@@ -1,0 +1,45 @@
+<%- include('header') -%>
+
+<style>
+  body {
+    background-color: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+  }
+
+  .logout-container {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  p {
+    font-size: 18px;
+    color: #333;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+</style>
+<div class="logout-container">
+  <p>Successfully logged out</p>
+  <!-- <a href="/admin/login"><button type="button">Log In</button></a> -->
+</div>
+<%- include('footer') -%>

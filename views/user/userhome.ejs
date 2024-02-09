@@ -1,0 +1,895 @@
+<%- include('header') -%>
+<%- include('nav') -%>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
+:root {
+    --main-color: rgb(255, 255, 255);
+    --border-radius: 95% 4% 97% 5% / 4% 94% 3% 95%;
+    --border-radius-hover: 4% 95% 6% 95% / 95% 4% 92% 5%;
+    --border: .2rem solid var(--main-color);
+    --border-hover: .2rem dashed var(--main-color);
+}
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: capitalize;
+    
+}
+
+html {
+    font-size: 65%;
+    overflow-x: hidden;
+    scroll-padding-top: 7rem;
+    scroll-behavior: smooth;
+    
+}
+.body{
+    background-color: #ffffff;
+    overflow-y: hidden;  
+}
+
+
+
+
+
+
+.active{
+    border-radius: 30px;
+    background-color: rgb(255, 255, 255);
+}
+
+
+
+.caption{
+    padding-bottom: 250px;
+    padding-left: 40px;
+}
+
+
+
+.carousel-item .custom-carousel-content{
+    width: 109%;
+}
+.custom-carousel-content{
+    text-align: start;
+}
+.custom-carousel-content h1{
+    font-size: 40px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 30px;
+}
+.custom-carousel-content h1 span{
+    color: #000000;
+}
+.custom-carousel-content p{
+    font-size: 18px;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 30px;
+    
+}
+.custom-carousel-content .btn-slider{
+    border: 1px solid #fff;
+    border-radius: 0px;
+    padding: 8px 26px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+    #carouselExampleCaptions {
+        width: calc(100vw - 0rem); 
+        height: 85vh;
+    margin: -40 auto;
+    padding: 4rem;
+    background-color: #ffffff;
+    }
+
+    .carousel-inner,
+    .carousel-item {
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-item img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.5);
+        /* border-radius: 29px; */
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        font-size: 1.5em;
+        animation: blink 1s infinite;
+    }
+
+    .getnow{
+        backdrop-filter: blur(8px);
+
+    }
+
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 767px) {
+    .carousel-item .custom-carousel-content {
+        width: 90%;
+    }
+}
+
+
+
+
+
+/* .container{
+    background-color: #a7bcb3;
+} */
+
+
+
+
+.footer .box-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width: 85%;
+    margin: 0 auto;
+}
+
+.footer .box {
+    flex: 1;
+    max-width: 20rem;
+    margin: 1rem;
+}
+
+.footer .box h3 {
+    margin-left: 0;
+    color: #fff; 
+}
+
+.footer .box a {
+    font-size: 1.5rem;
+    padding: 1rem 0;
+    color: var(--main-color);
+    display: flex;
+    align-items: center;
+}
+
+.footer .box a i {
+    padding-right: 0.5rem;
+}
+
+.footer .box a:hover i {
+    padding-right: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    .footer .box {
+        max-width: 100%;
+    }
+}
+
+
+
+
+
+
+</style>
+
+<!-- carousel html -->
+<div class="background">
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+
+    <div class="carousel-inner">
+        <div class="carousel-item active ">
+            <img src="/assets/homeimg/sofa4.jpeg" class="d-block w-100 hmimg " alt="..." >
+            <div class="carousel-caption  ">
+                <div class="custom-carousel-content caption">
+                   
+                    <div>
+                        <a href="/user/product" class="btn btn-slider btn-lg getnow ">
+                            Get Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/assets/homeimg/sofa5.jpeg" class="d-block w-100 hmimg" alt="...">
+            <div class="carousel-caption  ">
+                <div class="custom-carousel-content caption">
+                    <h1  class="display-4 ">
+                        <span>
+                            "Transform your space with comfort and style" </span>
+                            
+                    </h1>
+                   
+                    <div>
+                        <a href="/user/product" class="btn btn-slider btn-lg getnow">
+                            Get Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            
+            <img src="/assets/homeimg/sofa77.jpeg" class="d-block w-100 hmimg" alt="...">
+        
+            <div class="carousel-caption  ">
+                <div class="custom-carousel-content caption">
+                   
+                    <div>
+                        <a href="/user/product" class="btn btn-slider btn-lg getnow">
+                            Get Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <!-- st -->
+            <div class="page">
+                <div class="title">
+                    <img src="/assets/homeimg/gif.gif" class="img-fluid" style="width: 60%; height: 70%;" alt="Local GIF">
+                </div>
+                <canvas id="ring_shape-canvas"></canvas>
+            </div>
+            
+            
+            <script type="x-shader/x-fragment" id="vertShader">
+                precision mediump float;
+            
+                varying vec2 vUv;
+                attribute vec2 a_position;
+            
+                void main() {
+                    vUv = .5 * (a_position + 1.);
+                    gl_Position = vec4(a_position, 0.0, 1.0);
+                }
+            </script>
+            
+            
+            <script type="x-shader/x-fragment" id="fragShader">
+                precision mediump float;
+            
+                varying vec2 vUv;
+                uniform float u_time;
+                uniform float u_ratio;
+                uniform float u_click_time;
+                uniform vec2 u_pointer;
+                uniform vec2 u_click;
+            
+                #define TWO_PI 6.28318530718
+                #define PI 3.14159265358979323846
+            
+                // ------------------------------------------------
+                // Generic fractional Brownian motion (fBm) noise
+            
+                float rand(vec2 n) {
+                    return fract(cos(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+                }
+                float noise(vec2 n) {
+                    const vec2 d = vec2(0.0, 1.0);
+                    vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));
+                    return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);
+                }
+                float fbm(vec2 n) {
+                    float total = 0.0, amplitude = .4;
+                    for (int i = 0; i < 4; i++) {
+                        total += noise(n) * amplitude;
+                        n += n;
+                        amplitude *= 0.6;
+                    }
+                    return total;
+                }
+            
+                // ------------------------------------------------
+            
+                float get_ring_shape(vec2 uv, float innerRadius, float outerRadius) {
+                    float distance = length(uv);
+                    float line_width = outerRadius - innerRadius;
+                    float ringValue = smoothstep(innerRadius, innerRadius + line_width, distance);
+                    ringValue -= smoothstep(outerRadius, outerRadius + line_width, distance);
+                    return clamp(ringValue, 0., 1.);
+                }
+            
+                float get_dot_shape(vec2 uv, vec2 center, float pwr) {
+                    float mouse_center_dist = length(center);
+                    float pointer_shape = 1. - length(uv - center);
+                    pointer_shape = clamp(pointer_shape, 0., 1.);
+                    pointer_shape = pow(pointer_shape, pwr);
+                    pointer_shape *= .18;
+                    return pointer_shape;
+                }
+            
+                float get_sym_impulse(float v, float pwr) {
+                    return 1. - pow(1. - pow(2. * v - 1., 4.), pwr);
+                }
+            
+            
+                // ------------------------------------------------
+            
+                void main() {
+                    vec2 uv = vUv * 2. - 1.;
+                    uv.x *= u_ratio;
+            
+                    float noise_scale = 6.;
+            
+                    // overall speed
+                    float t = .0003 * u_time;
+                    float t_click = .001 * u_click_time;
+            
+                    // timing
+                    float expl_duration = 3.5;
+                    float t_click_explosion = (1. - step(expl_duration, t_click)) * t_click;
+                    t_click_explosion = pow(t_click_explosion, .6);
+            
+                    //
+                    float atg = atan(uv.y, uv.x);
+                    float angle = (atg + PI) / TWO_PI;
+            
+                    // radial noise
+                    vec2 polar_uv = vec2(atg, t + 2. / pow(length(uv), .5));
+                    polar_uv *= noise_scale;
+                    float noise_left = fbm(polar_uv);
+                    polar_uv.x = mod(polar_uv.x, noise_scale * TWO_PI);
+                    float noise_right = fbm(polar_uv);
+                    float noise = mix(noise_right, noise_left, smoothstep(-.2, .2, uv.x));
+            
+                    // cursor coordinates
+                    vec2 point = u_pointer * 2. - 1.;
+                    point.x *= u_ratio;
+                    vec2 click = u_click * 2. - 1.;
+                    click.x *= u_ratio;
+            
+                    // pointer following the cursor
+                    float pointer_shape = 0.;
+                    const int points_num = 5;
+                    // split it to 5 points on click
+                    for (int i = 0; i < points_num; i++) {
+                        float a = float(i) / float(points_num) * TWO_PI;
+                        a += 4. * t;
+                        float sp = 6. * t_click_explosion * max(.2, rand(vec2(float(i))));
+                        float x = sp * cos(a);
+                        float y = -sp * sin(a);
+                        pointer_shape += get_dot_shape(uv, click + vec2(x, y), 2.);
+                    }
+                    // keep the constant point size 
+                    pointer_shape /= float(points_num);
+                    pointer_shape *= min(5., 14. * t_click_explosion);
+                    pointer_shape += get_dot_shape(uv, point, 4.);
+            
+                    // darken in the enter
+                    float center_shape = 1. - pow(smoothstep(2., .0, length(uv)), 50.);
+                    pointer_shape *= center_shape;
+            
+                    // draw ring 
+                    float radius = .7 + .5 * pointer_shape;
+                    float thickness = .1;
+                    thickness += .75 * pow(pointer_shape, .6);
+                    float ring_shape = get_ring_shape(uv * (.9 + .4 * noise), radius - .8 * thickness, radius + .2 * thickness);
+            
+                    // radial gradient to be used for pointer
+                    vec3 radial_color = vec3(0.);
+                    radial_color.r = .5 + get_sym_impulse(fract(angle + .2 * t), 4.);
+                    radial_color.g = 2. * get_sym_impulse(fract(angle + .2 * t), 10.);
+                    radial_color.b = smoothstep(4., 0., radial_color.r);
+            
+                    // apply shapes to colors
+                    vec3 point_color = radial_color;
+                    point_color.r *= 60. * pow(pointer_shape, 2.);
+                    point_color *= pointer_shape;
+            
+                    vec3 ring_color = vec3(1.);
+                    ring_color *= ring_shape;
+            
+                    // 
+                    vec3 color = ring_color;
+                    color += point_color;
+            
+                    gl_FragColor = vec4(color, 1.);
+                }
+            </script>
+            
+            <style>
+                body, html {
+                margin: 0;
+                padding: 0;
+                 background: rgb(255, 255, 255);
+            }
+            
+            .page {
+                font-family: sans-serif;
+                color: #eeeeee;
+            }
+            
+            canvas#ring_shape-canvas {
+                display: block;
+                z-index: 2;
+                 width: 100%;
+                 height: 75vh;
+                 border-radius: 30px;
+            }
+            
+            .title {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 2vh;
+                text-align: center;
+                z-index: 2;
+            }
+            
+            </style>
+            
+            
+            <script>
+                const canvasEl = document.querySelector("#ring_shape-canvas");
+            const pageEl = document.querySelector(".page");
+            
+            const uniforms = {
+                timeLocation: null,
+                ratioLocation: null,
+                clickTimeLocation: null,
+                pointerLocation: null,
+                clickLocation: null,
+            }
+            
+            let clickTime = 0;
+            const mouseThreshold = .6;
+            let wasClicked = false;
+            
+            let mouse = {
+                x: -.5 * window.innerWidth,
+                y: .5 * window.innerHeight,
+                tX: -.5 * window.innerWidth,
+                tY: .5 * window.innerHeight,
+            }
+            
+            const gl = initShader();
+            
+            render();
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+            
+            window.addEventListener("mousemove", e => {
+                updateMousePosition(e.pageX, e.pageY);
+            });
+            window.addEventListener("touchmove", e => {
+                updateMousePosition(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+            });
+            pageEl.addEventListener("click", e => {
+                updateMousePosition(e.pageX, e.pageY);
+                gl.uniform2f(uniforms.clickLocation, mouse.x / window.innerWidth, 1. - mouse.y / window.innerHeight);
+                wasClicked = true;
+                clickTime = performance.now();
+            });
+            
+            function updateMousePosition(eX, eY) {
+                mouse.tX = eX;
+                mouse.tY = eY;
+            }
+            
+            
+            function initShader() {
+                const vsSource = document.getElementById("vertShader").innerHTML;
+                const fsSource = document.getElementById("fragShader").innerHTML;
+            
+                const gl = canvasEl.getContext("webgl") || canvasEl.getContext("experimental-webgl");
+            
+                if (!gl) {
+                    alert("WebGL is not supported by your browser.");
+                }
+            
+                function createShader(gl, sourceCode, type) {
+                    const shader = gl.createShader(type);
+                    gl.shaderSource(shader, sourceCode);
+                    gl.compileShader(shader);
+            
+                    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                        console.error("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader));
+                        gl.deleteShader(shader);
+                        return null;
+                    }
+            
+                    return shader;
+                }
+            
+                const vertexShader = createShader(gl, vsSource, gl.VERTEX_SHADER);
+                const fragmentShader = createShader(gl, fsSource, gl.FRAGMENT_SHADER);
+            
+                function createShaderProgram(gl, vertexShader, fragmentShader) {
+                    const program = gl.createProgram();
+                    gl.attachShader(program, vertexShader);
+                    gl.attachShader(program, fragmentShader);
+                    gl.linkProgram(program);
+            
+                    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                        console.error("Unable to initialize the shader program: " + gl.getProgramInfoLog(program));
+                        return null;
+                    }
+            
+                    return program;
+                }
+            
+                const shaderProgram = createShaderProgram(gl, vertexShader, fragmentShader);
+            
+                const vertices = new Float32Array([-1., -1., 1., -1., -1., 1., 1., 1.]);
+            
+                const vertexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+            
+                gl.useProgram(shaderProgram);
+            
+                const positionLocation = gl.getAttribLocation(shaderProgram, "a_position");
+                gl.enableVertexAttribArray(positionLocation);
+            
+                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+            
+                uniforms.timeLocation = gl.getUniformLocation(shaderProgram, "u_time");
+                uniforms.ratioLocation = gl.getUniformLocation(shaderProgram, "u_ratio");
+                uniforms.clickTimeLocation = gl.getUniformLocation(shaderProgram, "u_click_time");
+                uniforms.pointerLocation = gl.getUniformLocation(shaderProgram, "u_pointer");
+                uniforms.clickLocation = gl.getUniformLocation(shaderProgram, "u_click");
+            
+                return gl;
+            }
+            
+            function render() {
+                const currentTime = performance.now();
+            
+                gl.uniform1f(uniforms.timeLocation, currentTime);
+                if (wasClicked) {
+                    gl.uniform1f(uniforms.clickTimeLocation, currentTime - clickTime);
+                }
+            
+                gl.clearColor(0.0, 0.0, 0.0, 1.0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            
+                mouse.x += (mouse.tX - mouse.x) * mouseThreshold;
+                mouse.y += (mouse.tY - mouse.y) * mouseThreshold;
+            
+                gl.uniform2f(uniforms.pointerLocation, mouse.x / window.innerWidth, 1. - mouse.y / window.innerHeight);
+            
+                requestAnimationFrame(render);
+            }
+            
+            function resizeCanvas() {
+                 canvasEl.width = window.innerWidth * devicePixelRatio;
+                canvasEl.height = window.innerHeight * devicePixelRatio;
+                gl.viewport(0, 0, canvasEl.width, canvasEl.height);
+                gl.uniform1f(uniforms.ratioLocation, window.innerWidth / window.innerHeight);
+            }
+            </script>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <!-- en -->
+</div>
+</div>
+
+
+
+
+
+
+<style>
+    body {
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #a7bcb3;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-bottom: 30px;
+        margin-top: 30px;
+        margin-left: 45px;
+        margin-right: 45px;
+    }
+
+    .container {
+        width: 23%;
+        margin: 10px;
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        background-color: #e8e8e8;
+        border: 1px solid rgba(255, 255, 255, 0.125);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.3s ease;
+        /* border-radius: 9px 9px 9px 9px; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        filter: drop-shadow(0 10px 5px rgba(2, 4, 8, 0.125));
+    }
+
+    .container:hover {
+        transform: scale(1.01);
+       
+    }
+
+    .banner-image {
+        background-position: center;
+        background-size: cover;
+        height: 150px;
+        width: 100%;
+        transition: transform 0.3s ease;
+        /* border-radius: 9px 9px 9px 9px; */
+    }
+
+    .container:hover .banner-image {
+        transform: scale(1.070);
+    }
+
+    h5 {
+        font-family: 'Righteous', sans-serif;
+        color: rgba(0, 0, 0, 0.98);
+        text-transform: uppercase;
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+
+    h5.card-title {
+        margin-top: 0;
+    }
+
+    p {
+        color: #000000;
+        font-family: 'Lato', sans-serif;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 150%;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .button-wrapper {
+        margin-top: 10px;
+    }
+
+    .btn {
+        border: none;
+        padding: 8px 16px;
+        border-radius: 24px;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        cursor: pointer;
+    }
+
+    .btn + .btn {
+        margin-left: 10px;
+    }
+
+    .outline {
+        background: transparent;
+        color: rgba(176, 215, 223, 0.9);
+        border: 1px solid rgba(0, 212, 255, 0.6);
+        transition: all 0.3s ease;
+        background-color: rgb(81, 93, 93);
+    }
+
+    .outline:hover {
+        transform: scale(1.125);
+        color: rgba(255, 255, 255, 0.9);
+        border-color: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+    }
+
+    .fill {
+        background: rgba(0, 212, 255, 0.9);
+        color: rgba(255, 255, 255, 0.95);
+        filter: drop-shadow(0);
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .fill:hover {
+        transform: scale(1.125);
+        border-color: rgba(255, 255, 255, 0.9);
+        filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.125));
+        transition: all 0.3s ease;
+    }
+
+    @media screen and (min-width: 769px) {
+        .container {
+            width: 23%;
+        }
+
+        .banner-image {
+            height: 220px;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            width: 48%;
+        }
+
+        .banner-image {
+            height: 120px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .container {
+            width: 100%;
+        }
+
+        .banner-image {
+            height: 100px;
+        }
+    }
+
+    /* Footer Styles */
+
+    .footer .box-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        width: 85%;
+        margin: 0 auto;
+    }
+
+    .footer .box {
+        flex: 1;
+        max-width: 20rem;
+        margin: 1rem;
+    }
+
+    .footer .box h3 {
+        margin-left: 0;
+        color: #fff;
+        font-size: x-large;
+    }
+
+    .footer .box a {
+        font-size: 1rem;
+        padding: .5rem 0;
+        color: #fff;
+        display: flex;
+        align-items: center;
+    }
+
+    .footer .box a i {
+        padding-right: 0.5rem;
+    }
+
+    .footer .box a:hover i {
+        padding-right: 2rem;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .footer .box {
+            max-width: 100%;
+        }
+    }</style>
+
+
+<% products.forEach((product, index) => { %>
+    <% if (index % 4 === 0) { %>
+        <div class="row">
+    <% } %>
+    <div class="container">
+        <% if (product.images && product.images.length > 0) { %>
+            <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
+                onclick="openModal('<%= product.images[0] %>')"><br>
+        <% } else { %>
+            <img src="/assets/default-image.jpg" class="banner-image" id="image-zoom" alt="Default Image"><br>
+        <% } %>
+        <h5 class="card-title"><%= product.name %></h5>
+        <h5><%= "₹" + product.price %></h5>
+        <div class="button-wrapper">
+            <a href="/user/mainproduct/<%= product._id %>"><button class="btn outline">DETAILS</button></a>
+            <button class="btn fill">BUY NOW</button>
+        </div>
+    </div>
+    <% if ((index + 1) % 4 === 0 || (index + 1) === products.length) { %>
+        </div>
+    <% } %>
+<% }); %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Updated footer html -->
+<section class="footer"  style="background-color: #004C3F;">
+    <div class="box-container">
+        <div class="box">
+            <h3>our branches</h3>
+            <a href="#"><i class="fas fa-arrow-right"></i> Palakkad</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Wayanad</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Kollam</a>
+            <a href="#"><i class="fas fa-arrow-right"></i> Kozhikode</a>
+        </div>
+
+        <div class="box">
+            <h3>quick links</h3>
+            <a href="#home"><i class="fas fa-arrow-right"></i> home</a>
+            <a href="#about"><i class="fas fa-arrow-right"></i> about</a>
+            <a href="#menu"><i class="fas fa-arrow-right"></i> menu</a>
+            <a href="#review"><i class="fas fa-arrow-right"></i> review</a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href="#"><i class="fas fa-phone"></i> +91-9360854754</a>
+            <a href="#"><i class="fas fa-envelope"></i> vivek@gmail.com</a>
+            <a href="#"><i class="fas fa-envelope"></i> Kozhikode,Kerala</a>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> Location</a>
+        </div>
+
+        <div class="box">
+            <h3>social media</h3>
+            <a href="#"><i class="fab fa-facebook-f"></i> facebook</a>
+            <a href="#"><i class="fab fa-twitter"></i> twitter</a>
+            <a href="#"><i class="fab fa-instagram"></i> instagram</a>
+            <a href="#"><i class="fab fa-linkedin"></i> linkedin</a>
+        </div>
+    </div>
+</section>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<%- include('footer') -%>

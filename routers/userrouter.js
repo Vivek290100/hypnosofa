@@ -1,0 +1,45 @@
+//userrouter.js
+const express = require("express");
+const router = express.Router();
+const controller = require('../controller/userController');
+const controller1 = require('../controller/otpcontroller');
+const controller2 = require('../controller/resetpassword');
+const controller3= require('../controller/userprofilecontroller');
+
+const { verifyUser, userExist,checkUserStatus } = require("../middlewares/session");
+
+
+
+//user side------------------------------------------------------->
+router.get("/",checkUserStatus,controller.home);
+router.get("/user/product",checkUserStatus,verifyUser,controller.product);
+router.get("/user/mainproduct/:productId",checkUserStatus,verifyUser, controller.mainproduct);
+router.get('/user/signup',checkUserStatus,userExist,controller.signup)
+router.all('/user/login',checkUserStatus,userExist,controller.login)
+router.all('/login1',checkUserStatus,userExist,controller.login1)
+router.get('/user/logout',verifyUser,controller.logout)
+
+//user signup otp ------------------------------------------------------->
+router.post('/send',userExist,controller1.otp1)
+router.post('/verify',userExist,controller1.verify)
+router.get('/resend',userExist,controller1.resend)
+router.get('/logout',verifyUser,controller.logout)
+
+//login forgot password otp------------------------------------------------------->
+router.get('/user/forgot-password', controller2.showForgotPasswordForm);
+router.post('/user/forgot-password', controller2.forgotPassword);
+router.post('/user/reset-password', controller2.resetPassword);
+router.get('/otpresend',controller2.otpresend)
+
+//user profile------------------------------------------------------->
+router.get("/user/profile",verifyUser,controller3.userprofile);
+router.post("/change-password",verifyUser,controller3.changepassword)
+router.post('/save-address',verifyUser, controller3.saveAddress);
+
+
+
+
+
+
+
+module.exports = router;

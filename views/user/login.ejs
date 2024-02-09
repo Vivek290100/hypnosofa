@@ -1,0 +1,126 @@
+<%- include('header') -%>
+
+
+<style>
+  body {
+    background-color: #156161;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  .login-container {
+    /* background-color: white; */
+    background: rgba(240, 240, 240, 0.7);
+
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    margin: 0 auto; /* Center the login container */
+  }
+
+  .input-div {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+  }
+
+  .i {
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px 0 0 5px;
+  }
+
+  .input {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+    width: 100%;
+  }
+
+  #hai {
+    text-decoration: none;
+    color: #333;
+  }
+
+  #signbtn {
+    text-decoration: none;
+    color: black;
+  }
+
+  .btn1 {
+    width: 190px;
+  }
+
+  .btn1:hover {
+    width: 190px;
+    background-color: #156161;
+    color: #FFF;
+  }
+
+</style>
+
+            <div class="container">
+            
+                <div class="login-container">
+                  <form  action="/login1" method="post">
+                    <h2>Welcome</h2>
+                    <% if (error1) { %>
+                      <p style="color: red;"><%= error1 %></p>
+                  <% } %>
+                    <div class="input-div" one>
+                      <div class="i">
+                        <i class="fas fa-envelope"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Email" name="email" type="email" />
+                      </div>
+                    </div>
+                    <div class="input-div" two>
+                      <div class="i">
+                        <i class="fas fa-lock"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Password" name="password" type="password" id="password" />
+
+                      </div>
+                      <div class="checkbox-container">
+                        <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+                        <label for="showPassword"></label>
+                      </div>
+                    </div>
+                    <br>
+                    <a id="hai"  href="/user/forgot-password">Forgot password ?</a><br>
+                    <br>
+                    <input type="submit" class="btn1" value="login" />
+                    <br><br>
+                    <a href="/user/Signup" style="text-decoration: none;color:black;" id="signbtn" ><i>Don't have an account? </i><strong>Sign Up</strong></a>
+                  </form>
+                </div>
+              </div>
+             
+              <script type="text/javascript" src="js/main.js"></script>
+              <script>
+                function togglePasswordVisibility() {
+                  toggleVisibility('password');
+                  toggleVisibility('confirmPassword');
+                }
+              
+                function toggleVisibility(inputId) {
+  var passwordInput = document.getElementById(inputId);
+
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+  } else {
+    passwordInput.type = 'password';
+  }
+}
+              </script>
+
+<%- include('footer') -%>
