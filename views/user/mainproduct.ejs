@@ -23,7 +23,7 @@ img {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-          height: 500px;
+          height: 700px;
         }
   @media screen and (max-width: 996px) {
     .preview {
@@ -65,6 +65,7 @@ img {
 
 .card {
   margin-top: 50px;
+  height: 70vh;
   background: #eee;
   padding: 3em;
   line-height: 1.7em; }
@@ -77,6 +78,7 @@ img {
     display: flex; } }
 
 .details {
+  padding-top: 15px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -217,16 +219,20 @@ img {
     }
 }
 
-#pic-1{
-    width: 600px;
-    height: auto;
+#pic-1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-#pic-1 img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+.preview-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
+
+
+
 
 
  .preview-thumbnail img {
@@ -254,11 +260,12 @@ img {
 
 
 .preview-pic img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
+
 
 #pic-1 img {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
@@ -321,6 +328,11 @@ img {
     border-radius: 8px;
   }
 
+  .preview {
+    width: 450px;
+    height: 450px;
+  }
+
 
 
 
@@ -344,7 +356,7 @@ img {
                 <% for (var i = 0; i < Math.min(product.images.length, 45); i++) { %>
                 <!-- Limit the number of images displayed to 45 -->
                 <div class="tab-pane <%= i === 0 ? 'active' : '' %>" id="pic-<%= i + 1 %>">
-                  <img class="img-fluid h-100" src="/assets/product-images/<%= product.images[i] %>" />
+                  <img class="img-fluid1" src="/assets/product-images/<%= product.images[i] %>" />
                 </div>
                 <% } %>
               </div>
@@ -408,43 +420,9 @@ img {
 
 
 
-    <!-- Updated footer html -->
-<section class="footer"  style="background-color: #004C3F;">
-    <div class="box-container">
-        <div class="box">
-            <h3>our branches</h3>
-            <a href="#"><i class="fas fa-arrow-right"></i> Palakkad</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Wayanad</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Kollam</a>
-            <a href="#"><i class="fas fa-arrow-right"></i> Kozhikode</a>
-        </div>
 
-        <div class="box">
-            <h3>quick links</h3>
-            <a href="#home"><i class="fas fa-arrow-right"></i> home</a>
-            <a href="#about"><i class="fas fa-arrow-right"></i> about</a>
-            <a href="#menu"><i class="fas fa-arrow-right"></i> menu</a>
-            <a href="#review"><i class="fas fa-arrow-right"></i> review</a>
-        </div>
 
-        <div class="box">
-            <h3>contact info</h3>
-            <a href="#"><i class="fas fa-phone"></i> +91-9360854754</a>
-            <a href="#"><i class="fas fa-envelope"></i> vivek@gmail.com</a>
-            <a href="#"><i class="fas fa-envelope"></i> Kozhikode,Kerala</a>
-            <a href="#"><i class="fas fa-map-marker-alt"></i> Location</a>
-        </div>
-
-        <div class="box">
-            <h3>social media</h3>
-            <a href="#"><i class="fab fa-facebook-f"></i> facebook</a>
-            <a href="#"><i class="fab fa-twitter"></i> twitter</a>
-            <a href="#"><i class="fab fa-instagram"></i> instagram</a>
-            <a href="#"><i class="fab fa-linkedin"></i> linkedin</a>
-        </div>
-    </div>
-</section>
-
+<%- include('footer') -%>
 
 
 
