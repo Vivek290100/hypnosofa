@@ -28,7 +28,7 @@ const signup=(req, res) => {
 
   //user login------------------------------------------------------->  
 const login = (req, res) => {
-    //const email=req.session.email
+    const email=req.session.email
     // console.log(email);
     res.render("./user/login", { error1: req.flash('error1')[0] || '' });
 }
@@ -43,11 +43,11 @@ const login1 = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             req.flash('error1', 'Invalid email or password');
-            return res.render('./user/login', { error1: req.flash('error1') });
+            return res.redirect('./user/login', { error1: req.flash('error1') });
         }
         if (user.status === 'blocked') {
             req.flash('error1', 'User is blocked. Cannot log in.');
-            return res.render('./user/login', { error1: req.flash('error1') });
+            return res.redirect('./user/login', { error1: req.flash('error1') });
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (passwordMatch) {

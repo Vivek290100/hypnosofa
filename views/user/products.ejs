@@ -22,11 +22,11 @@
     }
 
     .container {
-        width: 23%;
+        width: 24%;
         margin: 10px;
         backdrop-filter: blur(16px) saturate(180%);
         -webkit-backdrop-filter: blur(16px) saturate(180%);
-        background-color: #e8e8e8;
+        background-color: #a7bcb3;
         border: 1px solid rgba(255, 255, 255, 0.125);
         padding: 10px;
         display: flex;
@@ -39,10 +39,10 @@
         filter: drop-shadow(0 10px 5px rgba(2, 4, 8, 0.125));
     }
 
-    .container:hover {
+    /* .container:hover {
         transform: scale(1.01);
        
-    }
+    } */
 
     .banner-image {
         background-position: center;
@@ -54,7 +54,7 @@
     }
 
     .container:hover .banner-image {
-        transform: scale(1.070);
+        transform: scale(1.060);
     }
 
     h5 {
@@ -97,33 +97,36 @@
     }
 
     .outline {
-        background: transparent;
-        color: rgba(176, 215, 223, 0.9);
+        /* background: transparent; */
+        color: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(0, 212, 255, 0.6);
         transition: all 0.3s ease;
-        background-color: rgb(81, 93, 93);
+        background-color: rgb(43, 95, 73);
     }
 
     .outline:hover {
-        transform: scale(1.125);
         color: rgba(255, 255, 255, 0.9);
-        border-color: rgba(255, 255, 255, 0.9);
+        border-color: rgba(22, 65, 36, 0.9);
         transition: all 0.3s ease;
+        background-color: rgb(15, 55, 38);
+
     }
 
     .fill {
-        background: rgba(0, 212, 255, 0.9);
-        color: rgba(255, 255, 255, 0.95);
-        filter: drop-shadow(0);
-        font-weight: bold;
+        /* background: transparent; */
+        color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(33, 87, 65, 0.6);
         transition: all 0.3s ease;
+        background-color: rgb(43, 95, 73);
+
     }
 
     .fill:hover {
-        transform: scale(1.125);
-        border-color: rgba(255, 255, 255, 0.9);
-        filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.125));
+        color: rgba(255, 255, 255, 0.9);
+        border-color: rgba(22, 65, 36, 0.9);
         transition: all 0.3s ease;
+        background-color: rgb(15, 55, 38);
+
     }
 
     @media screen and (min-width: 769px) {
@@ -156,57 +159,13 @@
         }
     }
 
-    /* Footer Styles */
-
-    .footer .box-container {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        width: 85%;
-        margin: 0 auto;
-    }
-
-    .footer .box {
-        flex: 1;
-        max-width: 20rem;
-        margin: 1rem;
-    }
-
-    .footer .box h3 {
-        margin-left: 0;
-        color: #fff;
-        font-size: x-large;
-    }
-
-    .footer .box a {
-        font-size: 1rem;
-        padding: .5rem 0;
-        color: #fff;
-        display: flex;
-        align-items: center;
-    }
-
-    .footer .box a i {
-        padding-right: 0.5rem;
-    }
-
-    .footer .box a:hover i {
-        padding-right: 2rem;
-    }
-
-    @media only screen and (max-width: 768px) {
-        .footer .box {
-            max-width: 100%;
-        }
-    }
 
 
     /* Dropdown Button */
 .dropbtn {
   background-color: #ffffff;
 ;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 3px;
   font-size: 16px;
   border: none;
@@ -280,7 +239,7 @@
 
 
 <div class="dropdown dropmargin">
-    <button onclick="myFunction()" class="dropbtn">All Products</button>
+    <button onclick="myFunction()" class="dropbtn">All Products ▼</button>
     <div id="myDropdown" class="dropdown-content">
       <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
       <a href="#about">About</a>
@@ -353,7 +312,6 @@
 
 
 
-<%- include('footer') -%>
 
 
 
@@ -380,4 +338,16 @@ function filterFunction() {
   }
 }
 </script>
+
+
+
+
+
+
+
+
+<%- include('footer') -%>
+    
+    
+  
 

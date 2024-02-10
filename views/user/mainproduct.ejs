@@ -6,7 +6,10 @@
 
 body {
   font-family: 'open sans';
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  background-color: #a7bcb3;
+}
+  
 
 img {
   max-width: 100%;
@@ -177,47 +180,6 @@ img {
             transform: scale(1); } }
 
 
-            .footer .box-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    width: 85%;
-    margin: 0 auto;
-}
-
-.footer .box {
-    flex: 1;
-    max-width: 20rem;
-    margin: 1rem;
-}
-
-.footer .box h3 {
-    margin-left: 0;
-    color: #fff; 
-}
-
-.footer .box a {
-    color: #ffffff;
-    font-size: 1.0rem;
-    padding: 1rem 0;
-    display: flex;
-    align-items: center;
-}
-
-.footer .box a i {
-    padding-right: 0.5rem;
-}
-
-.footer .box a:hover i {
-    padding-right: 2rem;
-}
-
-@media only screen and (max-width: 768px) {
-    .footer .box {
-        max-width: 100%;
-    }
-}
 
 #pic-1 img {
   width: 100%;
@@ -336,6 +298,7 @@ img {
 
 
 
+
     </style>
     
 
@@ -356,7 +319,7 @@ img {
                 <% for (var i = 0; i < Math.min(product.images.length, 45); i++) { %>
                 <!-- Limit the number of images displayed to 45 -->
                 <div class="tab-pane <%= i === 0 ? 'active' : '' %>" id="pic-<%= i + 1 %>">
-                  <img class="img-fluid1" src="/assets/product-images/<%= product.images[i] %>" />
+                  <img class="img-fluid " src="/assets/product-images/<%= product.images[i] %>" />
                 </div>
                 <% } %>
               </div>
@@ -375,14 +338,15 @@ img {
               <% if (product) { %>
               <h3 class="product-title"><%= product.name %></h3>
               <p class="product-description"><%= product.description %></p>
-              <h4 class="price">price: <span><%= product.price %></span></h4><br>
-              <div class="quantity">
+              <h4 class="price">price: <span>₹&nbsp;<%= product.price %></span></h4><br>
+              <!-- <div class="quantity">
                 <label for="quantity">Quantity:</label>
                 <input type="number" id="quantity" name="quantity" min="1" value="1">
-              </div><br><br><br>
+              </div> -->
+              
               <div class="action">
-                <button class="add-to-cart btn btn-default" type="button">add to cart</button>
-                <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+                <button class="add-to-cart btn btn-default"  type="button">add to cart</button>
+                <!-- <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button> -->
               </div>
               <% } %>
             </div>
@@ -416,19 +380,17 @@ img {
 </script>
 
         
-      
 
 
 
 
 
-<%- include('footer') -%>
 
 
 
 
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
 

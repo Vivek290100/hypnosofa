@@ -5,6 +5,7 @@ const controller = require('../controller/userController');
 const controller1 = require('../controller/otpcontroller');
 const controller2 = require('../controller/resetpassword');
 const controller3= require('../controller/userprofilecontroller');
+const controller4= require('../controller/cartcontroller');
 
 const { verifyUser, userExist,checkUserStatus } = require("../middlewares/session");
 
@@ -36,7 +37,8 @@ router.get("/user/profile",verifyUser,controller3.userprofile);
 router.post("/change-password",verifyUser,controller3.changepassword)
 router.post('/save-address',verifyUser, controller3.saveAddress);
 
-
+//user cart------------------------------------------------------->
+router.get('/user/cart',verifyUser,controller4.usercart);
 
 
 
