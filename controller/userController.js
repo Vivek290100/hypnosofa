@@ -4,6 +4,8 @@ const User = require('../models/userModel');
 const Product=require('../models/productModel')
 
 const bcrypt = require('bcrypt');
+const cartItemCountMiddleware = require('../middlewares/cartCountMiddleware');
+
 
 //user home------------------------------------------------------->
 const home = async (req, res) => {
@@ -58,18 +60,19 @@ const login1 = async (req, res) => {
             email: user.email,
            _id: user._id,
    };
-// const products = await Product.find().exec();
-return res.render('./user/userhome', { user , products  });
-        } else {
-            req.flash('error1', 'Invalid email or password');
-            return res.render('./user/login', { error1: req.flash('error1') });
-        }
-    } catch (error) {
-        console.error(error);
-        req.flash('error', 'Internal Server Error');
-        return res.status(500).render('error', { error1: req.flash('error') });
-    }
-};
+   await cartItemCountMiddleware(req, res, () => {});
+   const products = await Product.find().exec();
+               return res.render('./user/userhome', { user ,products});
+           } else {
+               req.flash('error1', 'Invalid email or password');
+               return res.render('./user/login', { error1: req.flash('error1') });
+           }
+       } catch (error) {
+           console.error(error);
+           req.flash('error', 'Internal Server Error');
+           return res.status(500).render('error', { error1: req.flash('error') });
+       }
+   };
 
 
 //user products------------------------------------------------------->

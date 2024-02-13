@@ -39,6 +39,7 @@ router.post('/save-address',verifyUser, controller3.saveAddress);
 
 //user cart------------------------------------------------------->
 router.get('/user/cart',verifyUser,controller4.usercart);
+router.get('/user/addtocart/:productId', verifyUser, controller4.addToCart);
 
 
 

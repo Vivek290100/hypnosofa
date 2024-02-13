@@ -12,7 +12,7 @@
             background: #a7bcb3;
             min-height: 100vh;
             vertical-align: middle;
-            font-family: sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
             font-size: 1.1rem;
             font-weight: bold;
@@ -166,64 +166,48 @@
             <div class="title">
                 <div class="row">
                     <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                    <div class="col align-self-center text-right text-muted">3 items</div>
+
+<% if (cartItems && cartItems.length > 0) { %>
+    <div class="col align-self-center text-right text-muted"><%= cartItems.length %> items</div>
+<% } else { %>
+    <div class="col align-self-center text-right text-muted">0 items</div>
+<% } %>
                 </div>
             </div>
             
            
-            <div class="row border-top border-bottom">
-                <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg" alt="Shirt Image"></div>
-                    <div class="col">
-                        <div class="row text-muted">Shirt</div>
-                        <div class="row">Cotton T-shirt</div>
-                    </div>
-                    <div class="col">
-                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                    </div>
-                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                </div>
-            </div>
            
             <div class="row border-top border-bottom">
+                <% if (cartItems && cartItems.length > 0) { %>
+    <% cartItems.forEach(item => { %>
+
                 <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg" alt="Shirt Image"></div>
+          <% if (item.productId && item.productId.images[0]) { %>
+
+                    <div  class="col-2">
+                        <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid" src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
+                    </div>
+                    <% } else { %>
+                        <p>No images available</p>
+                      <% } %>
                     <div class="col">
-                        <div class="row text-muted">Shirt</div>
-                        <div class="row">Cotton T-shirt</div>
+                        <div class="row text-muted"><Shirt></div>
+                        <div class="row"><%= item.productId && item.productId.name %></div>
                     </div>
                     <div class="col">
                         <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
                     </div>
-                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                     <!-- <div class="col">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1">
+              </div> -->
+                    <div class="col">₹ 44.00 <span class="close">&#10005;</span></div>
                 </div>
-            </div>
-           
-            <div class="row">
-                <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg" alt="Shirt Image"></div>
-                    <div class="col">
-                        <div class="row text-muted">Shirt</div>
-                        <div class="row">Cotton T-shirt</div>
-                    </div>
-                    <div class="col">
-                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                    </div>
-                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                </div>
-            </div>
-            <div class="row border-top border-bottom">
-                <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg" alt="Shirt Image"></div>
-                    <div class="col">
-                        <div class="row text-muted">Shirt</div>
-                        <div class="row">Cotton T-shirt</div>
-                    </div>
-                    <div class="col">
-                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                    </div>
-                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                </div>
+    <% }); %>
+    <% } else { %>
+        <p>No items in the cart.</p>
+    <% } %>
+
             </div>
             <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
         </div>
