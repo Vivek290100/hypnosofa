@@ -1,5 +1,5 @@
 <%- include('header') -%>
-<%- include('nav') -%>
+<%- include('nav',{ user: user }) -%>
 
 <style>
     body {
@@ -100,7 +100,7 @@
     .outline {
         /* background: transparent; */
         color: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(0, 212, 255, 0.6);
+        /* border: 1px solid rgba(0, 212, 255, 0.6); */
         transition: all 0.3s ease;
         background-color: rgb(43, 95, 73);
     }
@@ -182,20 +182,7 @@
   
 }
 
-/* The search field */
-#myInput {
-  box-sizing: border-box;
-  background-image: url('searchicon.png');
-  background-position: 14px 12px;
-  background-repeat: no-repeat;
-  font-size: 16px;
-  padding: 14px 59px 12px 45px;
-  border: none;
-  border-bottom: 1px solid #ddd;
-}
 
-/* The search field when it gets focus/clicked on */
-#myInput:focus {outline: 3px solid #ddd;}
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
@@ -231,6 +218,140 @@
 .dropmargin{
     margin-left: 60px;
 }
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-left: 54px;
+}
+
+.input-group input[type="search"] {
+    flex: 1;
+    border-radius: 5px 0 0 5px;
+    outline: 2px solid #7eb4ab;
+
+    height: 35px;
+}
+
+.sbtn {
+    background-color: #004c3f;
+    width: 31px;
+    border-radius: 9px;
+    height: 36px;
+}
+/* 
+.sbtn:hover {
+    background-color: #004c3f;
+} */
+
+/* Responsive adjustments */
+@media only screen and (max-width: 768px){
+.input-group {
+    margin-left: 44px;
+    margin-right: 57px;
+}
+
+    .input-group input[type="search"] {
+        height: 30px; /* Adjust height for smaller screens */
+    }
+
+    .sbtn {
+        width: 28px; /* Adjust button width for smaller screens */
+        height: 30px; /* Adjust button height for smaller screens */
+    }
+}
+
+
+
+/* body {
+  background: #e0e5ec;
+} */
+h1 {
+  position: relative;
+  text-align: center;
+  color: #353535;
+  font-size: 50px;
+  font-family: "Cormorant Garamond", serif;
+}
+
+p {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  text-align: center;
+  font-size: 18px;
+  color: #676767;
+}
+.frame{
+background-color: #a7bcb3;
+border-radius: 5px;
+}
+
+
+/* .frame {
+  width: 90%;
+  margin: 40px auto;
+  text-align: center;
+} */
+/* button {
+  margin: 20px;
+} */
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+
+
+/* 16 */
+.btn-16 {
+  border: none;
+  color: #000000;
+}
+.btn-16:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  direction: rtl;
+  z-index: -1;
+  box-shadow:
+   -7px -7px 20px 0px #fff9,
+   -4px -4px 5px 0px #fff9,
+   7px 7px 20px 0px #0002,
+   4px 4px 5px 0px #0001;
+  transition: all 0.3s ease;
+}
+.btn-16:hover {
+  color: #000;
+}
+.btn-16:hover:after {
+  left: auto;
+  right: 0;
+  width: 100%;
+}
+.btn-16:active {
+  top: 2px;
+}
+
+
+
+
+
   
 
 
@@ -240,44 +361,39 @@
 
 
 <div class="dropdown dropmargin">
-    <button onclick="myFunction()" class="dropbtn">All Products ▼</button>
-    <div id="myDropdown" class="dropdown-content">
-      <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-      <a href="#about">About</a>
-      <a href="#base">Base</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
-      <a href="#custom">Custom</a>
-      <a href="#support">Support</a>
-      <a href="#tools">Tools</a>
-    </div>
+  <div class="frame">
+      <button onclick="myFunction()" class="custom-btn btn-16 dropbtn">Filter By</button>
   </div>
-<div class="dropdown">
-    <button onclick="myFunction()" class="dropbtn">All Products</button>
-    <div id="myDropdown" class="dropdown-content">
-      <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-      <a href="#about">About</a>
-      <a href="#base">Base</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
-      <a href="#custom">Custom</a>
-      <a href="#support">Support</a>
-      <a href="#tools">Tools</a>
-    </div>
+  <div id="myDropdown" class="dropdown-content">
+      <a href="/user/product?sort=price_low_high">Price: Low to High</a>
+      <a href="/user/product?sort=price_high_low">Price: High to Low</a>
+      <a href="/user/product?sort=name_a_z">Sort By: A - Z</a>
+      <a href="/user/product?sort=name_z_a">Sort By: Z - A</a>
+      
+      
   </div>
-<div class="dropdown">
-    <button onclick="myFunction()" class="dropbtn">All Products</button>
-    <div id="myDropdown" class="dropdown-content">
-      <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-      <a href="#about">About</a>
-      <a href="#base">Base</a>
-      <a href="#blog">Blog</a>
-      <a href="#contact">Contact</a>
-      <a href="#custom">Custom</a>
-      <a href="#support">Support</a>
-      <a href="#tools">Tools</a>
+</div>
+
+  <div class="dropdown">
+    <div class="input-group">
+        <form action="/user/product" method="GET"> <!-- Update action and method -->
+            <input type="search" name="q" placeholder="Search your product">
+            <button class="sbtn" type="submit">
+                <i class="fa fa-search" style="color:white;"></i>
+            </button>
+        </form>
     </div>
-  </div>
+</div>
+
+
+
+  
+  <!-- <div class="input-group">
+    <input type="search" placeholder="Search your product" class="form-control" />
+    <button class="btn bg-dark sbtn" type="submit">
+        <i class="fa fa-search" style="color:white;"></i>
+    </button>
+</div> -->
 
 
 
@@ -323,22 +439,24 @@ function myFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
 
-function filterFunction() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
+
+</script>
+
+<script>
+    window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn') && !event.target.matches('#myInput')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
     }
   }
 }
 </script>
+
+
 
 
 

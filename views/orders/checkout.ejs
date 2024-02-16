@@ -1,0 +1,386 @@
+
+<%- include('nav') -%>
+<style>
+
+
+@import url(https://fonts.googleapis.com/css?family=Raleway:100,200,300);
+@keyframes content-opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes content-rotate-y {
+  from {
+    -moz-transform: rotateY(90deg);
+    -ms-transform: rotateY(90deg);
+    -webkit-transform: rotateY(90deg);
+    transform: rotateY(90deg);
+  }
+  to {
+    opacity: 1;
+    -moz-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+  }
+}
+@keyframes content-rotate-x {
+  from {
+    -moz-transform: rotateX(90deg);
+    -ms-transform: rotateX(90deg);
+    -webkit-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+  }
+  to {
+    opacity: 1;
+    -moz-transform: rotateX(0deg);
+    -ms-transform: rotateX(0deg);
+    -webkit-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+  }
+}
+@keyframes content-rotate-both {
+  from {
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -moz-transform-origin: 0% 50% 50%;
+    -ms-transform-origin: 0% 50% 50%;
+    -webkit-transform-origin: 0% 50% 50%;
+    transform-origin: 0% 50% 50%;
+  }
+  to {
+    opacity: 1;
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -moz-transform-origin: 0% 50% 50%;
+    -ms-transform-origin: 0% 50% 50%;
+    -webkit-transform-origin: 0% 50% 50%;
+    transform-origin: 0% 50% 50%;
+  }
+}
+@keyframes content-pop-out {
+  0% {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes content-pop-in {
+  from {
+    opacity: 1;
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes content-slide-bot {
+  from {
+    top: 20px;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+@keyframes content-slide-top {
+  from {
+    top: -20px;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+/* used for wrapper animation after the load of the page */
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+html {
+  background: url(http://distinctionjewelry.com/info/wp-content/uploads/2013/01/blurred-background-10-2000x1250.jpg);
+  webkit-font-smoothing: antialiased;
+  font: 1em/1.5em "Raleway";
+  font-weight: normal;
+}
+
+.tabs-wrapper {
+  margin: 5% 10% 0 10%;
+}
+.tabs-wrapper input[type="radio"] {
+  display: none;
+}
+.tabs-wrapper label {
+  transition: background 0.4s ease-in-out, height 0.2s linear;
+  display: inline-block;
+  cursor: pointer;
+  color: #dbdbd3;
+  width: 20%;
+  height: 3em;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background: #525252;
+  text-align: center;
+  line-height: 3em;
+}
+.tabs-wrapper label:last-of-type {
+  border-bottom: none;
+}
+.tabs-wrapper label:hover {
+  background: #667876;
+  /*@include transform (translate(0,-0.2em));*/
+}
+@media screen and (max-width: 1600px) {
+  .tabs-wrapper label {
+    width: 24.6%;
+  }
+}
+@media screen and (max-width: 900px) {
+  .tabs-wrapper label {
+    width: 20%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .tabs-wrapper label {
+    width: 100%;
+    display: block;
+    border-bottom: 2px solid #4d4c47;
+    border-radius: 0;
+  }
+}
+@media screen and (max-width: 600px) {
+  .tabs-wrapper {
+    margin: 0;
+  }
+}
+
+#tab1:checked + label,
+#tab2:checked + label,
+#tab3:checked + label,
+#tab4:checked + label {
+  background: #004c3f;
+  color: #f2f2f2;
+}
+
+.tab-body {
+  position: absolute;
+  top: -9999px;
+  opacity: 0;
+  padding: 10px;
+}
+
+.tab-body-wrapper {
+  background: #a7bcb3;
+  border-top: #004c3f 5px solid;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top-right-radius: 3px;
+  animation-delay: 0.2s;
+  animation-duration: 1.5s;
+  animation-name: show;
+  animation-fill-mode: forwards;
+}
+@media screen and (max-width: 600px) {
+  .tab-body-wrapper {
+    border: none;
+    border-radius: 0;
+  }
+}
+
+
+#tab1:checked ~ .tab-body-wrapper #tab-body-1,
+#tab2:checked ~ .tab-body-wrapper #tab-body-2,
+#tab3:checked ~ .tab-body-wrapper #tab-body-3,
+#tab4:checked ~ .tab-body-wrapper #tab-body-4 {
+  position: relative;
+  top: 0px;
+  /* Choose one - modify .tab-body opacity to 1 if you don't want any animation or set opacity to 1 here */
+  /* @include animation(0.2s,0.8s,content-rotate-y); */
+  /* @include animation(0.2s,0.8s,content-rotate-both); */
+  animation-delay: 0.1s;
+  animation-duration: 0.4s;
+  animation-name: content-pop-out;
+  animation-fill-mode: forwards;
+  /* @include animation(0.1s,1s,content-slide-bot); */
+}
+#tab-body-1 {
+        width: 400px; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        padding: 20px; /* Adding padding for spacing */
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Adjust the gap between divs as needed */
+    }
+
+    .username, .email {
+        border: 1px solid #ccc; /* Adding border */
+        padding: 10px; /* Adding padding */
+    }
+
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Website: wwww.codingdung.com-->
+<!-- <!DOCTYPE html> -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile </title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container light-style flex-grow-1 container-p-y ">
+        <h4 class="font-weight-bold py-3 mb-4">
+           <!-- CHECKOUT -->
+        </h4>
+        <div class="card overflow-hidden">
+            
+
+
+
+
+
+
+            <div class="tabs-wrapper">
+                <input type="radio" name="tab" id="tab1" class="tab-head" checked="checked" />
+                <label for="tab1">USER DETAILS</label>
+                <input type="radio" name="tab" id="tab2" class="tab-head" />
+                <label for="tab2">ORDER SUMMARY</label>
+                <input type="radio" name="tab" id="tab3" class="tab-head" />
+                <label for="tab3">ADDRESS</label>
+                <input type="radio" name="tab" id="tab4" class="tab-head" />
+                <label for="tab4">PAYMENT OPTION</label>
+                <div class="tab-body-wrapper">
+                    <div id="tab-body-1" class="tab-body">
+                        <div class="user-info">
+                            <div class="username">Name: [username]</div>
+                            <div class="email">Email: [email]</div>
+                        </div>
+                    </div>
+
+
+                    <div id="tab-body-2" class="tab-body">
+                        <div class="product">
+                            <label for="product-name">Product Name:</label>
+                            <input type="text" id="product-name" name="product-name">
+                            
+                            <label for="price">Price:</label>
+                            <input type="number" id="price" name="price">
+                            
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity">
+                            
+                            <label for="total-price">Total Price:</label>
+                            <input type="number" id="total-price" name="total-price" readonly>
+                        </div>
+                    </div>
+                    
+
+
+                    <div id="tab-body-3" class="tab-body">
+                        <h1>Tab 3 heading</h1>
+                        <p>Bacon ipsum dolor sit amet pastrami dolor tri-tip, magna tongue ullamco occaecat velit shoulder sunt elit. Non cillum turkey short loin beef ribs. Anim qui shankle short ribs pancetta boudin. Occaecat mollit in laboris ham hock bresaola corned beef flank hamburger aute chicken id t-bone.</p>
+                    </div>
+                    <div id="tab-body-4" class="tab-body">
+                        <h1>Tab 4 heading</h1>
+                        <p>Bacon ipsum dolor sit amet pastrami dolor tri-tip, magna tongue ullamco occaecat velit shoulder sunt elit. Non cillum turkey short loin beef ribs. Anim qui shankle short ribs pancetta boudin. Occaecat mollit in laboris ham hock bresaola corned beef flank hamburger aute chicken id t-bone.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        
+    </div><br><br><br><br>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

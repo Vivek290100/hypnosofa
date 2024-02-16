@@ -8,6 +8,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const router = require('./routers/userrouter');
 const router1 = require('./routers/adminrouter');
+const cartCountMiddleware = require("./middlewares/cartCountMiddleware");
 
 
 
@@ -43,6 +44,8 @@ app.use(session({
 
 app.use(flash()); 
 app.use(passport.session());
+app.use(cartCountMiddleware);
+
 
 
 app.set('view engine', 'ejs');

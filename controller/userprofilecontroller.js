@@ -102,6 +102,55 @@ const saveAddress = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
+
+
+//delete address 
+
+const deleteAddress = async (req, res) => {
+    try {
+      const addressId = req.params.id;
+      await Address.findByIdAndDelete(addressId);
+      const userId = req.session.user._id;
+      await User.findByIdAndUpdate(userId, { $pull: { addresses: addressId } });
+      res.redirect('/user/profile');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+
+
+
+// Controller logic for handling address editing
+const editAddress = (req, res) => {
+    const addressId = req.params.id;
+    Address.findById(addressId, (err, address) => {
+        if (err) {
+            console.error('Error finding address:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.render('edit-address', { address: address });
+        }
+    });
+};
+
+// Controller logic for updating an address
+const updateAddress = (req, res) => {
+    const addressId = req.params.id;
+    const updatedAddress = req.body;
+    Address.findByIdAndUpdate(addressId, updatedAddress, { new: true }, (err, updatedAddress) => {
+        if (err) {
+            console.error('Error updating address:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ message: 'Address updated successfully' });
+        }
+    });
+};
+
   
 
 
@@ -113,5 +162,8 @@ module.exports = {
     userprofile,
     changepassword,
     saveAddress,
+    deleteAddress,
+    editAddress,
+    updateAddress
    
 };

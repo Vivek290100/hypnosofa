@@ -13,7 +13,7 @@ const cartCountMiddleware = async (req, res, next) => {
                 const cartData = await Cart.findOne({ userId });
                 if (cartData) {
                     const cartCount = cartData.products.length
-                    console.log("cartCount:", cartCount);
+                    // console.log("cartCount:", cartCount);
                     res.locals.cartCount = cartCount;
                     res.locals.name = user.name;
                 } else {

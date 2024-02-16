@@ -1,5 +1,5 @@
 
-<%- include('nav') -%>
+<%- include('nav',{ user: user,cartItemCount: cartItemCount }) -%>
 
 
 <style>
@@ -295,6 +295,14 @@ img {
     width: 450px;
     height: 450px;
   }
+  .outofstock{
+    width: 240px;
+    height: 50px;
+    background-color: #004C3F;
+    margin: 20px;
+    color: #fff;
+    font-size: 25px;
+  }
 
 
 
@@ -345,9 +353,11 @@ img {
               </div> -->
               
               <div class="action btn-container">
-                <!-- <button class="add-to-cart btn btn-default"  type="button">add to cart</button> -->
-                <a href="/user/addtocart/<%= product._id %>" class="add-to-cart btn btn-default" role="button">Add to Cart</a>
-
+                <% if (product.quantity > 0) { %>
+                  <a href="/user/addtocart/<%= product._id %>" class="add-to-cart btn btn-default" role="button">Add to Cart</a>
+                <% } else { %>
+                  <p class="not-available outofstock">Out of Stock</p>
+                <% } %>
               </div>
               <% } %>
             </div>
@@ -378,7 +388,10 @@ img {
       $(targetImageId).addClass('active');
     });
   });
+
+ 
 </script>
+
 
         
 
@@ -391,7 +404,7 @@ img {
 
 
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
 

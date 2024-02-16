@@ -6,6 +6,7 @@ const controller1 = require('../controller/otpcontroller');
 const controller2 = require('../controller/resetpassword');
 const controller3= require('../controller/userprofilecontroller');
 const controller4= require('../controller/cartcontroller');
+const controller5= require('../controller/ordercontroller');
 
 const { verifyUser, userExist,checkUserStatus } = require("../middlewares/session");
 
@@ -36,11 +37,17 @@ router.get('/otpresend',controller2.otpresend)
 router.get("/user/profile",verifyUser,controller3.userprofile);
 router.post("/change-password",verifyUser,controller3.changepassword)
 router.post('/save-address',verifyUser, controller3.saveAddress);
+router.get('/user/deleteaddress/:id',verifyUser,controller3.deleteAddress);
+router.get('/edit-address/:id', controller3.editAddress);
+router.put('/update-address/:id', controller3.updateAddress);
 
 //user cart------------------------------------------------------->
 router.get('/user/cart',verifyUser,controller4.usercart);
 router.get('/user/addtocart/:productId', verifyUser, controller4.addToCart);
+router.get('/removeItem/:productId',verifyUser, controller4.removeFromCart);
 
+//checkout---------------------------------------------------
+router.get('/checkout',controller5.checkout);
 
 
 

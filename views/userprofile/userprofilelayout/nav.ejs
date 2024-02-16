@@ -15,22 +15,18 @@
                     <ul class="nav ">
                     
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="/user/cart">
                                 <% if (user) { %>
-                                <i class="fa fa-shopping-cart"></i> Cart (0)
+                                    <% if (cartCount >= 0) { %>
+                                        <i class="fa fa-shopping-cart"></i> Cart (<%= cartCount %>)
+                                    <% } else { %>
+                                        <h1>Nothing has happened</h1>
+                                    <% } %>
                                 <% } %>
 
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <% if (user) { %>
-                                <i class="fa fa-heart"></i> Wishlist (0)
-                                <% } %>
-
-                            </a>
-                
-                        </li>
+                       
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <% if (user) { %>

@@ -172,14 +172,14 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 
 
 <!--Website: wwww.codingdung.com-->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile </title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -198,8 +198,8 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                             href="#account-change-password">Change password</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
                             href="#account-info">Address</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-social-links">Orders</a>
+                        <a class="list-group-item list-group-item-action" 
+                            href="/checkout">Orders</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
                             href="#account-connections">Payment</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
@@ -276,10 +276,10 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                         <label class="form-label">Mobile</label>
                         <input type="text" class="form-control" name="mobile" placeholder="Mobile">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" name="email" placeholder="Email">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label class="form-label">Pincode</label>
                         <input type="text" class="form-control" name="pincode" placeholder="Pincode">
@@ -325,31 +325,81 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
     <button type="button" class="btn btn-primary " id="btn-add-address">Add Address</button>
     <br><br>
     
-    
-  <% addresses.forEach(function(address,index) { %>
-    
-    <div class="address-container">
-        <div class="address-heading">Address <%= index + 1%></div>
-        <div class="address-buttons">
-            <button>Edit</button>
-            <button>Delete</button>
+    <% addresses.forEach(function(address, index) { %>
+        <div class="address-container">
+            <div class="address-heading">Address <%= index + 1 %></div>
+            <div class="address-buttons">
+                <a href="" class="btn btn-primary btn-edit" data-toggle="modal" data-target="#editAddressModal" data-id="<%= address._id %>">Edit</a>
+                <!-- <button >Edit</button> -->
+                <a class="btn btn-delete" href="/user/deleteaddress/<%= address._id %>">Delete</a>
+            </div>
+            <div>
+                <span><%= user.name %>,</span>
+                <span><%= address.mobile %></span>
+            </div>
+            <div>
+                <span><%= address.houseName %></span>
+                <span><%= address.locality %>,</span>
+                <span><%= address.city %>,</span>
+                <span><%= address.district %>,</span>
+                <span><%= address.state %> -</span>
+                <span><%= address.pincode %></span>
+            </div>
         </div>
-        <div>
-            <span><%=user.name %>,</span>
-            <span><%=address.mobile %></span>
-        </div>
-        <div>
-            <span> <%=address.houseName %></span>
-            <span><%=address.locality %>,</span>
-            <span><%=address.city %>,</span>
-            <span><%=address.district %>,</span>
-            <span><%=address.state %> -</span>
-            <span><%=address.pincode %></span>
+    <% }); %>
+    
+
+</div>
+
+
+
+<!-- Add a modal for editing address -->
+<div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editAddressForm">
+                    <div class="form-group">
+                        <label for="editMobile">Mobile</label>
+                        <input type="text" class="form-control" id="editMobile" name="mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="editMobile">Pincode</label>
+                        <input type="text" class="form-control" id="editMobile" name="mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="editMobile">House Name</label>
+                        <input type="text" class="form-control" id="editMobile" name="mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="editLocality">Locality</label>
+                        <input type="text" class="form-control" id="editLocality" name="locality">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCity">City</label>
+                        <input type="text" class="form-control" id="editCity" name="city">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDistrict">District</label>
+                        <input type="text" class="form-control" id="editDistrict" name="district">
+                    </div>
+                    <div class="form-group">
+                        <label for="editState">State</label>
+                        <input type="text" class="form-control" id="editState" name="state">
+                    </div>
+                    <!-- Add other address fields here -->
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
         </div>
     </div>
-
-  <% }); %>
-
 </div>
 
 
@@ -357,7 +407,13 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 
 
 
-                        <div class="tab-pane fade" id="account-social-links">
+
+
+
+
+
+
+                        <!-- <div class="tab-pane fade" id="account-social-links">
                             <div class="card-body pb-2">
                                 <div class="form-group">
                                     <label class="form-label">Twitter</label>
@@ -477,14 +533,14 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
         
     </div><br><br><br><br>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <!-- <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
@@ -535,7 +591,7 @@ $(document).ready(function() {
 // change password script end=========================
 
 //==========================Address script=============
-// Assume jQuery is included
+
 
 $(document).ready(function() {
     // Handle form submission
@@ -543,28 +599,19 @@ $(document).ready(function() {
         event.preventDefault();
         var formData = $(this).serialize();
         
-        // Send AJAX request to save address
         $.post('/save-address', formData, function(response) {
-            // Handle response, maybe display a success message
-            // Clear form fields
             $('#address-form')[0].reset();
-            // Reload address list
-            loadAddressList();
-            addAddress();
+            location.reload();
         });
     });
 
     function addAddress() {
-    // Your code to handle form submission and address addition goes here
     
-    // Assuming the address is added successfully, show the success message
     document.getElementById("address-success-message").style.display = "inline";
 }
     
-    // Load address list on page load
     loadAddressList();
     
-    // Function to load and display address list
     function loadAddressList() {
         $.get('/get-addresses', function(addresses) {
             var addressListHtml = '';
@@ -572,7 +619,6 @@ $(document).ready(function() {
                 addressListHtml += '<div class="card-body pb-2">';
                 addressListHtml += '<p>Mobile: ' + address.mobile + '</p>';
                 addressListHtml += '<p>Email: ' + address.email + '</p>';
-                // Include other address fields as needed
                 addressListHtml += '<div class="text-right mt-3">';
                 addressListHtml += '<button type="button" class="btn btn-primary btn-edit" data-id="' + address._id + '">Edit</button>';
                 addressListHtml += '<button type="button" class="btn btn-danger btn-delete" data-id="' + address._id + '">Delete</button>';
@@ -584,42 +630,62 @@ $(document).ready(function() {
     }
     
     // Handle edit button click
-    $('#address-list').on('click', '.btn-edit', function() {
+    $(document).on('click', '.btn-edit', function(event) {
+        event.preventDefault(); // Prevent the default behavior of the anchor tag
+        
         var addressId = $(this).data('id');
-        // Fetch address details and populate form fields for editing
+
         $.get('/get-address/' + addressId, function(address) {
-            // Populate form fields with address details for editing
-            $('#address-form input[name="mobile"]').val(address.mobile);
-            $('#address-form input[name="email"]').val(address.email);
-            // Populate other fields similarly
-            // Change submit button to Update instead of Add Address
-            $('#btn-save-address').text('Update').attr('id', 'btn-update-address');
+            $('#editMobile').val(address.mobile);
+
+            $('#editAddressModal').modal('show');
         });
     });
-    
-    // Handle update button click
-    $('#address-form').on('click', '#btn-update-address', function() {
-        // Similar to handling form submission, but this time update the existing address instead of adding a new one
-        // You need to send the address ID along with the updated data
-        // Then reload the address list
-    });
-    
-    // Handle delete button click
-    $('#address-list').on('click', '.btn-delete', function() {
+
+
+
+      // Handle update button click
+      $('#btn-update-address').on('click', function() {
         var addressId = $(this).data('id');
-        // Send AJAX request to delete address
-        $.post('/delete-address/' + addressId, function(response) {
-            // Handle response, maybe display a success message
-            // Reload address list
-            loadAddressList();
+
+        var formData = $('#edit-address-form').serialize();
+
+        $.ajax({
+            url: '/update-address/' + addressId,
+            type: 'PUT',
+            data: formData,
+            success: function(response) {
+                alert(response.message);
+                loadAddressList();
+                $('#edit-address-form')[0].reset();
+                $('#editAddressModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseJSON.error);
+            }
         });
     });
     
+  
+    
+// Handle delete button click
+$('#address-list').on('click', '.btn-delete', function() {
+    var addressId = $(this).data('id');
+    $.ajax({
+        url: '/delete-address/' + addressId,
+        type: 'DELETE', 
+        success: function(response) {
+            loadAddressList();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error deleting address:', error);
+        }
+    });
+});
+
     // Handle cancel button click
     $('#btn-cancel').click(function() {
-        // Clear form fields
         $('#address-form')[0].reset();
-        // Reset submit button to Add Address
         $('#btn-update-address').text('Add Address').attr('id', 'btn-save-address');
     });
 });
@@ -648,57 +714,86 @@ $(document).ready(function() {
         var addButton = document.getElementById('btn-add-address');
         if (form.style.display === 'none') {
             form.style.display = 'block';
-            addButton.style.display = 'none'; // Hide the button
+            addButton.style.display = 'none';
         } else {
             form.style.display = 'none';
-            addButton.style.display = 'block'; // Show the button again
+            addButton.style.display = 'block'; 
         }
     });
 
     document.getElementById('btn-cancel').addEventListener('click', function() {
         document.getElementById('address-form').style.display = 'none';
-        document.getElementById('btn-add-address').style.display = 'block'; // Show the button again
+        document.getElementById('btn-add-address').style.display = 'block'; 
     });
 </script>
 
 
 
+
+
 <script>
-    document.getElementById("btn-save-address").addEventListener("click", function(event) {
-        var form = document.getElementById("address-form");
-        var inputs = form.querySelectorAll("input");
-        var isValid = true;
+// Handle edit button click
+$(document).on('click', '.btn-edit', function() {
+    var addressId = $(this).data('id');
 
-        inputs.forEach(function(input) {
-            if (input.value.trim() === "") {
-                isValid = false;
-                input.classList.add("is-invalid");
-            } else {
-                input.classList.remove("is-invalid");
-            }
-        });
+    $.get('/get-address/' + addressId, function(address) {
+        $('#editMobile').val(address.mobile);
 
-        if (!isValid) {
-            event.preventDefault();
-            alert("Please fill out all fields.");
+        $('#editAddressModal').modal('show');
+    });
+});
+
+
+// Handle update button click
+$('#address-form').on('click', '#btn-update-address', function() {
+    var addressId = $(this).data('id');
+
+    var formData = $('#address-form').serialize();
+
+    $.ajax({
+        url: '/update-address/' + addressId,
+        type: 'PUT',
+        data: formData,
+        success: function(response) {
+            alert(response.message);
+            loadAddressList();
+            $('#address-form')[0].reset();
+            $('#btn-update-address').text('Add Address').attr('id', 'btn-save-address');
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseJSON.error);
         }
     });
+});
+
 </script>
 
 <script>
-    // JavaScript function to handle form submission and address addition
-function addAddress() {
-    // Your code to handle form submission and address addition goes here
-    
-    // Assuming the address is added successfully, show the success message
-    document.getElementById("address-success-message").style.display = "inline";
-}
-
-</script>
-
-
-
-<%- include('userprofilelayout/footer') -%>
+    document.getElementById('btn-save-address').addEventListener('click', function() {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Your address has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      }).then(function() {
+        location.reload();
+      });
+    });
+    </script>
+<script>
+    document.getElementById('btn btn-delete').addEventListener('click', function() {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Your address has been saved",
+        showConfirmButton: false,
+        timer: 1500
+      }).then(function() {
+        location.reload();
+      });
+    });
+    </script>
 
 
 

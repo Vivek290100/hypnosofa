@@ -15,7 +15,7 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
             font-size: 1.1rem;
-            font-weight: bold;
+            /* font-weight: bold; */
         }
         .title {
             margin-bottom: 5vh;
@@ -49,8 +49,8 @@
         }
         .summary {
             background-color: #ddd;
-            border-top-right-radius: 1rem;
-            border-bottom-right-radius: 1rem;
+            /* border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem; */
             padding: 4vh;
             color: rgb(0, 0, 0);
         }
@@ -68,12 +68,14 @@
         }
         .row {
             margin: 0;
+            font-family:sans-serif;
+            font-size: 15px;
         }
         .title b {
             font-size: 1.5rem;
         }
         .main {
-            margin: 0;
+            margin: -13px;
             padding: 2vh 0;
             width: 100%;
         }
@@ -85,10 +87,11 @@
         }
         .close {
             margin-left: auto;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
+            margin-top: 8px;
         }
         img {
-            width: 3.5rem;
+            width: 7rem;
         }
         .back-to-shop {
             margin-top: 4.5rem;
@@ -156,6 +159,45 @@
             background-position-x: 95%;
             background-position-y: center;
         }
+
+        .price {
+        text-transform: UPPERCASE;
+        font-weight: bold; }
+
+       .price{
+       color: #004c3f; }
+        .back{
+            background-color: #004c3f;
+            color: #fff;
+        }
+        /* .img-fluid{
+            width: 100px;
+            height: 100px;
+        } */
+        .quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-control button {
+    background-color: #004c3f;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.quantity-control input {
+    width: 40px;
+    padding: 6px 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 5px;
+    font-size: 1rem;
+}
+
+      
         
     </style>
 </head>
@@ -165,7 +207,7 @@
         <div class="col-md-8 cart">
             <div class="title">
                 <div class="row">
-                    <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                    <div class="col"><h4><b>SHOPPING CART</b></h4></div>
 
 <% if (cartItems && cartItems.length > 0) { %>
     <div class="col align-self-center text-right text-muted"><%= cartItems.length %> items</div>
@@ -181,59 +223,188 @@
                 <% if (cartItems && cartItems.length > 0) { %>
     <% cartItems.forEach(item => { %>
 
-                <div class="row main align-items-center">
-          <% if (item.productId && item.productId.images[0]) { %>
+        <div class="row main align-items-center">
+            <% if (item.productId && item.productId.images[0]) { %>
+            <div class="col-2">
+                <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
+            </div>
+            <% } else { %>
+                <p>No images available</p>
+            <% } %>
+            <div class="col">
+                <div class="row"><%= item.productId && item.productId.name %></div>
+                <div class="row text-muted">₹<%=item.productId &&  item.productId.price%></div>
 
-                    <div  class="col-2">
-                        <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid" src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
-                    </div>
-                    <% } else { %>
-                        <p>No images available</p>
-                      <% } %>
-                    <div class="col">
-                        <div class="row text-muted"><Shirt></div>
-                        <div class="row"><%= item.productId && item.productId.name %></div>
-                    </div>
-                    <div class="col">
-                        <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                    </div>
-                     <!-- <div class="col">
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1">
-              </div> -->
-                    <div class="col">₹ 44.00 <span class="close">&#10005;</span></div>
-                </div>
+            </div>
+
+
+            <div class="col quantity-control">
+                <button class="decrease" onclick="decreaseQuantity(this)">-</button>
+                <input type="text" class="quantity-input" value="1" readonly>
+                <button class="increase" onclick="increaseQuantity(this)">+</button>
+            </div>
+            
+
+            <div class="col pricec">
+
+            <div class="col price" data-unit-price="<%=item.productId &&  item.productId.price%>">₹ <%=item.productId &&  item.productId.price%></div>
+            <!-- Move remove button here -->
+            </div>
+            <!-- Move remove button outside the 'col' div -->
+            <div class="col">
+                <a href="/removeItem/<%= item.productId._id %>" class=" close" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">&#10005; Remove</a>
+            </div>
+        </div>
+        
     <% }); %>
     <% } else { %>
         <p>No items in the cart.</p>
     <% } %>
 
             </div>
-            <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+            
+            <div class="back-to-shop"><a href="/user/product"><button class="text-mute back">🢀Back to shop</button></a></div>
         </div>
         <div class="col-md-4 summary">
-            <div><h5><b>Summary</b></h5></div>
+            <div><h5><b>PRICE DETAILS</b></h5></div>
             <hr>
             <div class="row">
-                <div class="col" style="padding-left:0;">ITEMS 3</div>
-                <div class="col text-right">&euro; 132.00</div>
-            </div>
-            <form>
+                <div class="col" style="padding-left:0;">TOTAL PRICE (<%= cartItems.length %> items)</div>
+                <div class="col text-right" id="total-price">₹ <%= totalPrice.toFixed(2) %></div>
+            </div><br>
+            <!-- <form>
                 <p>SHIPPING</p>
                 <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
                 <p>GIVE CODE</p>
                 <input id="code" placeholder="Enter your code">
-            </form>
+            </form> -->
+            
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                <div class="col">TOTAL PRICE</div>
-                <div class="col text-right">&euro; 137.00</div>
+                <!-- <div class="col">PACKAGING FEE</div>
+                <div class="col text-right">&euro; 137.00</div> -->
             </div>
-            <button class="btn">CHECKOUT</button>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <!-- <div class="col">TOTAL PRICE</div>
+                <div class="col text-right" id="total-price">₹ </div> -->
+            </div>
+            <a class="btn" href="/checkout"><button >CHECKOUT</button></a>
+            
         </div>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+
+
+<script>
+// function removeItem(button) {
+//     const productId = button.getAttribute('data-product-id');
+//     $.ajax({
+//       url: `/removeItem/${productId}`,
+//       type: 'DELETE',
+//       success: function(response) {
+//         if (response.success) {
+//           // Remove the item from the UI without reloading the page
+//           $(button).closest('.main').remove();
+//           // You can also update any summary or total price if needed
+//         } else {
+//           // Handle error response
+//           console.error(response.message);
+//         }
+//       },
+//       error: function(xhr, status, error) {
+//         console.error(error);
+//       }
+//     });
+//   }
+// </script>
+
+
+
+
+<!-- Updated removeItem function in the script section -->
+<script>
+    function removeItem(button) {
+        const productId = button.getAttribute('data-product-id');
+        $.ajax({
+          url: `/removeItem/${productId}`,
+          type: 'DELETE',
+          success: function(response) {
+            if (response.success) {
+              // Remove the item from the UI without reloading the page
+            //   $(button).closest('.main').remove();
+              // You can also update any summary or total price if needed
+            } else {
+              // Handle error response
+              console.error(response.message);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+    }
+    
+
+    </script>
+    
+
+
+
+    <script>
+    function increaseQuantity(button) {
+        const quantityInput = $(button).siblings('.quantity-input');
+        const currentQuantity = parseInt(quantityInput.val());
+        const newQuantity = currentQuantity + 1;
+        quantityInput.val(newQuantity);
+        
+        const priceDisplay = $(button).closest('.main').find('.price');
+        const unitPrice = parseInt(priceDisplay.attr('data-unit-price'));
+        const totalPrice = unitPrice * newQuantity;
+        priceDisplay.text('₹ ' + totalPrice.toFixed(2));
+
+        updateTotalPrice();
+    }
+
+    function decreaseQuantity(button) {
+        const quantityInput = $(button).siblings('.quantity-input');
+        const currentQuantity = parseInt(quantityInput.val());
+        if (currentQuantity > 1) {
+            const newQuantity = currentQuantity - 1;
+            quantityInput.val(newQuantity);
+            
+            const priceDisplay = $(button).closest('.main').find('.price');
+            const unitPrice = parseInt(priceDisplay.attr('data-unit-price'));
+            const totalPrice = unitPrice * newQuantity;
+            priceDisplay.text('₹ ' + totalPrice.toFixed(2));
+
+            updateTotalPrice();
+        }
+    }
+
+    function updateTotalPrice() {
+    let totalPrice = 0;
+    $('.price').each(function() {
+        const priceText = $(this).text().replace('₹ ', ''); // Remove currency symbol
+        const price = parseFloat(priceText); // Parse price as float
+        if (!isNaN(price)) { // Check if price is a valid number
+            totalPrice += price; // Add to total price
+        }
+    });
+    $('#total-price').text('₹ ' + totalPrice.toFixed(2)); // Format total price with 2 decimal places
+}
+</script>
+
+
+
+
+ 
+    
+    
+
+
+
 </body>
 </html>
 
@@ -242,4 +413,3 @@
 
 
 
-<%- include('../user/footer') -%>

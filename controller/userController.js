@@ -45,11 +45,11 @@ const login1 = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             req.flash('error1', 'Invalid email or password');
-            return res.redirect('./user/login', { error1: req.flash('error1') });
+            return res.render('./user/login', { error1: req.flash('error1') });
         }
         if (user.status === 'blocked') {
             req.flash('error1', 'User is blocked. Cannot log in.');
-            return res.redirect('./user/login', { error1: req.flash('error1') });
+            return res.render('./user/login', { error1: req.flash('error1') });
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (passwordMatch) {
@@ -65,7 +65,7 @@ const login1 = async (req, res) => {
                return res.render('./user/userhome', { user ,products});
            } else {
                req.flash('error1', 'Invalid email or password');
-               return res.render('./user/login', { error1: req.flash('error1') });
+               return res.redirect('./user/login', { error1: req.flash('error1') });
            }
        } catch (error) {
            console.error(error);
@@ -79,16 +79,43 @@ const login1 = async (req, res) => {
 const product = async (req, res) => {
     try {
         const user = req.session.user;
-        console.log("user",user);
-        const products = await Product.find().populate('category');
+        let query = {}; // Default query to find all products
+        const searchQuery = req.query.q; // Get search query from URL parameter 'q'
+        let sortCriteria = req.query.sort; // Get sorting criteria from URL parameter 'sort'
+        
+        if (searchQuery) {
+            // If there's a search query, create a regex to match product names containing the query string
+            query = { name: { $regex: new RegExp(searchQuery, 'i') } };
+        }
 
-        console.log("product",products);
-    
+        // Sorting logic based on selected criteria
+        let sortOptions = {};
+        switch (sortCriteria) {
+            case 'price_low_high':
+                sortOptions = { price: 1 };
+                break;
+            case 'price_high_low':
+                sortOptions = { price: -1 };
+                break;
+            case 'name_a_z':
+                sortOptions = { name: 1 };
+                break;
+            case 'name_z_a':
+                sortOptions = { name: -1 };
+                break;
+            default:
+                // No sorting criteria specified, keep the default order
+                break;
+        }
+
+        // Find products based on the query and apply sorting
+        const products = await Product.find(query).sort(sortOptions).populate('category');
+        const cartItemCount = req.session.cartItemCount;
         res.render('./user/products', {
             title: 'Products',
             products,
-              // It seems like `categories` is not defined in the provided code.
             user,
+            cartItemCount,
         });
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -96,20 +123,23 @@ const product = async (req, res) => {
     }
 };
 
+
+
+
 //user main product page------------------------------------------------------->
 const mainproduct = async (req,res)=>{
     
     try {
         const productId = req.params.productId; 
         const product = await Product.findById(productId).populate('category');
-         // console.log("product idddd: ", productId);
-         // console.log("productttt: ", product);
+        
         if (!product) {
             console.log("Product not found");
             return res.render('./user/mainproduct', { title: 'Product Not Found' });
         }
         const user = req.session.user;
-        console.log(user);
+        cartItemCount=req.session.cartItemCount
+
         res.render('./user/mainproduct',{title: 'Products', product,user})        
     } catch (error) {
         console.error('Error fetching product:', error);

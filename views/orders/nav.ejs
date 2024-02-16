@@ -4,7 +4,7 @@
 <div class="main-navbar sticky-top ">
     <div class="top-navbar sticky-top">
         <div class="container-fluid ">
-            <div class="row ">
+            <div class="row roww">
                 <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
 
                     <h3 class="brand-name space" style="margin-left: -51px; padding-top: 10px; font-size: 30px;"><img src="/assets/homeimg/brand-logo2.png" alt="Logo" class="brand-logo">Hypnosofa</h3>
@@ -22,71 +22,25 @@
                 </div>
                 <div class="col-md-5 my-auto">
                     <ul class="nav justify-content-end">
-                    
-                       
-                        <li class="nav-item">
-                            <% if (!user) { %>
-
-                            <a class="nav-link" href="/user/product">
-                            
-                                <i class="fa-solid fa-circle-info"></i> About
-                                <% } %>
-
-                                
-
-                            </a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="/user/cart">
-                                <% if (user) { %>
-                                    <% if (cartCount >= 0) { %>
                                         <i class="fa fa-shopping-cart"></i> Cart (<%= cartCount %>)
-                                    <% } else { %>
-                                        <h1>Nothing has happened</h1>
-                                    <% } %>
-                                <% } %>
+                                 
                                 
 
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/user/product">
-                                <% if (user) { %>
                                 <i class="fa-solid fa-store"></i> Products 
-                                <% } %>
                             </a>
                 
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <% if (user) { %>
-                                    <%= user.name %> 
-                                  <% } else { %>
-                                <i class="fa fa-user"></i> Account
-                                <% } %>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <% if (!user) { %>
-                                <li><a class="dropdown-item" href="/user/signup"><i class="fa fa-user"></i> Signup</a></li>
-                                <li><a class="dropdown-item" href="/user/login"><i class="fa fa-user"></i> Login</a></li>
-                                <% } %>
-
-                                <% if (user) { %>
-
-                                <li><a class="dropdown-item" href="/user/profile"><i class="fa fa-user"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Orders</a></li>
-
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> My Wishlist</a></li>
-
-
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
-
-
-                                <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-                                <% } %>
-
-                            </ul>
-                        </li>
+                        
+                        
+                        
+                       
                        
                     </ul>
                 </div>
@@ -139,10 +93,7 @@ padding-left: 40px;
         box-shadow: none;
     }
 
-
  
-
-
 
 
     .main-navbar .top-navbar .brand-name {
@@ -185,7 +136,7 @@ padding-left: 40px;
     }
 
     .space {
-        padding-left: 50px;
+        padding-left: 100px;
         margin-left: 10px;
     }
 
