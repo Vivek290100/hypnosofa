@@ -7,13 +7,13 @@ const cartSchema = new Schema({
     {
       productId: { type: Schema.Types.ObjectId, ref: 'Product' },
       quantity: { type: Number, default: 1 },
+      price: {type: Number},
     },
   ],
   totals: {
-    subtotal: { type: Number, default: 0 },
-    tax: { type: Number, default: 0 },
-    shipping: { type: Number, default: 0 },
-    grandTotal: { type: Number, default: 0 },
+    total:{type: Number, default: 0},
+    subtotal: {type: Number,default: 0},
+    totalprice: { type: Number, default: 0 },
   },
 });
 

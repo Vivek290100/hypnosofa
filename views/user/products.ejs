@@ -414,7 +414,7 @@ border-radius: 5px;
         <div class="button-wrapper">
             <a href="/user/mainproduct/<%= product._id %>">  <button class="btn outline" >DETAILS</button>
             </a>
-            <button class="btn fill">BUY NOW</button>
+            <a href="/user/addtocart/<%= product._id %>">  <button class="btn fill">ADD TO CART</button></a>
         </div>
     </div>
     <% if ((index + 1) % 4 === 0 || (index + 1) === products.length) { %>

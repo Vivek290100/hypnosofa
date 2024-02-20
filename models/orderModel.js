@@ -48,56 +48,24 @@ const orderSchema = new mongoose.Schema({
     },
   },
   totals: {
+    total: {
+      type: Number,
+      require: true
+    },
     subtotal: {
       type: Number,
       required: true,
     },
-    tax: {
-      type: Number,
-      required:true,
-    },
-    shipping: {
-      type: Number,
-      required:true,
-    },
-    grandTotal: {
+    totalprice: {
       type: Number,
       required:true,
     },
   },
-  orderDate: {
-    type: Date,
-    required: true,
-  },
-  orderTime: {
-    type: String, 
-    required: true,
-  },
-  deliveryDate: {
-    type: Date,
-    required:true,
-  },
-  deliveryTime: {
-    type: String,
-    required:true 
-  },
-  couponCode:{
-    type:String,
-  },
-  discountAmount:{
-    type:String,
-  },
+ 
+ 
+ 
 
-  paymentMethod: {
-    type: String,
-    enum: ['Wallet', 'RazorPay', 'Cash on Delivery', 'Other'], 
-    required: true,
-  },
-  status: {
-    type: String,
-    enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
-    default: 'Pending',
-  },
+  
 });
 
 const Order = mongoose.model('Order', orderSchema);

@@ -16,7 +16,7 @@ const productList = async (req, res) => {
             title: 'Products',
             products,
         });
-        console.log(products)
+        // console.log(products)
     } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).send('Internal Server Error');

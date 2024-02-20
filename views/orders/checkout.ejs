@@ -1,8 +1,14 @@
 
-<%- include('nav') -%>
+<%- include('nav',{user:user}) -%>
 <style>
 
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Lato);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css);
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
 @import url(https://fonts.googleapis.com/css?family=Raleway:100,200,300);
 @keyframes content-opacity {
   from {
@@ -161,6 +167,7 @@ html {
 }
 .tabs-wrapper label:last-of-type {
   border-bottom: none;
+  border: 1px solid black;
 }
 .tabs-wrapper label:hover {
   background: #667876;
@@ -168,12 +175,12 @@ html {
 }
 @media screen and (max-width: 1600px) {
   .tabs-wrapper label {
-    width: 24.6%;
+    width: 32.8%;
   }
 }
 @media screen and (max-width: 900px) {
   .tabs-wrapper label {
-    width: 20%;
+    width: 32.5%;
   }
 }
 @media screen and (max-width: 600px) {
@@ -188,6 +195,10 @@ html {
   .tabs-wrapper {
     margin: 0;
   }
+}
+
+.container{
+  background-color: #a7bcb3;
 }
 
 #tab1:checked + label,
@@ -206,8 +217,8 @@ html {
 }
 
 .tab-body-wrapper {
-  background: #a7bcb3;
-  border-top: #004c3f 5px solid;
+  /* background: #a7bcb3; */
+  /* border-top: #004c3f 5px solid; */
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
   border-top-right-radius: 3px;
@@ -215,7 +226,11 @@ html {
   animation-duration: 1.5s;
   animation-name: show;
   animation-fill-mode: forwards;
+  height: 60vh;
+  
 }
+
+
 @media screen and (max-width: 600px) {
   .tab-body-wrapper {
     border: none;
@@ -255,6 +270,222 @@ html {
         border: 1px solid #ccc; /* Adding border */
         padding: 10px; /* Adding padding */
     }
+    .user-info,
+.product-info {
+    border: 1px solid #ccc; /* Adding border */
+    padding: 10px; /* Adding padding */
+    background-color: #a7bcb3; /* Adding background color */
+}
+body{
+  font-family:calibri;
+  height: 100vh;
+}
+.address-row {
+  display: inline-block;
+  height: 123px;
+  width: 380px;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  vertical-align: top;
+  border-radius: 4px;
+  position: relative;
+  padding: 19px 5px 25px 42px;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(40,44,63,.08);
+  border: 1px solid #eaeaec;
+  background-color: #a7bcb3;
+}
+
+/* .address-row:hover {
+  border: 1px solid #000000!important
+} */
+
+.address-row .name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #000000;
+  padding-left: 0;
+  padding-top: 0;
+  white-space: nowrap;
+}
+.address-row .name .address-type {
+  float: right;
+  font-size: 10px;
+  padding: 2px 10px;
+  border: 1px solid #d5d6d9;
+  border-radius: 20px;
+  color: #596062;
+  margin-right: 10px;
+}
+.address-row .address {
+  padding-left: 0;
+  padding-top: 10px;
+  width: 80%;
+}
+.address-row .address .address-content {
+  color: #535766;
+  line-height: 1.4;
+}
+.address-row .address .address-content .mob {
+  display: block;
+  padding: 8px 0
+}
+.address-row .address .address-content .mobile {
+  font-weight: 600
+}
+.address-row .select {
+  position: absolute;
+  left: 12px;
+  top: 27px;
+  background: url(address-check.png) -24px 0 no-repeat;
+  border: none;
+  border-radius: 50px;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle
+}
+.address-row.selected .select {
+  background: url(address-check.png) 0 0 no-repeat;
+  background-color: #004c3f;
+}
+.address-row.selected {
+  /* background: #919a96; */
+  border-color: #000000;
+  color: #000000;
+  margin-bottom: 8px;
+  box-shadow: 2px 2px 2px 2px #868b8a;
+  /* background: radial-gradient(rgb(176, 179, 177), rgba(0, 0, 0, 0.2) 50%); */
+}
+  
+
+a.add-address .add-new-address {
+  display: inline-block;
+  height: 200px;
+  width: 347px;
+  margin-right: 15px;
+  margin-bottom: 17px;
+  vertical-align: top;
+  border: 1px dashed #ccd2d5;
+  border-radius: 4px;
+  position: relative;
+  text-align: center;
+  padding-left: 0;
+}
+a.add-address .add-new-address:hover {
+  border: 1px solid #8d3030;
+}
+a.add-address .add-new-address:before {
+  margin: 60px auto 10px;
+  content: ' ';
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  vertical-align: middle;
+  display: block;
+  background: url(add-new.png) 0 0 no-repeat!important;
+}
+
+ /* Custom radio button styles */
+ .form-check-input[type="radio"] {
+    width: 20px; /* Set width */
+    height: 20px; /* Set height */
+    border-radius: 50%; /* Make it circular */
+    border: 2px solid #004c3f; /* Set border */
+    background-color: #fff; /* Set background color */
+    margin-right: 5px; /* Adjust margin */
+  }
+
+  /* Custom radio button checked state */
+  .form-check-input[type="radio"]:checked {
+    background-color: #004c3f; /* Change background color when checked */
+  }
+
+  /* Custom radio button label styles */
+  .form-check-label {
+    color: #004c3f; /* Set label color */
+    font-weight: bold; /* Set label font weight */
+  }
+  .overflow-hidden{
+    overflow: hidden!important;
+    height: 59vh;
+  }
+
+  .address-row1 {
+    height: 80px;
+    width: 380px;
+    margin-right: 25px;
+    margin-bottom: 25px;
+    vertical-align: top;
+    border-radius: 4px;
+    position: relative;
+    padding: 19px 5px 25px 42px;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(40,44,63,.08);
+    border: 1px solid #eaeaec;
+    background-color: #a7bcb3;
+}
+
+@media only screen and (max-width: 600px) {
+  .address-row {
+    display: inline-block;
+    height: 99px;
+    width: 321px;
+    margin-right: 25px;
+    margin-bottom: 7px;
+    vertical-align: top;
+    border-radius: 4px;
+    position: relative;
+    padding: 3px 5px 25px 42px;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(40,44,63,.08);
+    border: 1px solid #eaeaec;
+    background-color: #a7bcb3;
+}
+}
+
+@media only screen and (max-width: 377px) {
+
+#tab-body-1 {
+    width: 336px;
+    height: 200px;
+    padding: 9px;
+    border: 1px solid #000000;
+
+}
+}
+
+.checkbox-item{
+  /* background-color: #8d3030; */
+  /* border: 1px solid #000000; */
+  height: 10vh;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+
+@media only screen and (max-width: 900px) {
+  /* Adjust layout for smaller screens */
+  .checkbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between checkboxes */
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center; /* Align checkbox and label vertically */
+  }
+
+  .checkbox-item img {
+    margin-right: 10px; /* Add margin between image and label */
+  }
+}
+
+
+
+
 
 
 
@@ -287,8 +518,9 @@ html {
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container light-style flex-grow-1 container-p-y ">
+<body style="background-color: #a7bcb3;">
+
+    <div class="container light-style flex-grow-1 container-p-y " style="background-color: #a7bcb3;">
         <h4 class="font-weight-bold py-3 mb-4">
            <!-- CHECKOUT -->
         </h4>
@@ -302,50 +534,98 @@ html {
 
             <div class="tabs-wrapper">
                 <input type="radio" name="tab" id="tab1" class="tab-head" checked="checked" />
-                <label for="tab1">USER DETAILS</label>
-                <input type="radio" name="tab" id="tab2" class="tab-head" />
-                <label for="tab2">ORDER SUMMARY</label>
+                <label for="tab1">ORDERs</label>
+                <!-- <input type="radio" name="tab" id="tab2" class="tab-head" />
+                <label for="tab2">ORDER SUMMARY</label> -->
                 <input type="radio" name="tab" id="tab3" class="tab-head" />
                 <label for="tab3">ADDRESS</label>
                 <input type="radio" name="tab" id="tab4" class="tab-head" />
-                <label for="tab4">PAYMENT OPTION</label>
+                <label for="tab4">PAYMENT</label>
+
+
+
+
                 <div class="tab-body-wrapper">
-                    <div id="tab-body-1" class="tab-body">
-                        <div class="user-info">
-                            <div class="username">Name: [username]</div>
-                            <div class="email">Email: [email]</div>
-                        </div>
+                  <div id="tab-body-1" class="tab-body">
+                    <div class="user-info">
+                        <div class="username">Name:<%= user.name %></div>
+                        <div class="email">Email: <%= user.email %></div>
                     </div>
-
-
-                    <div id="tab-body-2" class="tab-body">
-                        <div class="product">
-                            <label for="product-name">Product Name:</label>
-                            <input type="text" id="product-name" name="product-name">
-                            
-                            <label for="price">Price:</label>
-                            <input type="number" id="price" name="price">
-                            
-                            <label for="quantity">Quantity:</label>
-                            <input type="number" id="quantity" name="quantity">
-                            
-                            <label for="total-price">Total Price:</label>
-                            <input type="number" id="total-price" name="total-price" readonly>
-                        </div>
-                    </div>
-                    
-
-
-                    <div id="tab-body-3" class="tab-body">
-                        <h1>Tab 3 heading</h1>
-                        <p>Bacon ipsum dolor sit amet pastrami dolor tri-tip, magna tongue ullamco occaecat velit shoulder sunt elit. Non cillum turkey short loin beef ribs. Anim qui shankle short ribs pancetta boudin. Occaecat mollit in laboris ham hock bresaola corned beef flank hamburger aute chicken id t-bone.</p>
-                    </div>
-                    <div id="tab-body-4" class="tab-body">
-                        <h1>Tab 4 heading</h1>
-                        <p>Bacon ipsum dolor sit amet pastrami dolor tri-tip, magna tongue ullamco occaecat velit shoulder sunt elit. Non cillum turkey short loin beef ribs. Anim qui shankle short ribs pancetta boudin. Occaecat mollit in laboris ham hock bresaola corned beef flank hamburger aute chicken id t-bone.</p>
+                
+                    <div class="product-info">
+                        <div class="product-name">No.of Items: <%= cartItems.length %></div>
+                        <div class="total-price" id="total-price">Total Price: ₹ <%= totalPrice.toFixed(2) %></div>
                     </div>
                 </div>
-            </div>
+                    
+<!-- --------------------------------------------------- -->
+
+
+<div id="tab-body-3" class="tab-body" >
+  <% if (addresses.length === 0) { %>
+    <div class="error-message"  >No addresses found. </div>
+    
+  <% } else { %>
+    <% addresses.forEach(function(address, index) { %>
+      <div class="address-row selected">
+        <div class="name">
+          <span>ADDRESS <%= index + 1 %></span>
+          <div>
+            <span><%= user.name %>,</span>
+            <span><%= address.mobile %></span>
+          </div>
+        </div>
+        <span><%= address.houseName %></span>
+        <span><%= address.locality %>,</span>
+        <span><%= address.city %>,</span>
+        <span><%= address.district %>,</span><br>
+        <span><%= address.state %> -</span>
+        <span><%= address.pincode %></span>
+        <button class="select"></button>
+      </div>
+    <% }); %>
+  <% } %>
+</div>
+
+
+
+
+
+
+<!-- ------------------------------------------------------------ -->
+
+
+<div id="tab-body-4" class="tab-body" style="background-color: #a7bcb3;">
+  <div class="checkbox-container">
+    <div class="checkbox-item">
+      <input type="checkbox" name="my-options" id="option1" value="option1">
+      <img src="/assets/homeimg/COD_cash_on_delivery_shipping_payment_delivery-512.webp" alt="" style="width: 40px; height: 40px;">
+      <label for="option1">Cash On Delivery</label>
+    </div>
+    <!-- Add the id attribute to the button -->
+    <div class="checkbox-item">
+      <input type="checkbox" name="my-options" id="option2" value="option2">
+      <img src="/assets/homeimg/aami6-55-256.webp" alt="" style="width: 40px; height: 40px;">
+      <label for="option2">Razorpay</label>
+    </div>
+    <div class="checkbox-item">
+      <input type="checkbox" name="my-options" id="option2" value="option2">
+      <img src="/assets/homeimg/2663922.png" alt="" style="width: 40px; height: 40px;">
+      <label for="option2">Option 2</label>
+    </div>
+  </div>
+  <!-- Add the id attribute to the button -->
+  <div class="">
+    <!-- Add the id attribute to the button -->
+    <button id="orderButton">Place Order</button>
+  </div>
+</div>
+
+  
+
+</div>
+
+</div>
 
 
 
@@ -361,19 +641,99 @@ html {
 
         </div>
         
-    </div><br><br><br><br>
+    </div>
+    
+    <br><br><br><br>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
 
     </script>
 
+<script>
+  const address = document.querySelectorAll(".address-row");
+
+for (let i = 0; i < address.length; i++) {
+  address[i].addEventListener("click", function() {
+  for (let i = 0; i < address.length; i++) {
+    address[i].classList.remove("selected");
+  }
+  this.classList.add("selected");
+  });
+}
+</script>
 
 
+<script>
+  const checkboxContainer = document.querySelector('.checkbox-container');
+
+checkboxContainer.addEventListener('change', (event) => {
+  const checkedCheckbox = event.target;
+  const otherCheckboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
+
+  // Uncheck all other checkboxes except the one clicked
+  otherCheckboxes.forEach(checkbox => {
+    if (checkbox !== checkedCheckbox) {
+      checkbox.checked = false;
+    }
+  });
+});
+
+</script>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const orderButton = document.getElementById('orderButton');
 
+  orderButton.addEventListener('click', function() {
+    const selectedAddress = document.querySelector('.address-row.selected');
+    const selectedPayment = document.querySelector('input[name="my-options"]:checked');
 
+    if (!selectedAddress) {
+      alert('Please select an address.');
+      return;
+    }
+
+    if (!selectedPayment) {
+      alert('Please select a payment method.');
+      return;
+    }
+
+    // Retrieve the index of the selected address within its parent container
+    const addressIndex = Array.from(selectedAddress.parentElement.children).indexOf(selectedAddress) + 1; // Add 1 to start index from 1
+    const paymentMethod = selectedPayment.value;
+
+    // Send data to the backend using AJAX
+    const requestData = {
+      addressIndex: addressIndex, // Use the retrieved address index
+      paymentMethod: paymentMethod
+    };
+
+    fetch('/placeorder', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    })
+    .then(response => {
+      if (response.ok) {
+        // Handle successful response
+        alert('Order placed successfully!');
+      } else {
+        // Handle error response
+        alert('Failed to place order. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again later.');
+    });
+  });
+});
+
+</script>
 
 
 

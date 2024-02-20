@@ -38,17 +38,23 @@ router.get("/user/profile",verifyUser,controller3.userprofile);
 router.post("/change-password",verifyUser,controller3.changepassword)
 router.post('/save-address',verifyUser, controller3.saveAddress);
 router.get('/user/deleteaddress/:id',verifyUser,controller3.deleteAddress);
-router.get('/edit-address/:id', controller3.editAddress);
-router.put('/update-address/:id', controller3.updateAddress);
+router.post('/save-user',verifyUser, controller3.saveUser);
+router.get('/edit-address/:id',verifyUser, controller3.editaddress)
+router.post('/submit-address/:addressId',verifyUser, controller3.updateAddress);
 
 //user cart------------------------------------------------------->
 router.get('/user/cart',verifyUser,controller4.usercart);
 router.get('/user/addtocart/:productId', verifyUser, controller4.addToCart);
 router.get('/removeItem/:productId',verifyUser, controller4.removeFromCart);
+router.put('/updateQuantity/:productId',verifyUser, controller4.updateQuantity)
+router.get('/getTotalPrice',verifyUser,controller4.totalprice)
+router.get('/getUpdatedPrice/:productId', controller4.getUpdatedPrice);
+
+
 
 //checkout---------------------------------------------------
-router.get('/checkout',controller5.checkout);
-
+router.get('/checkout',verifyUser,controller5.checkout);
+router.post('/placeorder',verifyUser, controller5.createOrder);
 
 
 

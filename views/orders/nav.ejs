@@ -37,6 +37,36 @@
                             </a>
                 
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <% if (user) { %>
+                                    <%= user.name %> 
+                                  <% } else { %>
+                                <i class="fa fa-user"></i> Account
+                                <% } %>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <% if (!user) { %>
+                                <li><a class="dropdown-item" href="/user/signup"><i class="fa fa-user"></i> Signup</a></li>
+                                <li><a class="dropdown-item" href="/user/login"><i class="fa fa-user"></i> Login</a></li>
+                                <% } %>
+
+                                <% if (user) { %>
+
+                                <li><a class="dropdown-item" href="/user/profile"><i class="fa fa-user"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Orders</a></li>
+
+                                
+
+                                <li><a class="dropdown-item" href="/user/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+
+
+                                <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                                <% } %>
+
+                            </ul>
+                        </li>
+                        
                         
                         
                         

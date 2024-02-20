@@ -223,7 +223,7 @@
                 <% if (cartItems && cartItems.length > 0) { %>
     <% cartItems.forEach(item => { %>
 
-        <div class="row main align-items-center">
+        <div class="row main align-items-center" data-product-id="<%= item.productId._id %>">
             <% if (item.productId && item.productId.images[0]) { %>
             <div class="col-2">
                 <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
@@ -239,17 +239,30 @@
 
 
             <div class="col quantity-control">
-                <button class="decrease" onclick="decreaseQuantity(this)">-</button>
-                <input type="text" class="quantity-input" value="1" readonly>
-                <button class="increase" onclick="increaseQuantity(this)">+</button>
+                <button class="decrease" >-</button>
+                <input type="text" class="quantity-input" value="<%=item.quantity%>" readonly>
+                <button class="increase" >+</button>
             </div>
             
 
-            <div class="col pricec">
 
-            <div class="col price" data-unit-price="<%=item.productId &&  item.productId.price%>">₹ <%=item.productId &&  item.productId.price%></div>
-            <!-- Move remove button here -->
-            </div>
+
+            <% if (item.productId && item.productId.price) { %>
+                <div class="col pricec">
+                    <div class="col price" data-product-id="<%= item.productId._id %>">₹ <%= (item.productId.price * item.quantity).toFixed(2) %></div>
+                </div>
+            <% } else { %>
+                <div class="col pricec">
+                    <div class="col price" data-product-id="<%= item.productId._id %>">Price Unavailable</div>
+                </div>
+            <% } %>
+            
+           
+            
+
+
+
+
             <!-- Move remove button outside the 'col' div -->
             <div class="col">
                 <a href="/removeItem/<%= item.productId._id %>" class=" close" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">&#10005; Remove</a>
@@ -294,31 +307,10 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 
 
 
-<script>
-// function removeItem(button) {
-//     const productId = button.getAttribute('data-product-id');
-//     $.ajax({
-//       url: `/removeItem/${productId}`,
-//       type: 'DELETE',
-//       success: function(response) {
-//         if (response.success) {
-//           // Remove the item from the UI without reloading the page
-//           $(button).closest('.main').remove();
-//           // You can also update any summary or total price if needed
-//         } else {
-//           // Handle error response
-//           console.error(response.message);
-//         }
-//       },
-//       error: function(xhr, status, error) {
-//         console.error(error);
-//       }
-//     });
-//   }
-// </script>
 
 
 
@@ -350,51 +342,82 @@
     </script>
     
 
-
-
     <script>
-    function increaseQuantity(button) {
-        const quantityInput = $(button).siblings('.quantity-input');
-        const currentQuantity = parseInt(quantityInput.val());
-        const newQuantity = currentQuantity + 1;
-        quantityInput.val(newQuantity);
-        
-        const priceDisplay = $(button).closest('.main').find('.price');
-        const unitPrice = parseInt(priceDisplay.attr('data-unit-price'));
-        const totalPrice = unitPrice * newQuantity;
-        priceDisplay.text('₹ ' + totalPrice.toFixed(2));
-
-        updateTotalPrice();
+        $('.increase').click(function() {
+            const row = $(this).closest('.main');
+            const productId = row.attr('data-product-id'); // Retrieve productId from data attribute
+            let quantity = parseInt(row.find('.quantity-input').val());
+            quantity++;
+            row.find('.quantity-input').val(quantity);
+            updateQuantity(productId, quantity);
+        });
+    
+        $('.decrease').click(function() {
+            const row = $(this).closest('.main');
+            const productId = row.attr('data-product-id'); // Retrieve productId from data attribute
+            let quantity = parseInt(row.find('.quantity-input').val());
+            if (quantity > 1) {
+                quantity--;
+                row.find('.quantity-input').val(quantity);
+                updateQuantity(productId, quantity);
+            }
+        });
+    
+        function updateQuantity(productId, quantity) {
+             // Ensure quantity is a valid number
+    if (isNaN(quantity)) {
+        console.error('Invalid quantity:', quantity);
+        return; // Exit the function if quantity is not a number
     }
-
-    function decreaseQuantity(button) {
-        const quantityInput = $(button).siblings('.quantity-input');
-        const currentQuantity = parseInt(quantityInput.val());
-        if (currentQuantity > 1) {
-            const newQuantity = currentQuantity - 1;
-            quantityInput.val(newQuantity);
-            
-            const priceDisplay = $(button).closest('.main').find('.price');
-            const unitPrice = parseInt(priceDisplay.attr('data-unit-price'));
-            const totalPrice = unitPrice * newQuantity;
-            priceDisplay.text('₹ ' + totalPrice.toFixed(2));
-
-            updateTotalPrice();
+            $.ajax({
+                url: `/updateQuantity/${productId}`,
+                type: 'PUT',
+                data: { quantity: quantity },
+                success: function(response) {
+                    if (response.success) {
+                        // Update any summary or total price if needed
+                    } else {
+                        console.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         }
-    }
+    </script>
+    
 
-    function updateTotalPrice() {
-    let totalPrice = 0;
-    $('.price').each(function() {
-        const priceText = $(this).text().replace('₹ ', ''); // Remove currency symbol
-        const price = parseFloat(priceText); // Parse price as float
-        if (!isNaN(price)) { // Check if price is a valid number
-            totalPrice += price; // Add to total price
+   
+    <script>
+        // Function to fetch and update the total price
+        function updateTotalPrice() {
+            $.ajax({
+                url: '/getTotalPrice', // Endpoint to fetch total price
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Update the total price element with the received data
+                        $('#total-price').text('₹ ' + response.totalPrice.toFixed(2));
+                    } else {
+                        console.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         }
-    });
-    $('#total-price').text('₹ ' + totalPrice.toFixed(2)); // Format total price with 2 decimal places
-}
-</script>
+    
+        // Call the updateTotalPrice function when the page loads
+        $(document).ready(function() {
+            updateTotalPrice(); // Fetch and update total price on page load
+    
+            // Update the total price every 5 seconds (adjust the interval as needed)
+            setInterval(updateTotalPrice,100 );
+        });
+    </script>
+    
 
 
 

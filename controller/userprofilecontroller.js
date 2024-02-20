@@ -124,34 +124,84 @@ const deleteAddress = async (req, res) => {
 
 
 
-// Controller logic for handling address editing
-const editAddress = (req, res) => {
-    const addressId = req.params.id;
-    Address.findById(addressId, (err, address) => {
-        if (err) {
-            console.error('Error finding address:', err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            res.render('edit-address', { address: address });
-        }
-    });
-};
-
-// Controller logic for updating an address
-const updateAddress = (req, res) => {
-    const addressId = req.params.id;
-    const updatedAddress = req.body;
-    Address.findByIdAndUpdate(addressId, updatedAddress, { new: true }, (err, updatedAddress) => {
-        if (err) {
-            console.error('Error updating address:', err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            res.status(200).json({ message: 'Address updated successfully' });
-        }
-    });
-};
 
   
+
+const saveUser = async (req, res) => {
+    try {
+        // Check if req.user is defined and has the id property
+        if (!req.session.user._id) {
+            throw new Error('User ID not found in request');
+        }
+
+        const userId = req.session.user._id;
+        console.log('userId......',userId);
+        const newName = req.body.name;
+        console.log('newname',newName);
+
+        // Update the user's name in the database
+        await User.findByIdAndUpdate(userId, { name: newName });
+        req.session.user.name=newName
+        res.redirect('user/profile')
+
+        // res.status(200).json({ success: true, message: 'User name updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'An error occurred while updating the user name' });
+    }
+};
+
+
+// Route to handle AJAX request for fetching address details
+
+// router.get('/edit-address/:id',
+const editaddress= async(req, res) => {
+    try {
+        const user = req.session.user
+        console.log("user",user);
+        const addressId = req.params.id;
+        console.log("addressiddd",addressId);
+        const address = await Address.findById(addressId);
+        if (!address) {
+            return res.status(404).send('Address not found');
+        }
+        res.render('userprofile/editaddress', { address,user });
+    } catch (error) {
+        console.error('Error fetching address:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const updateAddress = async (req, res) => {
+    try {
+        const { mobile, pincode, houseName, locality, city, district, state } = req.body;
+        // Assuming addressId is available in req.params or req.body, depending on your route configuration
+        const addressId = req.params.addressId;
+        // console.log("update",addressId);
+
+        // Find the address by ID
+        let address = await Address.findById(addressId);
+
+        // Update the address fields
+        address.mobile = mobile;
+        address.pincode = pincode;
+        address.houseName = houseName;
+        address.locality = locality;
+        address.city = city;
+        address.district = district;
+        address.state = state;
+
+        // Save the updated address
+        await address.save();
+        res.redirect('/user/profile')
+        // res.status(200).json({ success: true, message: 'Address updated successfully' });
+    } catch (err) {
+        console.error('Error updating address:', err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+
 
 
 
@@ -163,7 +213,8 @@ module.exports = {
     changepassword,
     saveAddress,
     deleteAddress,
-    editAddress,
+    saveUser,
+    editaddress,
     updateAddress
    
 };
