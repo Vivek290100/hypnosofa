@@ -48,7 +48,7 @@ router.get('/user/addtocart/:productId', verifyUser, controller4.addToCart);
 router.get('/removeItem/:productId',verifyUser, controller4.removeFromCart);
 router.put('/updateQuantity/:productId',verifyUser, controller4.updateQuantity)
 router.get('/getTotalPrice',verifyUser,controller4.totalprice)
-router.get('/getUpdatedPrice/:productId', controller4.getUpdatedPrice);
+router.get('/getProductPrice', controller4.getUpdatedPrice);
 
 
 

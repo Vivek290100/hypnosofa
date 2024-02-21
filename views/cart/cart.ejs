@@ -248,14 +248,26 @@
 
 
             <% if (item.productId && item.productId.price) { %>
-                <div class="col pricec">
-                    <div class="col price" data-product-id="<%= item.productId._id %>">₹ <%= (item.productId.price * item.quantity).toFixed(2) %></div>
-                </div>
-            <% } else { %>
-                <div class="col pricec">
-                    <div class="col price" data-product-id="<%= item.productId._id %>">Price Unavailable</div>
-                </div>
-            <% } %>
+    <div class="col pricec">
+       <!-- cart.ejs -->
+<div class="col text-right" id="update-price-<%= item.productId._id %>">
+    <% if (updatePrice != 0) { %>
+        ₹ <%= updatePrice.toFixed(2) %>
+    <% } else { %>
+        <!-- Default price if updatePrice is not defined -->
+        ₹ <%= item.productId.price.toFixed(2) %>
+    <% } %>
+</div>
+
+
+        
+    </div>
+<% } else { %>
+    <div class="col pricec">
+        <div class="col price" data-product-id="<%= item.productId._id %>">Price Unavailable</div>
+    </div>
+<% } %>
+
             
            
             
@@ -376,6 +388,7 @@
                 success: function(response) {
                     if (response.success) {
                         // Update any summary or total price if needed
+                        $(`#update-price-${productId}`).text('₹ ' + response.updatePrice.toFixed(2));
                     } else {
                         console.error(response.message);
                     }
@@ -393,7 +406,7 @@
         // Function to fetch and update the total price
         function updateTotalPrice() {
             $.ajax({
-                url: '/getTotalPrice', // Endpoint to fetch total price
+                url: '/getTotalPrice', 
                 type: 'GET',
                 success: function(response) {
                     if (response.success) {
@@ -419,11 +432,35 @@
     </script>
     
 
+    <script>
+       $(document).ready(function() {
+    $('.col.price').each(function() {
+        var productId = $(this).data('product-id'); // Get the product ID
+        var priceDiv = $(this); // Store the price div element
 
+        // Check if productId is available
+        if (productId) {
+            $.ajax({
+                url: '/getProductPrice', // Your endpoint to fetch product price
+                type: 'GET',
+                data: { productId: productId },
+                success: function(response) {
+                    // Update the price in the HTML
+                    priceDiv.html('₹ ' + (response.price * $('.quantityInput[value="' + productId + '"]').val()).toFixed(2));
+                },
+                error: function() {
+                    // Handle error
+                    priceDiv.html('Price Unavailable');
+                }
+            });
+        }
+    });
+});
 
-
- 
+    </script>
     
+
+
     
 
 

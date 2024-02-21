@@ -24,6 +24,10 @@ const addToCart = async (req, res) => {
       cart.products.push({ productId, quantity: 1 });
     }
 
+    // cart.totals.subtotal += product.price;
+    // cart.totals.totalprice = cart.totals.subtotal;
+    
+
     await cart.save();
     res.redirect(`/user/mainproduct/${product._id}`);
   } catch (error) {
@@ -44,12 +48,15 @@ const usercart = async (req, res) => {
 
     const cartItems = cart.products || [];
     let totalPrice = 0;
+    let updatePrice=0
 
     cartItems.forEach(item => {
       totalPrice += item.productId.price * item.quantity;
     });
+    
+    // console.log('totalprice', totalPrice);
 
-    res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice });
+    res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice,updatePrice });
   } catch (error) {
     console.error('Error fetching cart items:', error);
     res.status(500).send('Internal Server Error');
@@ -86,6 +93,7 @@ const removeFromCart = async (req, res) => {
 const updateQuantity = async (req, res) => {
   try {
     const productId = req.params.productId;
+    console.log(productId);
     const quantity = req.body.quantity;
 
     const cart = await cartModels.findOne({ 'products.productId': productId });
@@ -93,36 +101,37 @@ const updateQuantity = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Cart item not found.' });
     }
 
-    
+    let updatePrice = 0;
 
     for (const product of cart.products) {
       if (product.productId.toString() === productId) {
-        // Save the original quantity before updating
         const originalQuantity = product.quantity;
 
         // Update the product quantity
         product.quantity = quantity;
 
-        // Calculate the difference in quantity
-        const quantityDifference = quantity - originalQuantity;
-
-        // Subtract the difference from the product model quantity in the database
+        // Fetch the product from the database to get its price
         try {
-          await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
-          // console.log("Subtracted quantity from model:", quantityDifference);
+          const productDetails = await Product.findById(product.productId);
+          if (productDetails) {
+            // Calculate the total price for this item
+            updatePrice += productDetails.price * product.quantity;
+            console.log(updatePrice);
+
+            // Calculate the difference in quantity
+            const quantityDifference = quantity - originalQuantity;
+
+            // Subtract the difference from the product model quantity in the database
+            await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
+          }
         } catch (error) {
           console.error("Error updating product quantity:", error);
         }
       }
     }
 
-    let totalPrice = 0;
-    cart.products.forEach(item => {
-      totalPrice += item.productId.price * item.quantity;
-    });
-
     await cart.save();
-    res.json({ success: true, message: 'Quantity updated successfully.', totalPrice: totalPrice });
+    res.json({ success: true, message: 'Quantity updated successfully.', updatePrice: updatePrice });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Internal server error.' });
@@ -134,6 +143,7 @@ const updateQuantity = async (req, res) => {
 const totalprice =  async (req, res) => {
   try {
       // Logic to fetch and calculate the total price
+      // console.log("total price",req.body);
       const user = req.session.user;
       const cart = await cartModels.findOne({ userId: user._id });
       const cartItems = cart ? cart.products : [];
@@ -145,6 +155,9 @@ const totalprice =  async (req, res) => {
               totalPrice += product.price * item.quantity;
           }
       }
+      // console.log('totalprice' ,totalPrice);
+      cart.totals.total = totalPrice;
+      await cart.save();
 
       // Send the total price as a response
       res.json({ success: true, totalPrice: totalPrice });
@@ -155,26 +168,37 @@ const totalprice =  async (req, res) => {
 };
 
 
+// In your user controller
 const getUpdatedPrice = async (req, res) => {
-  const { productId } = req.params;
-  const { quantity } = req.query;
+  const productId = req.query.productId;
+  console.log( productId);
 
   try {
-      // Fetch the product from the database
+      // Find the product by productId
       const product = await Product.findById(productId);
-      console.log("product",product);
 
-      // Calculate the updated price based on the provided quantity
-      const updatedPrice = product.price * parseInt(quantity);
-      console.log("updatedPriceee",updatedPrice);
+      // Check if the product exists and has a valid price
+      if (!product || !product.price) {
+          return res.status(400).json({ success: false, message: 'Invalid product or price unavailable.' });
+      }
 
-      // Send the updated price in the response
-      res.json({ success: true, updatedPrice: updatedPrice, cartItems: cartItems });
+      // Calculate updatedPrice based on product price and quantity
+      const updatedPrice = product.price * quantity;
+
+      res.json({ success: true, updatedPrice: updatedPrice });
   } catch (error) {
       console.error('Error updating price based on quantity:', error);
       res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
+
+
+
+
+
+
+
+
 
 
 
