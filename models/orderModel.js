@@ -48,10 +48,6 @@ const orderSchema = new mongoose.Schema({
     },
   },
   totals: {
-    total: {
-      type: Number,
-      require: true
-    },
     subtotal: {
       type: Number,
       required: true,
@@ -60,6 +56,19 @@ const orderSchema = new mongoose.Schema({
       type: Number,
       required:true,
     },
+  },
+  orderDate: {
+    type: String,
+    required: true,
+  },
+  orderTime: {
+    type: String, 
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+    default: 'Pending',
   },
  
  

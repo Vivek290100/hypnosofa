@@ -48,14 +48,16 @@ router.get('/user/addtocart/:productId', verifyUser, controller4.addToCart);
 router.get('/removeItem/:productId',verifyUser, controller4.removeFromCart);
 router.put('/updateQuantity/:productId',verifyUser, controller4.updateQuantity)
 router.get('/getTotalPrice',verifyUser,controller4.totalprice)
-router.get('/getProductPrice', controller4.getUpdatedPrice);
+router.get('/getProductPrice',verifyUser, controller4.getUpdatedPrice);
 
 
 
 //checkout---------------------------------------------------
 router.get('/checkout',verifyUser,controller5.checkout);
 router.post('/placeorder',verifyUser, controller5.createOrder);
-
+router.get('/user/successorder',verifyUser,controller5.successorder);
+router.get('/user/userOrder',verifyUser, controller5.userorders);
+router.get('/viewproduct',verifyUser, controller5.viewproduct)
 
 
 module.exports = router;

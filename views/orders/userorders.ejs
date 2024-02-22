@@ -1,0 +1,64 @@
+<%- include('nav') -%>
+
+  <title>User Orders</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    .row-border {
+      border: 1px solid #dee2e6;
+      /* Add border to row */
+      border-radius: 5px;
+      /* Optional: Add border radius */
+      padding: 15px;
+      /* Optional: Add padding */
+      margin-bottom: 20px;
+      /* Optional: Add margin to separate rows */
+    }
+
+    .row-border {
+      background-color: #fff;
+    }
+  </style>
+  </head>
+
+  <body style="background-color: #a7bcb3;">
+
+    <div class="container mt-5">
+      <% Orders.forEach(order=> { %>
+        <h2>OrderID: <%= order._id %>
+        </h2>
+        <div class="row row-border">
+          <div class="col-md-6 flex"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+              <h5>Product Details</h5>
+              <% order.products.forEach(product=> { %>
+                <div class="row d-flex border-1">
+                  <span class="col-6">Product Name: <%= product.product.name %></span>
+                  <span class="col-6">Quantity: <%= product.quantity %></span>
+                </div> <!-- Include product quantity -->
+                <% }); %>
+            </div>
+          </div>
+          <div class="col-md-6"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+              <h5>Order Summary</h5>
+              <p>Total Price: ₹<%= order.totals.totalprice %>
+              <p>Ordered Date: <%= order.orderDate %>
+              <p>Ordered Time: <%= order.orderTime %>
+              </p>
+              <p>Status: <%= order.status %>
+              </p>
+              <button class="btn btn-danger">Cancel Order</button>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <% }); %>
+    </div>
+
+    <hr>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

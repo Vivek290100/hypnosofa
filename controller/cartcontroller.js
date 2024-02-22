@@ -54,6 +54,9 @@ const usercart = async (req, res) => {
       totalPrice += item.productId.price * item.quantity;
     });
     
+
+  
+
     // console.log('totalprice', totalPrice);
 
     res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice,updatePrice });
@@ -127,8 +130,11 @@ const updateQuantity = async (req, res) => {
         } catch (error) {
           console.error("Error updating product quantity:", error);
         }
+        product.updateprice = updatePrice;
       }
     }
+
+    // cart.products.updateprice = updatePrice;
 
     await cart.save();
     res.json({ success: true, message: 'Quantity updated successfully.', updatePrice: updatePrice });
@@ -156,7 +162,7 @@ const totalprice =  async (req, res) => {
           }
       }
       // console.log('totalprice' ,totalPrice);
-      cart.totals.total = totalPrice;
+      cart.totals.totalprice = totalPrice;
       await cart.save();
 
       // Send the total price as a response

@@ -569,7 +569,11 @@ a.add-address .add-new-address:before {
     <% addresses.forEach(function(address, index) { %>
       <div class="address-row selected">
         <div class="name">
+         
           <span>ADDRESS <%= index + 1 %></span>
+          <% if (index === 0) { %>
+            <span class="address-type">PRIMARY</span>
+          <% } %>
           <div>
             <span><%= user.name %>,</span>
             <span><%= address.mobile %></span>
@@ -609,15 +613,15 @@ a.add-address .add-new-address:before {
       <label for="option2">Razorpay</label>
     </div>
     <div class="checkbox-item">
-      <input type="checkbox" name="my-options" id="option2" value="option2">
+      <input type="checkbox" name="my-options" id="option3" value="option3">
       <img src="/assets/homeimg/2663922.png" alt="" style="width: 40px; height: 40px;">
-      <label for="option2">Option 2</label>
+      <label for="option2">Option 3</label>
     </div>
   </div>
   <!-- Add the id attribute to the button -->
   <div class="">
     <!-- Add the id attribute to the button -->
-    <button id="orderButton">Place Order</button>
+    <a href="/user/successorder"><button id="orderButton">Place Order</button> </a>
   </div>
 </div>
 
@@ -728,7 +732,6 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(error => {
       console.error('Error:', error);
-      alert('An error occurred. Please try again later.');
     });
   });
 });
