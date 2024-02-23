@@ -9,19 +9,17 @@ const FS = require('fs');
 
 const productList = async (req, res) => {
     try {
-        let query = {};
-        const products = await Product.find(query)
-            .populate('category')
+        const products = await Product.find({ isDeleted: false }).populate('category');
         res.render('./product/products', {
             title: 'Products',
             products,
         });
-        // console.log(products)
     } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 //add product with categories that stored in database------------------------------------------------------->
 const addform = function(req, res) {
@@ -158,8 +156,8 @@ const deleteproduct = async function(req, res) {
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        if (product.images && product.images.length > 0) { // Corrected this line
-            for (const image of product.images) { // Loop through images
+        if (product.images && product.images.length > 0) { 
+            for (const image of product.images) { 
                 const imagePath = path.join(__dirname, '../public/assets/product-images', image);
                 try {
                     await FS.promises.unlink(imagePath);
@@ -169,7 +167,9 @@ const deleteproduct = async function(req, res) {
                 }
             }
         }
-        await Product.findByIdAndDelete(productId);
+       const ProductData =  await Product.findById(productId);
+       ProductData.isDeleted = true;
+       await ProductData.save();
         res.redirect('/product');
     } catch (err) {
         console.error(err);

@@ -133,7 +133,7 @@ const updateOrderStatus = async (req, res) => {
         const { orderId, newStatus } = req.body;
         // Update the status of the order
         await orderModels.findOneAndUpdate({ _id: orderId }, { $set: { status: newStatus } });
-        res.json({ success: true });
+        // res.json({ success: true });
     } catch (error) {
         console.error('Error updating order status:', error);
         res.status(500).send('Internal Server Error');

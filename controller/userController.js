@@ -11,7 +11,7 @@ const cartItemCountMiddleware = require('../middlewares/cartCountMiddleware');
 const home = async (req, res) => {
     try {
         const user = req.session.user;
-        const products = await Product.find().exec();
+        const products = await Product.find({isDeleted : false}).exec();
 
     res.render("./user/userhome", { pageTitle: "userhome", user,  products});
     } catch (error) {
@@ -79,16 +79,14 @@ const login1 = async (req, res) => {
 const product = async (req, res) => {
     try {
         const user = req.session.user;
-        let query = {}; // Default query to find all products
-        const searchQuery = req.query.q; // Get search query from URL parameter 'q'
-        let sortCriteria = req.query.sort; // Get sorting criteria from URL parameter 'sort'
+        let query = {}; 
+        const searchQuery = req.query.q; 
+        let sortCriteria = req.query.sort; 
         
         if (searchQuery) {
-            // If there's a search query, create a regex to match product names containing the query string
             query = { name: { $regex: new RegExp(searchQuery, 'i') } };
         }
 
-        // Sorting logic based on selected criteria
         let sortOptions = {};
         switch (sortCriteria) {
             case 'price_low_high':
@@ -104,12 +102,10 @@ const product = async (req, res) => {
                 sortOptions = { name: -1 };
                 break;
             default:
-                // No sorting criteria specified, keep the default order
                 break;
         }
 
-        // Find products based on the query and apply sorting
-        const products = await Product.find(query).sort(sortOptions).populate('category');
+        const products = await Product.find(/*quesr,*/{isDeleted: false}).sort(sortOptions).populate('category');
         const cartItemCount = req.session.cartItemCount;
         res.render('./user/products', {
             title: 'Products',
