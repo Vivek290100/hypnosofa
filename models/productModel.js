@@ -15,11 +15,8 @@ const productSchema = new mongoose.Schema({
         {
             type: String,
             required: true,
-            
-        }
-       
+        }  
     ],
-   
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Category,
@@ -33,7 +30,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0, 
     },
-    
+    isDeleted:{
+        type:Boolean,
+        default:false
+    },
 });
 
 const Product = mongoose.model('Product', productSchema);

@@ -78,8 +78,7 @@
             </p>
             <div class="d-flex"> 
               <!-- <a href="/viewproduct"> <button class="btn btn-success">View Product</button> </a>&nbsp; -->
-              <button class="btn btn-danger">Cancel Order</button>
-
+              <button class="btn btn-danger" onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
             </div>
           </div>
         </div>
@@ -91,3 +90,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+
+<script>
+  function cancelOrder(orderId) {
+    $.ajax({
+      url: '/cancelOrder', 
+      type: 'POST', 
+      data: { orderId: orderId },
+      success: function(response) {
+        console.log('Order canceled successfully:', response);
+      },
+      error: function(xhr, status, error) {
+        console.error('Error canceling order:', error);
+      }
+    });
+  }
+</script>

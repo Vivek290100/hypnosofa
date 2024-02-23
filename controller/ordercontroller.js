@@ -57,9 +57,7 @@ const createOrder = async (req, res, addresses) => {
         const orderDate = currentDate.format('DD-MM-YYYY');
         const userId = req.session.user._id;
         const { addressIndex, paymentMethod } = req.body;
-
         // console.log("Received data - userId:", userId, "addressIndex:", addressIndex, "paymentMethod:", paymentMethod);
-
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
 
@@ -68,9 +66,7 @@ const createOrder = async (req, res, addresses) => {
             name: cartItem.name,
             quantity: cartItem.quantity,
         }));
-
-        console.log("productsss",products);
-
+        // console.log("productsss",products);
         let totalPrice = 0;
         for (const item of cartItems) {
             try {
@@ -85,8 +81,6 @@ const createOrder = async (req, res, addresses) => {
                 console.error('Error fetching product:', error);
             }
         }
-
-        // Create the order
         const newOrderId = new ObjectId().toString(); 
         const newOrder = new orderModels({
             orderID: newOrderId,
@@ -99,14 +93,10 @@ const createOrder = async (req, res, addresses) => {
             },
             orderDate: orderDate,
             orderTime: orderTime
-
         });
         // console.log('neworderrrr', newOrder);
         await cartModels.findOneAndDelete({ userId: userId });
-
         await newOrder.save();
-
-        
         // res.status(201).json({ success: true, message: 'Order created successfully' });
     } catch (error) {
         console.error(error);
@@ -133,13 +123,11 @@ const userorders = async (req,res)=>{
     try{
         const user = req.session.user;
         const userId = req.session.user._id;
-        console.log('user',user);
-        console.log('userId',userId);
-
+        // console.log('user',user);
+        // console.log('userId',userId);
 
         const Orders = await orderModels.find({ customer: userId }).populate('products.product');
-        console.log('ordersss',Orders);
-
+        // console.log('ordersss',Orders);
 
         res.render('./orders/userorders', { user: req.session.user, Orders });
     } catch (error){
@@ -152,8 +140,6 @@ const userorders = async (req,res)=>{
 const viewproduct = async (req,res)=>{
     try{
         const user = req.session.user;
-
-
         res.render('./orders/viewproduct',{user})
     }catch(error){
         console.error('Error fetching user orders:', error);
@@ -162,12 +148,21 @@ const viewproduct = async (req,res)=>{
 }
 
 
-
-
-
-
-
-
+//-------------------------------------------------
+const cancelorder = async (req,res)=>{
+    try{
+     const id = req.body.orderId
+     const orderData = await orderModels.findById(id)
+     if(orderData.status !== 'Delivered'){
+        orderData.status ='Cancelled';
+     }
+     await orderData.save()
+     
+    }catch (error){
+        console.error('Error fetching user orders:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
 
 
 
@@ -180,5 +175,6 @@ module.exports={
     createOrder,
     successorder,
     userorders,
-    viewproduct
+    viewproduct,
+    cancelorder
 } 

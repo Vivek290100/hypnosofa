@@ -58,6 +58,7 @@ router.post('/placeorder',verifyUser, controller5.createOrder);
 router.get('/user/successorder',verifyUser,controller5.successorder);
 router.get('/user/userOrder',verifyUser, controller5.userorders);
 router.get('/viewproduct',verifyUser, controller5.viewproduct)
-
+router.post('/cancelOrder',verifyUser,controller5.cancelorder)
+,
 
 module.exports = router;

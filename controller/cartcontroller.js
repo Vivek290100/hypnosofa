@@ -113,22 +113,16 @@ const updateQuantity = async (req, res) => {
       if (product.productId.toString() === productId) {
         const originalQuantity = product.quantity;
 
-        // Update the product quantity if the new quantity is greater than 0
         if (quantity > 0) {
-          // Update the product quantity
           product.quantity = quantity;
 
-          // Fetch the product from the database to get its price
           try {
             const productDetails = await Product.findById(product.productId);
             if (productDetails) {
-              // Calculate the total price for this item
               updatePrice += productDetails.price * product.quantity;
 
-              // Calculate the difference in quantity
               const quantityDifference = quantity - originalQuantity;
 
-              // Subtract the difference from the product model quantity in the database
               await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
             }
           } catch (error) {
@@ -149,10 +143,9 @@ const updateQuantity = async (req, res) => {
 
 
     
-// total price
+// total price----------------------------------------
 const totalprice =  async (req, res) => {
   try {
-      // Logic to fetch and calculate the total price
       // console.log("total price",req.body);
       const user = req.session.user;
       const cart = await cartModels.findOne({ userId: user._id });
@@ -169,7 +162,6 @@ const totalprice =  async (req, res) => {
       cart.totals.totalprice = totalPrice;
       await cart.save();
 
-      // Send the total price as a response
       res.json({ success: true, totalPrice: totalPrice });
   } catch (error) {
       console.error('Error fetching total price:', error);
@@ -178,21 +170,17 @@ const totalprice =  async (req, res) => {
 };
 
 
-// In your user controller
 const getUpdatedPrice = async (req, res) => {
   const productId = req.query.productId;
   console.log( productId);
 
   try {
-      // Find the product by productId
       const product = await Product.findById(productId);
 
-      // Check if the product exists and has a valid price
       if (!product || !product.price) {
           return res.status(400).json({ success: false, message: 'Invalid product or price unavailable.' });
       }
 
-      // Calculate updatedPrice based on product price and quantity
       const updatedPrice = product.price * quantity;
 
       res.json({ success: true, updatedPrice: updatedPrice });
