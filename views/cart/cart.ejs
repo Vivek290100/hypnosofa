@@ -280,6 +280,7 @@
                 <a href="/removeItem/<%= item.productId._id %>" class=" close" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">&#10005; Remove</a>
             </div>
         </div>
+        <hr>
         
     <% }); %>
     <% } else { %>
@@ -287,6 +288,7 @@
     <% } %>
 
             </div>
+            
             
             <div class="back-to-shop"><a href="/user/product"><button class="text-mute back">🢀Back to shop</button></a></div>
         </div>
@@ -359,9 +361,14 @@
             const row = $(this).closest('.main');
             const productId = row.attr('data-product-id'); // Retrieve productId from data attribute
             let quantity = parseInt(row.find('.quantity-input').val());
-            quantity++;
-            row.find('.quantity-input').val(quantity);
-            updateQuantity(productId, quantity);
+            // Check if quantity is already zero
+    if (quantity === 0) {
+        return; // Exit the function without increasing quantity
+    }
+    
+    quantity++;
+    row.find('.quantity-input').val(quantity);
+    updateQuantity(productId, quantity);
         });
     
         $('.decrease').click(function() {

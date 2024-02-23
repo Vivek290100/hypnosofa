@@ -1,5 +1,7 @@
 const User = require('../models/userModel');
 const ejs = require('ejs');
+const orderModels = require('../models/orderModel');
+
 
 
 
@@ -18,7 +20,7 @@ const admin = (req, res) => {
 
 
 
-//checking email and password of admin------------------------------------------------------->
+//checking email and password------------------------------------------------------>
 const dashboard = (req, res) => {
     const credential = {
       email: 'admin@gmail.com',
@@ -56,7 +58,7 @@ const dashboard = (req, res) => {
 
 
 
-//blocking user in admin side------------------------------------------------------->
+//blocking user i------------------------------------------------------->
 const block=async (req, res) => {
   const { userId } = req.body;
   try {
@@ -73,7 +75,7 @@ const block=async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
-//unblocking user in admin side------------------------------------------------------->
+//unblocking user------------------------------------------------>
 const unblock=async (req, res) => {
   const { userId } = req.body;
   try {
@@ -92,7 +94,7 @@ const unblock=async (req, res) => {
 };
 
 
-//logout------------------------------------------------------->
+//logout------------------------------------------------->
 const logout = (req, res) => {
   req.session.destroy(err => {
     if (err) {
@@ -101,6 +103,44 @@ const logout = (req, res) => {
     }
   });
 };
+
+
+//order list -------------------------------------------
+const userOrder = async(req,res)=>{
+  try{
+    const Orders = await orderModels.find().populate({
+      path: 'products.product',
+      model: 'Product',
+      select: 'name price description image',
+    })
+    .exec();
+
+    // console.log('Orders', Orders);
+
+    res.render('./admin/orderlist',{
+      title: 'Orders',
+      Orders,  
+    })
+  }catch (error){
+    console.error('Error fetching user orders:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, newStatus } = req.body;
+        // Update the status of the order
+        await orderModels.findOneAndUpdate({ _id: orderId }, { $set: { status: newStatus } });
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
 
 
 
@@ -112,5 +152,7 @@ const logout = (req, res) => {
     users,
     block,
     unblock,
+    userOrder,
+    updateOrderStatus,
     logout,
   }

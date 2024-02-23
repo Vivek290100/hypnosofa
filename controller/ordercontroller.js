@@ -63,6 +63,14 @@ const createOrder = async (req, res, addresses) => {
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
 
+        const products = cart.products.map(cartItem => ({
+            product: cartItem.productId,
+            name: cartItem.name,
+            quantity: cartItem.quantity,
+        }));
+
+        console.log("productsss",products);
+
         let totalPrice = 0;
         for (const item of cartItems) {
             try {
@@ -93,7 +101,8 @@ const createOrder = async (req, res, addresses) => {
             orderTime: orderTime
 
         });
-        console.log('neworderrrr', newOrder);
+        // console.log('neworderrrr', newOrder);
+        await cartModels.findOneAndDelete({ userId: userId });
 
         await newOrder.save();
 
@@ -145,7 +154,7 @@ const viewproduct = async (req,res)=>{
         const user = req.session.user;
 
 
-        res.render('./orders/viewproduct')
+        res.render('./orders/viewproduct',{user})
     }catch(error){
         console.error('Error fetching user orders:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });

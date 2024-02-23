@@ -96,8 +96,11 @@ const removeFromCart = async (req, res) => {
 const updateQuantity = async (req, res) => {
   try {
     const productId = req.params.productId;
-    console.log(productId);
     const quantity = req.body.quantity;
+
+    if (quantity <= 0) {
+      return res.status(400).json({ success: false, message: 'Quantity must be greater than 0.' });
+    }
 
     const cart = await cartModels.findOne({ 'products.productId': productId });
     if (!cart) {
@@ -110,31 +113,31 @@ const updateQuantity = async (req, res) => {
       if (product.productId.toString() === productId) {
         const originalQuantity = product.quantity;
 
-        // Update the product quantity
-        product.quantity = quantity;
+        // Update the product quantity if the new quantity is greater than 0
+        if (quantity > 0) {
+          // Update the product quantity
+          product.quantity = quantity;
 
-        // Fetch the product from the database to get its price
-        try {
-          const productDetails = await Product.findById(product.productId);
-          if (productDetails) {
-            // Calculate the total price for this item
-            updatePrice += productDetails.price * product.quantity;
-            console.log(updatePrice);
+          // Fetch the product from the database to get its price
+          try {
+            const productDetails = await Product.findById(product.productId);
+            if (productDetails) {
+              // Calculate the total price for this item
+              updatePrice += productDetails.price * product.quantity;
 
-            // Calculate the difference in quantity
-            const quantityDifference = quantity - originalQuantity;
+              // Calculate the difference in quantity
+              const quantityDifference = quantity - originalQuantity;
 
-            // Subtract the difference from the product model quantity in the database
-            await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
+              // Subtract the difference from the product model quantity in the database
+              await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
+            }
+          } catch (error) {
+            console.error("Error updating product quantity:", error);
           }
-        } catch (error) {
-          console.error("Error updating product quantity:", error);
+          product.updateprice = updatePrice;
         }
-        product.updateprice = updatePrice;
       }
     }
-
-    // cart.products.updateprice = updatePrice;
 
     await cart.save();
     res.json({ success: true, message: 'Quantity updated successfully.', updatePrice: updatePrice });
@@ -143,6 +146,7 @@ const updateQuantity = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
+
 
     
 // total price

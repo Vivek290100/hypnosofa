@@ -40,5 +40,9 @@ router.post('/product/updateproduct/:id',verifyAdmin,upload.array('image',5),pro
 router.get('/product/deleteproduct/:id',verifyAdmin,productcontroller.deleteproduct)
 
 
+//order list-------------------------------------------->
+router.get("/userorder",verifyAdmin,controller2.userOrder);
+router.post('/updateOrderStatus', controller2.updateOrderStatus);
+
 
 module.exports = router
