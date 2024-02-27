@@ -31,7 +31,6 @@ const signup=(req, res) => {
   //user login------------------------------------------------------->  
 const login = (req, res) => {
     const email=req.session.email
-    // console.log(email);
     res.render("./user/login", { error1: req.flash('error1')[0] || '' });
 }
 
@@ -39,8 +38,7 @@ const login = (req, res) => {
 //checking the user valid or invalid------------------------------------------------------->
 const login1 = async (req, res) => {
     const { email, password } = req.body;
-    const products = await Product.find().exec();
-    // console.log({email,password});
+    const products = await Product.find({isDeleted : false}).exec();
     try {
         const user = await User.findOne({ email });
         if (!user) {
@@ -61,7 +59,7 @@ const login1 = async (req, res) => {
            _id: user._id,
    };
    await cartItemCountMiddleware(req, res, () => {});
-   const products = await Product.find().exec();
+   const products = await Product.find({isDeleted : false}).exec();
                return res.render('./user/userhome', { user ,products});
            } else {
                req.flash('error1', 'Invalid email or password');
@@ -105,7 +103,7 @@ const product = async (req, res) => {
                 break;
         }
 
-        const products = await Product.find(/*quesr,*/{isDeleted: false}).sort(sortOptions).populate('category');
+        const products = await Product.find({ ...query, isDeleted: false }).sort(sortOptions).populate('category');
         const cartItemCount = req.session.cartItemCount;
         res.render('./user/products', {
             title: 'Products',
@@ -151,7 +149,6 @@ const logout = (req, res) => {
             console.error('Error destroying session:', err);
             res.redirect('/user/login'); 
         } else {
-            // const logoutMessage = 'Successfully logged out.';
             res.redirect('/');
         }
     });

@@ -11,7 +11,6 @@
     --border: .2rem solid var(--main-color);
     --border-hover: .2rem dashed var(--main-color);
 }
-
 * {
 
     margin: 0;
@@ -21,40 +20,25 @@
     border: none;
     text-decoration: none;
     text-transform: capitalize;
-    
 }
-
 html {
     font-size: 65%;
     overflow-x: hidden;
     scroll-padding-top: 7rem;
     scroll-behavior: smooth;
-    
 }
 .body{
     background-color: #ffffff;
     overflow-y: hidden;  
 }
-
-
-
-
-
-
 .active{
     border-radius: 30px;
     background-color: rgb(255, 255, 255);
 }
-
-
-
 .caption{
     padding-bottom: 250px;
     padding-left: 40px;
 }
-
-
-
 .carousel-item .custom-carousel-content{
     width: 109%;
 }
@@ -64,18 +48,20 @@ html {
 .custom-carousel-content h1{
     font-size: 40px;
     font-weight: 700;
-    color: #fff;
+    color: #000000;
     margin-bottom: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .custom-carousel-content h1 span{
     color: #000000;
 }
+
 .custom-carousel-content p{
     font-size: 18px;
     font-weight: 400;
-    color: #fff;
+    color: #000000;
     margin-bottom: 30px;
-    
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .custom-carousel-content .btn-slider{
     border: 1px solid #fff;
@@ -93,13 +79,11 @@ html {
     padding: 4rem;
     background-color: #ffffff;
     }
-
     .carousel-inner,
     .carousel-item {
         width: 100%;
         height: 100%;
     }
-
     .carousel-item img {
         object-fit: cover;
         width: 100%;
@@ -107,7 +91,6 @@ html {
         background-color: rgba(255, 255, 255, 0.5);
         /* border-radius: 29px; */
     }
-
     .carousel-control-prev,
     .carousel-control-next {
         font-size: 1.5em;
@@ -133,29 +116,11 @@ html {
         width: 90%;
     }
 }
-
-
-
-
-
-
-
-
-
-/* .container{
-    background-color: #a7bcb3;
-} */
-
-
-
-
-
-
-
-
-
-
 </style>
+
+
+
+
 
 <!-- carousel html -->
 <div class="background">
@@ -171,27 +136,26 @@ html {
             </div>
             </footer> -->
         
-        <div class="carousel-item active ">
-            <img src="/assets/homeimg/sofa4.jpeg" class="d-block w-100 hmimg " alt="..." >
-            <div class="carousel-caption  ">
-                <div class="custom-carousel-content caption">
-                   
-                    <div>
-                        <a href="/user/product" class="btn btn-slider btn-lg getnow ">
-                            Get Now
-                        </a>
+            <div class="carousel-item active">
+                <img src="/assets/homeimg/soa4.jpeg" class="d-block w-100 hmimg" alt="...">
+                <div class="carousel-caption">
+                    <div class="custom-carousel-content caption">
+                        <h1 class="display-4">
+                            Transform Youy Space With Comfort And Style                        
+                        </h1>
+                        <p>Relax In Timeless Elegance. Transform Your Home, One Seat At A Time.</p>
+                        <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
                     </div>
                 </div>
             </div>
-        </div>
+
+
         <div class="carousel-item">
             <img src="/assets/homeimg/sofa5.jpeg" class="d-block w-100 hmimg" alt="...">
             <div class="carousel-caption  ">
                 <div class="custom-carousel-content caption">
                     <h1  class="display-4 ">
-                        <span>
-                            "Transform your space with comfort and style" </span>
-                            
+                        <span>"Transform your space with comfort and style" </span>
                     </h1>
                    
                     <div>
@@ -203,21 +167,15 @@ html {
             </div>
         </div>
         <div class="carousel-item">
-            
             <img src="/assets/homeimg/sofa77.jpeg" class="d-block w-100 hmimg" alt="...">
-        
             <div class="carousel-caption  ">
                 <div class="custom-carousel-content caption">
-                   
                     <div>
-                        <a href="/user/product" class="btn btn-slider btn-lg getnow">
-                            Get Now
-                        </a>
+                        <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
         data-bs-slide="prev">
@@ -229,20 +187,20 @@ html {
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
-    <!-- en -->
+    <!-- end-->
 </div>
 </div>
 
 
 
-<footer class="new_footer_area bg_color">
+<!-- <footer class="new_footer_area bg_color">
     <div class="new_footer_top">
     <div class="footer_bg">
     <div class="footer_bg_one"></div>
     <div class="footer_bg_two"></div>
     </div>
     </div>
-    </footer>
+    </footer> -->
 
 
 
@@ -253,7 +211,7 @@ html {
         justify-content: center;
         height: 100vh;
         margin: 0;
-        background-color: #a7bcb3;
+        background-color: #fff;
         max-width: 100%;
         overflow-x: hidden;
     }
@@ -271,77 +229,66 @@ html {
     .container {
         width: 23%;
         margin: 10px;
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        background-color: #e8e8e8;
-        border: 1px solid rgba(255, 255, 255, 0.125);
+        /* backdrop-filter: blur(16px) saturate(180%); */
+        /* -webkit-backdrop-filter: blur(16px) saturate(180%); */
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
         padding: 10px;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        /* align-items: center; */
         text-align: center;
         transition: transform 0.3s ease;
         /* border-radius: 9px 9px 9px 9px; */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         filter: drop-shadow(0 10px 5px rgba(2, 4, 8, 0.125));
     }
-
-    /* .container:hover {
-        transform: scale(1.01);
-       
-    } */
-
     .banner-image {
         background-position: center;
         background-size: cover;
         height: 150px;
         width: 100%;
         transition: transform 0.3s ease;
+        object-fit: cover;
     }
-
     .container:hover .banner-image {
         transform: scale(1.070);
     }
-
     h5 {
-        font-family: 'Righteous', sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color: rgba(0, 0, 0, 0.98);
         text-transform: uppercase;
-        font-size: 1rem;
+        font-size: 0.5cm;
         margin-top: 10px;
     }
-
     h5.card-title {
         margin-top: 0;
+        font-size: 0.5cm;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
-
     p {
         color: #000000;
-        font-family: 'Lato', sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         text-align: center;
         font-size: 0.8rem;
         line-height: 150%;
         letter-spacing: 2px;
         text-transform: uppercase;
     }
-
     .button-wrapper {
         margin-top: 10px;
     }
-
     .btn {
         border: none;
         padding: 8px 16px;
-        border-radius: 24px;
-        font-size: 0.8rem;
+        /* border-radius: 10px; */
+        font-size: 1.2rem;
         letter-spacing: 2px;
         cursor: pointer;
     }
-
     .btn + .btn {
         margin-left: 10px;
     }
-
     .outline {
         /* background: transparent; */
         color: rgba(255, 255, 255, 0.9);
@@ -349,7 +296,6 @@ html {
         transition: all 0.3s ease;
         background-color: rgb(43, 95, 73);
     }
-
     .outline:hover {
         color: rgba(255, 255, 255, 0.9);
         border-color: rgba(22, 65, 36, 0.9);
@@ -357,49 +303,39 @@ html {
         background-color: rgb(15, 55, 38);
 
     }
-
     .fill {
         /* background: transparent; */
         color: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(33, 87, 65, 0.6);
         transition: all 0.3s ease;
         background-color: rgb(43, 95, 73);
-
     }
-
     .fill:hover {
         color: rgba(255, 255, 255, 0.9);
         border-color: rgba(22, 65, 36, 0.9);
         transition: all 0.3s ease;
         background-color: rgb(15, 55, 38);
-
     }
-
     @media screen and (min-width: 769px) {
         .container {
             width: 23%;
         }
-
         .banner-image {
             height: 220px;
         }
     }
-
     @media screen and (max-width: 768px) {
         .container {
             width: 48%;
         }
-
         .banner-image {
             height: 120px;
         }
     }
-
     @media screen and (max-width: 480px) {
         .container {
             width: 100%;
         }
-
         .banner-image {
             height: 100px;
         }
@@ -411,7 +347,7 @@ html {
 <style>
 
     body {
-    background: #a7bcb3;
+    background: #fff;
     }
     
     .new_footer_area {
@@ -424,18 +360,13 @@ html {
     overflow-x: hidden;
     width: 100% !important;
     }
-    
-    
-    
-    
     .new_footer_top .footer_bg {
     position: absolute;
     bottom: 0;
     width: 100%;
     height: 60px;
-    background-color: #a7bcb3;
+    background-color: #fff;
     }
-    
     .new_footer_top .footer_bg .footer_bg_one {
     background: url("https://res.cloudinary.com/iamcybersam/image/upload/v1627348369/car_jucbmp.gif") no-repeat center center;
     width: 180px;
@@ -447,7 +378,6 @@ html {
     -webkit-animation: myfirst 22s linear infinite;
     animation: myfirst 22s linear infinite;
     }
-    
     .new_footer_top .footer_bg .footer_bg_two {
     background: url("https://res.cloudinary.com/iamcybersam/image/upload/v1627348370/bicycle_klbr4n.gif") no-repeat center center;
     width: 56px;
@@ -459,7 +389,6 @@ html {
     -webkit-animation: myfirst 30s linear infinite;
     animation: myfirst 30s linear infinite;
     }
-    
     @-moz-keyframes myfirst {
     0% {
     left: -55%;
@@ -468,7 +397,6 @@ html {
     left: 100%;
     }
     }
-    
     @-webkit-keyframes myfirst {
     0% {
     left: -55%;
@@ -477,7 +405,6 @@ html {
     left: 100%;
     }
     }
-    
     @keyframes myfirst {
     0% {
     left: -55%;
@@ -515,26 +442,7 @@ html {
 <% }); %>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script> -->
-
-
-
-
-
 
 
 <style>
@@ -549,20 +457,17 @@ html {
         margin-top: 50px;
         font-family: sans-serif;
     }
-    
     .footer .box {
         flex: 1;
         max-width: 20rem;
         margin: 1rem;
     }
-    
     .footer .box h3 {
         margin-left: 0;
         font-weight: 900;
         font-size: x-large;
         color: #000000; 
     }
-    
     .footer .box a {
         font-size: 1.5rem;
         padding: 0.5rem 0;
@@ -570,15 +475,9 @@ html {
         display: flex;
         align-items: center;
     }
- 
-    
     .footer .box a i {
         padding-right: 0.5rem;
     }
-    
-    /* .footer .box a:hover i {
-        padding-right: 2rem;
-    } */
     
     @media only screen and (max-width: 768px) {
         .footer .box {

@@ -27,7 +27,7 @@
         margin: 10px;
         backdrop-filter: blur(16px) saturate(180%);
         -webkit-backdrop-filter: blur(16px) saturate(180%);
-        background-color: #a7bcb3;
+        background-color: #fff;
         border: 1px solid rgba(255, 255, 255, 0.125);
         padding: 10px;
         display: flex;
@@ -40,10 +40,6 @@
         filter: drop-shadow(0 10px 5px rgba(2, 4, 8, 0.125));
     }
 
-    /* .container:hover {
-        transform: scale(1.01);
-       
-    } */
 
     .banner-image {
         background-position: center;
@@ -52,6 +48,7 @@
         width: 100%;
         transition: transform 0.3s ease;
         border-radius: 9px 9px 9px 9px;
+        object-fit: cover;
     }
 
     .container:hover .banner-image {
@@ -87,9 +84,9 @@
     .btn {
         border: none;
         padding: 8px 16px;
-        border-radius: 24px;
+        border-radius: 7px;
         font-size: 0.8rem;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         cursor: pointer;
     }
 
@@ -282,7 +279,7 @@ p {
   color: #676767;
 }
 .frame{
-background-color: #a7bcb3;
+background-color: #fff;
 border-radius: 5px;
 }
 
@@ -347,6 +344,14 @@ border-radius: 5px;
 .btn-16:active {
   top: 2px;
 }
+.notfound{
+  width: 100vh;
+  height: 20vw;
+  font-weight: 900;
+  font-size: xx-large;
+}
+
+
 
 
 
@@ -398,29 +403,37 @@ border-radius: 5px;
 
 
 
-<% products.forEach((product, index) => { %>
-    <% if (index % 4 === 0) { %>
-        <div class="row">
-    <% } %>
-    <div class="container">
-        <% if (product.images.length > 0) { %>
-            <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
-                onclick="openModal('<%= product.images[0] %>')"><br>
-        <% } else { %>
-            <img src="/assets/default-image.jpg" class="banner-image" id="image-zoom" alt="Default Image"><br>
-        <% } %>
-        <h5 class="card-title"><%= product.name %></h5>
-        <h5><%= "₹" + product.price %></h5>
-        <div class="button-wrapper">
-            <a href="/user/mainproduct/<%= product._id %>">  <button class="btn outline" >DETAILS</button>
-            </a>
-            <a href="/user/addtocart/<%= product._id %>">  <button class="btn fill">ADD TO CART</button></a>
-        </div>
-    </div>
-    <% if ((index + 1) % 4 === 0 || (index + 1) === products.length) { %>
-        </div>
-    <% } %>
-<% }); %>
+<% if (products.length === 0) { %>
+  <div class="notfound d-flex justify-content-center align-items-center">  Sorry, No results found  !</div>
+  <% } else { %>
+  <% products.forEach((product, index) => { %>
+      <% if (index % 4 === 0) { %>
+          <div class="row">
+      <% } %>
+      <div class="container">
+          <% if (product.images.length > 0) { %>
+              <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
+                  onclick="openModal('<%= product.images[0] %>')"><br>
+          <% } else { %>
+              <img src="/assets/default-image.jpg" class="banner-image" id="image-zoom" alt="Default Image"><br>
+          <% } %>
+          <h5 class="card-title"><%= product.name %></h5>
+          <h5><%= "₹" + product.price %></h5>
+          <div class="button-wrapper">
+              <a href="/user/mainproduct/<%= product._id %>">  
+                  <button class="btn outline">DETAILS</button>
+              </a>
+              <a href="/user/addtocart/<%= product._id %>">  
+                  <button class="btn fill">ADD TO CART</button>
+              </a>
+          </div>
+      </div>
+      <% if ((index + 1) % 4 === 0 || (index + 1) === products.length) { %>
+          </div>
+      <% } %>
+  <% }); %>
+<% } %>
+
 
 
 

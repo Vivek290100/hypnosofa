@@ -19,6 +19,7 @@ const categoryList = async (req, res) => {
 };
 
 
+
 // create category in admin side------------------------------------------------------->
 const createcat = function(req, res) {
     const error= req.flash('error');

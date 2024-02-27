@@ -18,6 +18,7 @@
 
   .row-border {
     background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .field-name {
@@ -27,7 +28,7 @@
 </style>
 </head>
 
-<body style="background-color: #a7bcb3;">
+<body style="background-color: #fff;">
 
 <div class="container mt-5">
   <% if (Orders.length === 0) { %>
@@ -35,9 +36,9 @@
       No orders found.
     </div>
   <% } else { %>
-    <% Orders.forEach((order, index)=> { %>
+    <% Orders.reverse().forEach((order, index)=> { %>
       <div class="row row-border">
-        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); text-align: center;">
+        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;  text-align: center;">
           <h4 style="margin-top: 0;"><%= index + 1 %>. ORDER ID: <%= order._id %></h4>
         </div>
 

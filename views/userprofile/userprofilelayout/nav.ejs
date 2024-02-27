@@ -5,9 +5,9 @@
     <div class="top-navbar sticky-top">
         <div class="container-fluid ">
             <div class="row justify-content-end">
-                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
+                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block" >
 
-                    <h3 class="brand-name space" ><img src="/assets/homeimg/brand-logo2.png" alt="Logo" class="brand-logo">Hypnosofa</h3>
+                   <a href="/" style="text-decoration: none;" > <h3 class="brand-name space"   ><img src="/assets/homeimg/brand-logo2.png" alt="Logo" class="brand-logo">Hypnosofa</h3> </a> 
                                         
                 </div>
                 
@@ -41,10 +41,19 @@
                                 <li><a class="dropdown-item" href="/user/login"><i class="fa fa-user"></i> Login</a></li>
                                 <% } %>
 
+
                                 <% if (user) { %>
 
+                                        <li><a class="dropdown-item" href="/user/profile"><i class="fa fa-user"></i> Profile</a></li>
+                                        <li><a class="dropdown-item" href="/user/userOrder"><i class="fa fa-list"></i> My Orders</a></li>
+        
+        
+                                        <li><a class="dropdown-item" href="/user/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+        
+        
+                                        <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+
                                 
-                                <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
                                 <% } %>
 
                             </ul>
@@ -65,7 +74,7 @@
 
 
 .container-fluid{
-background-color: #a7bcb3;
+background-color: #fff;
 padding-left: 40px;
 
 }

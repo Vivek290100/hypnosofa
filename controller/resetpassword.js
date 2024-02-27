@@ -27,7 +27,7 @@ const sendOTP = async (email, otp) => {
     const mailOptions = {
         to: email,
         subject: "Otp for password reset is: ",
-        html: "<h3>OTP for password reset is </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>"
+        html: "<h3>OTP for password reset is </h3>" + "<h1 style='font-weight:bold;'>" + otp1 + "</h1>"
     };
     return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (error, info) => {

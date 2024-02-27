@@ -121,20 +121,30 @@
     <input type="checkbox" id="updateImage" name="updateImage">
 </div>
 
+
+
+
+
     
-    <div class="checkbox-group">
-        <label for="existingImage">Existing Image:</label>
-        <% if (product.images && product.images.length > 0) { %>
-            <% product.images.forEach(image => { %>
+<div class="checkbox-group">
+    <label for="existingImage">Existing Image:</label>
+    <% if (product.images && product.images.length > 0) { %>
+        <% product.images.forEach((image, index) => { %>
+            <div>
                 <img src="/assets/product-images/<%= image %>" alt="<%= product.name %>">
                 <br>
-            <% }); %>
-            <label>Delete Existing Image:</label>
-            <input type="checkbox" name="deleteExistingImage">
-        <% } else { %>
-            No image available
-        <% } %>
-    </div>
+                <label>Delete Existing Image:</label>
+                <input type="checkbox" name="deleteExistingImage<%= index %>" value="<%= image %>">
+            </div>
+        <% }); %>
+    <% } else { %>
+        No image available
+    <% } %>
+</div>
+
+
+
+
     
 
     <div id="newImageSection">
@@ -154,12 +164,50 @@
 </form>
 
 <a href="/product">Back to Products</a>
+
+
+
+
+
+
 <script>
     document.getElementById('updateImage').addEventListener('change', function () {
         var newImageSection = document.getElementById('newImageSection');
         newImageSection.style.display = this.checked ? 'block' : 'none';
     });
 </script>
+
+
+
+<script>
+    // Assuming you're using jQuery for AJAX
+$('.checkbox-group input[type="checkbox"]').on('change', function() {
+    var selectedImages = [];
+    $('.checkbox-group input[type="checkbox"]:checked').each(function() {
+        selectedImages.push($(this).val());
+    });
+
+    $.ajax({
+        url: '/product/deleteproduct/:id', // Replace with your backend endpoint
+        method: 'POST',
+        data: { images: selectedImages },
+        success: function(response) {
+            // Handle success response from the server
+            console.log('Images deleted successfully');
+        },
+        error: function(xhr, status, error) {
+            // Handle error response from the server
+            console.error('Error deleting images:', error);
+        }
+    });
+});
+
+</script>
+
+
+
+
+
 
 </body>
 </html>

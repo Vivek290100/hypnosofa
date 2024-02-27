@@ -17,7 +17,7 @@ const cartCountMiddleware = async (req, res, next) => {
                     res.locals.cartCount = cartCount;
                     res.locals.name = user.name;
                 } else {
-                    console.log("Cart data not found");
+                    // console.log("Cart data not found");
                     res.locals.cartCount = 0;
                     res.locals.name = user.name;
                 }

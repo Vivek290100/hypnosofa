@@ -108,7 +108,7 @@ const logout = (req, res) => {
 //order list -------------------------------------------
 const userOrder = async(req,res)=>{
   try{
-    const Orders = await orderModels.find().populate({
+    const Orders = await orderModels.find().sort({ "orderDate": -1, "orderTime": -1}).populate({
       path: 'products.product',
       model: 'Product',
       select: 'name price description image',

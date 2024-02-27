@@ -54,7 +54,7 @@ const addproduct = async function (req, res) {
                 .resize(300, 200)
                 .toFile(resizedImagePath);
             
-                images.push(imageFilename); // Push the filename to the array
+                images.push(imageFilename);
         }
 
     }
@@ -96,40 +96,47 @@ const editform = function(req, res) {
 //updateproduct in the admin side------------------------------------------------------->
 const updateproduct = async function (req, res) {
     const productId = req.params.id;
-    const { name, description, category, price, quantity, deleteExistingImage } = req.body;
+    const { name, description, category, price, quantity } = req.body;
+    const deleteExistingImages = req.body;
+    const newImages = req.files; // Assuming you're using multer or similar for file uploads
+
     try {
         const currentProduct = await Product.findById(productId);
         if (!currentProduct) {
             return res.status(404).send('Product not found');
         }
 
-        // Delete existing images if checkbox is ticked
-        if (deleteExistingImage === 'on' && currentProduct.images && currentProduct.images.length > 0) {
-            for (const image of currentProduct.images) {
-                const imagePath = path.join(__dirname, '../public/assets/product-images', image);
-                try {
-                    await FS.promises.unlink(imagePath);
-                    console.log('Image Deleted Successfully');
-                } catch (error) {
-                    console.error('Error deleting image file:', error.message);
-                }
-            }
-            currentProduct.images = []; // Clear the images array
-        }
-
-        // Handle addition of new images
-        if (req.files && req.files.length > 0) {
-            for (const file of req.files) {
-                const imagePath = file.path;
-                const imageFilename = file.filename;
-                const resizedImagePath = path.join(__dirname, '../public/assets/product-images', `resized_${imageFilename}`);
-                await sharp(imagePath)
-                    .resize(300, 200)
-                    .toFile(resizedImagePath);
-                currentProduct.images.push(`resized_${imageFilename}`);
+        // Delete existing images
+        for (const key in deleteExistingImages) {
+            if (key.startsWith('deleteExistingImage')) {
+                const index = parseInt(key.replace('deleteExistingImage', ''));
+                const imageFilename = deleteExistingImages[key];
+                const imagePath = path.join(__dirname, '../public/assets/product-images', imageFilename);
+                
+                // Delete image file
+                await FS.promises.unlink(imagePath);
+                console.log('Image Deleted Successfully:', imageFilename);
+                
+                // Remove filename from product's images array
+                currentProduct.images.splice(index, 1);
+                
+                // Delete image from the database (if needed)
+                await Product.deleteOne({ filename: imageFilename });
+                console.log('Image deleted from the database:', imageFilename);
             }
         }
 
+        // Add new images
+        if (newImages && newImages.length > 0) {
+            newImages.forEach(async (image) => {
+                const imageFilename = image.filename; // Assuming multer saves filename
+                currentProduct.images.push(imageFilename);
+                // You may also need to save image metadata to the database
+                // Example: await Image.create({ filename: imageFilename, productId });
+                console.log('New image added:', imageFilename);
+            });
+        }
+        
         // Update other fields
         currentProduct.name = name;
         currentProduct.description = description;
@@ -137,14 +144,22 @@ const updateproduct = async function (req, res) {
         currentProduct.price = price;
         currentProduct.quantity = quantity;
 
+        // Save the updated product
         await currentProduct.save();
-        console.log('Updated Product:', currentProduct);
+
         res.redirect('/product');
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
+
+
+
+
 
 
 
