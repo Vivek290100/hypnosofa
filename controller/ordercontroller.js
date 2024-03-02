@@ -5,7 +5,13 @@ const Product = require('../models/productModel');
 const moment = require('moment');
 const mongoose = require('mongoose');
 const { Types: { ObjectId } } = require('mongoose');
+const Razorpay = require('razorpay');
 
+
+    instance = new Razorpay({
+    key_id: 'rzp_test_Dc1MSlNThSEKkf',
+    key_secret: 'ojehzUEvc0lwVxNXI57xnRPj',
+  });
 
 
 const checkout = async (req, res) => {
@@ -51,13 +57,11 @@ function getCurrentTime() {
 //-----create orderdatabase----------------------------------------
 const createOrder = async (req, res, addresses) => {
     try {
-        // console.log("Request Body:", req.body);
         const orderTime = getCurrentTime();
         const currentDate = moment();
         const orderDate = currentDate.format('DD-MM-YYYY');
         const userId = req.session.user._id;
         const { addressIndex, paymentMethod } = req.body;
-        // console.log("Received data - userId:", userId, "addressIndex:", addressIndex, "paymentMethod:", paymentMethod);
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
 
@@ -66,7 +70,7 @@ const createOrder = async (req, res, addresses) => {
             name: cartItem.name,
             quantity: cartItem.quantity,
         }));
-        // console.log("productsss",products);
+
         let totalPrice = 0;
         for (const item of cartItems) {
             try {
@@ -81,6 +85,7 @@ const createOrder = async (req, res, addresses) => {
                 console.error('Error fetching product:', error);
             }
         }
+
         const newOrderId = new ObjectId().toString(); 
         const newOrder = new orderModels({
             orderID: newOrderId,
@@ -92,17 +97,92 @@ const createOrder = async (req, res, addresses) => {
                 totalprice: totalPrice,
             },
             orderDate: orderDate,
-            orderTime: orderTime
+            orderTime: orderTime,
+            paymentMethod: paymentMethod,
         });
-        // console.log('neworderrrr', newOrder);
-        await cartModels.findOneAndDelete({ userId: userId });
-        await newOrder.save();
-        // res.status(201).json({ success: true, message: 'Order created successfully' });
+
+        // Handle payment method specific logic
+        if (paymentMethod === 'Cash On Delivery') {
+            // For Cash on Delivery
+            await cartModels.findOneAndDelete({ userId: userId });
+            await newOrder.save();
+            res.status(201).json({ success: true, message: 'Order created successfully' });
+        } else if (paymentMethod === 'RazorPay') {
+
+            var instance = new Razorpay({ key_id: 'rzp_test_Dc1MSlNThSEKkf', key_secret: 'ojehzUEvc0lwVxNXI57xnRPj' })
+
+
+
+                    var options = {
+                        amount: totalPrice * 100, 
+                        currency: "INR",
+                        receipt: "order"+newOrderId
+        
+                        }
+
+                        instance.orders.create(options, function(err, order) {
+                            if(err) {
+                                console.error(err);
+                            } else {
+                                console.log('order', order);
+                                res.status(200).json({ orderId: newOrderId, success: true, message: 'Redirect to RazorPay payment page' });
+                            }
+                        });
+                
+            }
+
+
+
+            // Assuming these variables are available in scope
+
+
+
+            
+
+
+
+
+            var { validatePaymentVerification, validateWebhookSignature } = require('./dist/utils/razorpay-utils');
+            validatePaymentVerification({ "order_id": razorpayOrderId, "payment_id": razorpayPaymentId }, signature, secret);
+        
+    
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Failed to create order' });
     }
 };
+
+
+const apiVerify = async (req, res) => {
+    try {
+
+        console.log('req...bodyy', req.body);
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+            throw new Error('Missing required parameters');
+        }
+
+        const body = razorpay_order_id + "|" + razorpay_payment_id;
+        const crypto = require("crypto");
+        const expectedSignature = crypto.createHmac('sha256', 'rzp_test_Dc1MSlNThSEKkf')
+            .update(body.toString())
+            .digest('hex');
+
+        if (expectedSignature === razorpay_signature) {
+            res.status(200).json({ signatureIsValid: true });
+        } else {
+            res.status(400).json({ signatureIsValid: false });
+        }
+    } catch (error) {
+        console.error('Error in apiVerify:', error.message);
+        res.status(400).json({ error: error.message });
+    }
+};
+
+
+  
+
 
 
 
@@ -176,5 +256,8 @@ module.exports={
     successorder,
     userorders,
     viewproduct,
-    cancelorder
+    cancelorder,
+    apiVerify
 } 
+    
+

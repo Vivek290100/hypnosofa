@@ -59,6 +59,10 @@ router.get('/user/successorder',verifyUser,controller5.successorder);
 router.get('/user/userOrder',verifyUser, controller5.userorders);
 router.get('/viewproduct',verifyUser, controller5.viewproduct)
 router.post('/cancelOrder',verifyUser,controller5.cancelorder)
-,
+router.post('/create/orderId', verifyUser, controller5.createOrder);
+router.post('/apiVerify', verifyUser, controller5.apiVerify);
+
+
+// router.use(controller.render404);
 
 module.exports = router;

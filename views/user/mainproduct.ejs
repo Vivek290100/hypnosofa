@@ -107,7 +107,11 @@ img {
   color: #ff9f1a; }
 
 .product-title, .rating, .product-description, .price, .vote, .sizes {
-  margin-bottom: 15px; }
+  margin-bottom: 15px;
+ }
+ .product-description{
+  font-size: 15px;
+ }
 
 .product-title {
   margin-top: 0; }
@@ -345,8 +349,9 @@ img {
             <div class="details col-md-6">
               <% if (product) { %>
               <h3 class="product-title"><%= product.name %></h3>
-              <p class="product-description"><%= product.description %></p>
-              <h4 class="price">price: <span>₹&nbsp;<%= product.price %></span></h4><br>
+              <p class="product-description">&nbsp;&nbsp;&nbsp;&nbsp;  <%= product.description %></p>
+              <h4 class="price">Category:<span> &nbsp;<%= product.category.name %></span></h4>
+              <h4 class="price">Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span>&nbsp;<%= product.price %>/-</span></h4><br>
               <!-- <div class="quantity">
                 <label for="quantity">Quantity:</label>
                 <input type="number" id="quantity" name="quantity" min="1" value="1">

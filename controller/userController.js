@@ -157,6 +157,13 @@ const logout = (req, res) => {
 
 
 
+const render404 = (req, res) => {
+    const user = req.session.user;
+    res.status(404).render('./user/404',{user,user});
+};
+
+
+
 module.exports = {
     home,
     signup,
@@ -164,5 +171,6 @@ module.exports = {
     login1,
     logout,
     product,
-    mainproduct
+    mainproduct,
+    render404
 };

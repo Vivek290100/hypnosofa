@@ -108,7 +108,7 @@ const logout = (req, res) => {
 //order list -------------------------------------------
 const userOrder = async(req,res)=>{
   try{
-    const Orders = await orderModels.find().sort({ "orderDate": -1, "orderTime": -1}).populate({
+    const Orders = await orderModels.find().sort(/*{ "orderDate": -1, "orderTime": -1}*/).populate({
       path: 'products.product',
       model: 'Product',
       select: 'name price description image',
@@ -131,8 +131,11 @@ const userOrder = async(req,res)=>{
 const updateOrderStatus = async (req, res) => {
     try {
         const { orderId, newStatus } = req.body;
+        console.log('orderiddd',orderId)
+        console.log('newStatussss',newStatus)
+
         // Update the status of the order
-        await orderModels.findOneAndUpdate({ _id: orderId }, { $set: { status: newStatus } });
+        await orderModels.findOneAndUpdate({ _id: orderId }, { $set: { status: newStatus } },{new:true});
         // res.json({ success: true });
     } catch (error) {
         console.error('Error updating order status:', error);

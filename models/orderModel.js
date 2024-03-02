@@ -70,6 +70,11 @@ const orderSchema = new mongoose.Schema({
     enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
     default: 'Pending',
   },
+  paymentMethod: {
+    type: String,
+    enum: ['Wallet', 'RazorPay', 'Cash On Delivery'], 
+    required: true,
+  },
  
  
  

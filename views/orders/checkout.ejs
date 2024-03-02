@@ -610,7 +610,7 @@ a.add-address .add-new-address:before {
     </div>
     <!-- Add the id attribute to the button -->
     <div class="checkbox-item">
-      <input type="checkbox" name="my-options" id="option2" value="Razorpay">
+      <input type="checkbox" name="my-options" /*id="option2"*/ id="rzp-button1" value="Razorpay">
       <img src="/assets/homeimg/aami6-55-256.webp" alt="" style="width: 40px; height: 40px;">
       <label for="option2">Razorpay</label>
     </div>
@@ -650,6 +650,12 @@ a.add-address .add-new-address:before {
     </div>
     
     <br><br><br><br>
+
+
+    <!-- <button id="rzp-button1">Pay with Razorpay</button> -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
@@ -743,9 +749,178 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+<!-- razorpay---------------------------------->
+<script>
+
+var orderId;
+$(document).ready(function() {
+  var settings = {
+    "url": "/placeorder",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+      "amount": "49990"
+    })
+  };
 
 
+  console.log(orderId);
 
 
+  document.getElementById('rzp-button1').onclick = function(e) {
+    var options = {
+      "key": "rzp_test_Dc1MSlNThSEKkf", // Enter the Key ID generated from the Dashboard
+      "amount": "<%= totalPrice.toFixed(2) * 100 %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "Hypnosofa",
+      "description": "Soofaa",
+      "image": "/assets/homeimg/brand-logo.png",
+      "order_id": orderId, 
+      "handler": function(response) {
+        console.log('Payment Success:', response); // Log payment success response
+    
+        console.log('response.razorpay_payment_id',response.razorpay_payment_id);
+        console.log('response.razorpay_order_id',response.razorpay_order_id);
+        console.log('response.razorpay_signature',response.razorpay_signature);
 
+      alert('Payment ID: ' + response.razorpay_payment_id);
+      alert('Order ID: ' + response.razorpay_order_id);
+      alert('Signature: ' + response.razorpay_signature);
+
+        var verifySettings = {
+          "url": "/apiVerify",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          
+          "data": JSON.stringify(response)
+        };
+
+        $.ajax(verifySettings).done(function(response) {
+          alert(JSON.stringify(response));
+          window.location.href = "/user/successorder";
+
+        });
+
+      fetch("/apiVerify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              payment_id: response.razorpay_payment_id,
+              order_id: response.razorpay_order_id,
+              signature: response.razorpay_signature,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Payment details sent to the server:", data);
+              if (data.success) {
+                window.location.href = "/confirm";
+              }
+            })
+            .catch((error) => {
+              console.error(
+                "Error sending payment details to the server:",
+                error
+              );
+            });
+
+          return this;
+
+
+      },
+
+      //creates new orderId everytime
+      "theme": {
+        "color": "#004c3f"
+      },
+      "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function(response) {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+    rzp1.open();
+    e.preventDefault();
+  };
+});
+
+
+// var options = {
+//         key: "rzp_test_Dc1MSlNThSEKkf",
+//         amount: "< totalPrice.toFixed(2) * 100 >",
+//         currency: "INR",
+//         name: "Coffee Land",
+//         description: "Test Transaction",
+//         image: "https://example.com/your_logo",
+//         order_id: "< razorpayOrder.id >",
+//         handler: function (response) {
+//           fetch("/process-payment", {
+//             method: "POST",
+//             headers: {
+//               "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({
+//               payment_id: response.razorpay_payment_id,
+//               order_id: response.razorpay_order_id,
+//               signature: response.razorpay_signature
+//             }),
+//           })
+//             .then((response) => response.json())
+//             .then((data) => {
+//               console.log("Payment details sent to the server:", data);
+//               if (data.success) {
+//                 window.location.href = "/confirm";
+//               }
+//             })
+//             .catch((error) => {
+//               console.error(
+//                 "Error sending payment details to the server:",
+//                 error
+//               );
+//             });
+
+//           return this;
+//         },
+//         prefill: {
+//           name: "Joel",
+//           email: "joeltompt@gmail.com",
+//           contact: "5435345443",
+//         },
+//         notes: {
+//           address: "Razorpay Corporate Office",
+//         },
+//         theme: {
+//           color: "#3399cc",
+//         },
+//       };
+//       var rzp1 = new Razorpay(options);
+//       rzp1.on("payment.failed", function (response) {
+//         alert(response.error.code);
+//         alert(response.error.description);
+//         alert(response.error.source);
+//         alert(response.error.step);
+//         alert(response.error.reason);
+//         alert(response.error.metadata.order_id);
+//         alert(response.error.metadata.payment_id);
+//       });
+//       rzp1.open();
+</script>
 

@@ -38,27 +38,21 @@ const addform = function(req, res) {
 const addproduct = async function (req, res) {
     try {
         const { name, description, category, price, quantity } = req.body;
-
         const categoryObject = await Category.findById(category).populate('name');
         // console.log("category name",categoryObject);
-
         let images=[];
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
                 const imagePath = file.path;
                 const imageFilename = file.filename;
                 const resizedImagePath = path.join(__dirname, '../public/assets/product-images/', `resized_${imageFilename}`);
-            
-            // Resize and save the image using sharp
             await sharp(imagePath)
                 .resize(300, 200)
                 .toFile(resizedImagePath);
             
                 images.push(imageFilename);
         }
-
     }
-
         const newProduct = new Product({
             name,
             description,
@@ -98,53 +92,40 @@ const updateproduct = async function (req, res) {
     const productId = req.params.id;
     const { name, description, category, price, quantity } = req.body;
     const deleteExistingImages = req.body;
-    const newImages = req.files; // Assuming you're using multer or similar for file uploads
-
+    const newImages = req.files; 
     try {
         const currentProduct = await Product.findById(productId);
         if (!currentProduct) {
             return res.status(404).send('Product not found');
         }
-
-        // Delete existing images
         for (const key in deleteExistingImages) {
             if (key.startsWith('deleteExistingImage')) {
                 const index = parseInt(key.replace('deleteExistingImage', ''));
                 const imageFilename = deleteExistingImages[key];
                 const imagePath = path.join(__dirname, '../public/assets/product-images', imageFilename);
                 
-                // Delete image file
                 await FS.promises.unlink(imagePath);
                 console.log('Image Deleted Successfully:', imageFilename);
                 
-                // Remove filename from product's images array
                 currentProduct.images.splice(index, 1);
                 
-                // Delete image from the database (if needed)
                 await Product.deleteOne({ filename: imageFilename });
                 console.log('Image deleted from the database:', imageFilename);
             }
         }
-
-        // Add new images
         if (newImages && newImages.length > 0) {
             newImages.forEach(async (image) => {
-                const imageFilename = image.filename; // Assuming multer saves filename
+                const imageFilename = image.filename;
                 currentProduct.images.push(imageFilename);
-                // You may also need to save image metadata to the database
-                // Example: await Image.create({ filename: imageFilename, productId });
-                console.log('New image added:', imageFilename);
+                // console.log('New image added:', imageFilename);
             });
         }
-        
-        // Update other fields
         currentProduct.name = name;
         currentProduct.description = description;
         currentProduct.category = category;
         currentProduct.price = price;
         currentProduct.quantity = quantity;
 
-        // Save the updated product
         await currentProduct.save();
 
         res.redirect('/product');

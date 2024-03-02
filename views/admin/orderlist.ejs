@@ -120,48 +120,52 @@
                     <div class="col-md-12">
                         <h2>User Orders</h2>
                         <table id="usersTable" class="table table-striped table-bordered" style="width:100%">
-                            <form action="/updateOrderStatus" method="POST" id="updateOrderStatusAjax">
+                            <form action="/updateOrderStatus" method="POST">
 
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ORDER ID</th>
-                                    <th>TOTAL PRICE</th>
-                                    <th>PRODUCT ID</th>
-                                    <th>NAME</th>
-                                    <th>Quantity</th>
-                                    <th>Date & Time</th>
+                                    <th>Order ID</th>
+                                    <th>Price</th>
+                                    <!-- <th>PRODUCT ID</th> -->
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Pymt</th>
+                                    <th>DT</th>
                                     <th>STATUS</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <% if (Orders.length > 0) { %>
+                                <% if (Orders.length >= 0) { %>
                                     <% Orders.forEach((order, orderIndex) => { %>
                                         <% order.products.forEach((product, productIndex) => { %>
                                             <tr>
                                                 <% if(productIndex === 0) { %>
+
                                                     <td rowspan="<%= order.products.length %>"><%- orderIndex + 1 %></td>
                                                     <td rowspan="<%= order.products.length %>"><%= order._id %></td>
-                                                    <td rowspan="<%= order.products.length %>">Rs. <%= order.totals.totalprice %>.00</td>
+                                                    <td rowspan="<%= order.products.length %>">₹.<%= order.totals.totalprice %>.00</td>
                                                 <% } %>
-                                                <td><%= product.product._id %></td>
+                                                <!-- <td> product.product._id %></td> -->
                                                 <td><%= product.product.name %></td>
                                                 <td><%= product.quantity %></td>
+                                                <td><%= order.paymentMethod %></td>
                                                 <td><%= order.orderDate %>, <%= order.orderTime %></td>
                                                 <td>
                                                     <form action="/updateOrderStatus" method="POST">
                                                         <input type="hidden" name="orderId" value="<%= order._id %>">
                                                         <input type="hidden" name="productId" value="<%= product.product._id %>">
-                                                        <select name="newStatus" class="status-select">
+                                                        <select name="newStatus" class="status-select" <%= order.status === 'Cancelled' ? 'disabled' : '' %>>
                                                             <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
                                                             <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
                                                             <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
                                                             <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
                                                             <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                                         </select>
-                                                        <button class="btnn btn-success" id="update" type="submit">Update Status</button>
+                                                        <button class="btnn btn-success update" type="submit">Update Status</button>
                                                     </form>
                                                 </td>
+                                                
                                             </tr>
                                         <% }) %>
                                     <% }) %>
@@ -212,52 +216,58 @@
 
 
     <script>
-    jQuery.noConflict();
-    jQuery(document).ready(function($) {
-        $('#usersTable').DataTable();
-    });
+        jQuery.noConflict();
+        jQuery(document).ready(function($) {
+            $('#usersTable').DataTable();
+        });
+   </script>
+
+
+<script>
+// $('form[action="/updateOrderStatus"]').each(function() {
+//     var form = $(this);
+//     form.submit(function(event) {
+//         event.preventDefault(); 
+//         var orderId = form.find('input[name="orderId"]').val();
+//         var newStatus = form.find('select[name="newStatus"]').val();
+        
+//         $.ajax({
+//             url: form.attr('action'),
+//             method: form.attr('method'),
+//             data: {
+//                 orderId: orderId,
+//                 newStatus: newStatus
+//             },
+//             success: function(response) {
+//                 console.log('Order status updated successfully');
+//             },
+//             error: function(xhr, status, error) {
+//                 console.error('Error updating order status:', error);
+//             }
+//         });
+//     });
+// });
+
+
 </script>
 
 
 <script>
-$('form[action="/updateOrderStatus"]').submit(function(event) {
-    event.preventDefault(); 
-    var form = $(this);
-    var orderId = form.find('input[name="orderId"]').val();
-    var newStatus = form.find('select[name="newStatus"]').val();
-    
-    $.ajax({
-        url: form.attr('action'),
-        method: form.attr('method'),
-        data: {
-            orderId: orderId,
-            newStatus: newStatus
-        },
-        success: function(response) {
-            console.log('Order status updated successfully');
-        },
-        error: function(xhr, status, error) {
-            console.error('Error updating order status:', error);
-        }
+    document.querySelectorAll('.update').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var orderId = this.getAttribute('data-order-id');
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Status updated successfully!",
+                showConfirmButton: false,
+                timer: 1500
+            }).then(function() {
+                location.reload();
+            });
+        });
     });
-});
-
 </script>
-
-
-<script>
-    document.getElementById('update').addEventListener('click', function() {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Status updated successfully!",
-        showConfirmButton: false,
-        timer: 1500
-      }).then(function() {
-        location.reload();
-      });
-    });
-    </script>
 
 
 

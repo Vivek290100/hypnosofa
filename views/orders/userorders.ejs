@@ -58,7 +58,7 @@
               <tbody>
                 <% order.products.forEach(product=> { %>
                 <tr>
-                  <td><%= product.product.name %></td>
+                  <td><%= product.product && product.product.name %></td>
                   <td><%= product.quantity %></td>
                 </tr>
                 <% }); %>
@@ -72,6 +72,7 @@
               <h5 class="field-name" >ORDER SUMMARY</h5>
             </div><br>
             <p class="field-name">Total Price: ₹<%= order.totals.totalprice %>
+            <p class="field-name">Payment Method: <%= order.paymentMethod %>
             <p class="field-name">Ordered Date: <%= order.orderDate %>
             <p class="field-name">Ordered Time: <%= order.orderTime %>
             </p>
