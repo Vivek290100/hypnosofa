@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../user/nav') -%>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <style>
+        body {
+            background: #fff;
+            min-height: 100vh;
+            vertical-align: middle;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+            font-size: 1.1rem;
+            /* font-weight: bold; */
+        }
+        .title {
+            margin-bottom: 5vh;
+        }
+        .card {
+            margin: auto;
+            max-width: 1300px;
+            margin-top: 50px;
+            width: 90%;
+            box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+            border: transparent;
+        }
+        @media(max-width:767px){
+            .card{
+                margin: 3vh auto;
+            }
+        }
+        .cart {
+            background-color: #fff;
+            padding: 4vh 5vh;
+            border-bottom-left-radius: 1rem;
+            border-top-left-radius: 1rem;
+        }
+        @media(max-width:767px){
+            .cart{
+                padding: 4vh;
+                border-bottom-left-radius: unset;
+                border-top-right-radius: 1rem;
+            }
+        }
+        .summary {
+            background-color: #ddd;
+            /* border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem; */
+            padding: 4vh;
+            color: rgb(0, 0, 0);
+        }
+        @media(max-width:767px){
+            .summary{
+                border-top-right-radius: unset;
+                border-bottom-left-radius: 1rem;
+            }
+        }
+        .summary .col-2 {
+            padding: 0;
+        }
+        .summary .col-10 {
+            padding: 0;
+        }
+        .row {
+            margin: 0;
+            font-family:sans-serif;
+            font-size: 15px;
+        }
+        .title b {
+            font-size: 1.5rem;
+        }
+        .main {
+            margin: -13px;
+            padding: 2vh 0;
+            width: 100%;
+        }
+        .col-2, .col {
+            padding: 0 1vh;
+        }
+        a {
+            padding: 0 1vh;
+        }
+        .close {
+            margin-left: auto;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+        img {
+            width: 7rem;
+        }
+        .back-to-shop {
+            margin-top: 4.5rem;
+        }
+        h5 {
+            margin-top: 4vh;
+        }
+        hr {
+            margin-top: 1.25rem;
+        }
+        form {
+            padding: 2vh 0;
+        }
+        select {
+            border: 1px solid rgba(0, 0, 0, 0.137);
+            padding: 1.5vh 1vh;
+            margin-bottom: 4vh;
+            outline: none;
+            width: 100%;
+            background-color: rgb(247, 247, 247);
+        }
+        input {
+            border: 1px solid rgba(0, 0, 0, 0.137);
+            padding: 1vh;
+            margin-bottom: 4vh;
+            outline: none;
+            width: 100%;
+            background-color: rgb(247, 247, 247);
+        }
+        input:focus::-webkit-input-placeholder {
+            color: transparent;
+        }
+        .btn {
+            background-color: #DDDDDD;
+            /* border-color: #000; */
+            color: white;
+            width: 100%;
+            font-size: 0.7rem;
+            margin-top: 4vh;
+            padding: 1vh;
+            border-radius: 0;
+        }
+        .btn:focus {
+            box-shadow: none;
+            outline: none;
+            box-shadow: none;
+            color: white;
+            -webkit-box-shadow: none;
+            /* -webkit-user-select: none; */
+            transition: none;
+        }
+        .btn:hover {
+            color: rgb(14, 57, 40);
+        }
+        a {
+            color: black;
+        }
+        a:hover {
+            color: black;
+            text-decoration: none;
+        }
+        #code {
+            background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253) , rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+            background-repeat: no-repeat;
+            background-position-x: 95%;
+            background-position-y: center;
+        }
+
+        .price {
+        text-transform: UPPERCASE;
+        font-weight: bold; }
+
+       .price{
+       color: #004c3f; }
+        .back{
+            background-color: #004c3f;
+            color: #fff;
+        }
+        /* .img-fluid{
+            width: 100px;
+            height: 100px;
+        } */
+        .quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-control button {
+    background-color: #004c3f;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.quantity-control input {
+    width: 40px;
+    padding: 6px 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 5px;
+    font-size: 1rem;
+}
+.checkoup{
+    background-color: #004c3f;
+    color: #fff;
+}
+      
+        
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col"><h4><b>SHOPPING CART</b></h4></div>
+
+                    <% if (cartItems && cartItems.length > 0) { %>
+                        <div class="col align-self-center text-right text-muted"><%= cartItems.length %> items</div>
+                    <% } else { %>
+                        <div class="col align-self-center text-right text-muted">0 items</div>
+                    <% } %>
+                </div>
+            </div>
+            
+           
+           
+            <div class="row border-top border-bottom">
+                <% if (cartItems && cartItems.length > 0) { %>
+    <% cartItems.forEach(item => { %>
+
+        <div class="row main align-items-center" data-product-id="<%= item.productId._id %>">
+            <% if (item.productId && item.productId.images[0]) { %>
+            <div class="col-2">
+                <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
+            </div>
+            <% } else { %>
+                <p>No images available</p>
+            <% } %>
+            <div class="col">
+                <div class="row"><%= item.productId && item.productId.name %></div>
+                <div class="row text-muted">₹<%=item.productId &&  item.productId.price%></div>
+
+            </div>
+
+
+            <div class="col quantity-control">
+                <button class="decrease" >-</button>
+                <input type="text" class="quantity-input" value="<%=item.quantity%>" readonly>
+                <button class="increase" >+</button>
+            </div>
+            
+
+            <% if (item.productId && item.productId.price) { %>
+                <div class="col pricec">
+                    <!-- cart.ejs -->
+                    <div class="col text-right" id="update-price-<%= item.productId._id %>">
+                        <!-- Check if there's a discount percentage available -->
+                        <% const originalPrice = item.updateprice || item.productId.price; %>
+                        <% const discountedPrice = item.discountPercentage && item.discountPercentage > 0 ? (originalPrice - (originalPrice * (item.discountPercentage / 100))) : originalPrice; %>
+                        <!-- Show the discounted price -->
+                        ₹ <%= discountedPrice.toFixed(2) %>
+                        <% if (item.discountPercentage && item.discountPercentage > 0) { %>
+                            <!-- Display the discount percentage -->
+                            (<%= item.discountPercentage %> % off)
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+            
+            
+
+            
+           
+            
+
+
+
+
+            <!-- Move remove button outside the 'col' div -->
+            <div class="col">
+                <a href="/removeItem/<%= item.productId._id %>" class=" close" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">&#10005; Remove</a>
+            </div>
+        </div>
+        <hr>
+        
+    <% }); %>
+    <% } else { %>
+        <div class="text-center mt-3">
+            <img src="/assets/homeimg/empty cart.webp" alt="">
+            <h4>Your cart is empty!</h4>
+            <p>Add items to it now.</p>
+        </div>
+    <% } %>
+
+            </div>
+            
+            
+            <div class="back-to-shop"><a href="/user/product"><button class="text-mute back">🢀Back to shop</button></a></div>
+        </div>
+        <div class="col-md-4 summary">
+            <div><h5><b>PRICE DETAILS</b></h5></div>
+            <hr>
+            <div class="row">
+                <div class="col" style="padding-left:0;">TOTAL PRICE (<%= cartItems.length %> items)</div>
+                <div class="col text-right" id="total-price">₹ <%= totalPrice.toFixed(2) %></div>
+            </div><br>
+            <!-- <form>
+                <p>SHIPPING</p>
+                <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
+                <p>GIVE CODE</p>
+                <input id="code" placeholder="Enter your code">
+            </form> -->
+            
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <!-- <div class="col">PACKAGING FEE</div>
+                <div class="col text-right">&euro; 137.00</div> -->
+            </div>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <!-- <div class="col">TOTAL PRICE</div>
+                <div class="col text-right" id="total-price">₹ </div> -->
+            </div>
+            <a class="btn" href="/checkout"><button class="checkoup" >CHECKOUT</button></a>
+            
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+
+
+
+
+
+
+
+<!-- Updated removeItem function in the script section -->
+<script>
+    function removeItem(button) {
+        const productId = button.getAttribute('data-product-id');
+        $.ajax({
+          url: `/removeItem/${productId}`,
+          type: 'DELETE',
+          success: function(response) {
+            if (response.success) {
+              // Remove the item from the UI without reloading the page
+            //   $(button).closest('.main').remove();
+              // You can also update any summary or total price if needed
+            } else {
+              // Handle error response
+              console.error(response.message);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
+        });
+    }
+    
+
+    </script>
+    
+
+    <script>
+        $('.increase').click(function() {
+        const row = $(this).closest('.main');
+        const productId = row.attr('data-product-id'); 
+        let quantity = parseInt(row.find('.quantity-input').val());
+        const maxQuantity = parseInt(row.find('.max-quantity').text());
+
+
+        if (quantity >= 10) {
+            alert('Maximum quantity reached.');
+            return;
+        }
+
+        quantity++;
+        row.find('.quantity-input').val(quantity);
+        updateQuantity(productId, quantity);
+    });
+    
+        $('.decrease').click(function() {
+            const row = $(this).closest('.main');
+            const productId = row.attr('data-product-id');
+            let quantity = parseInt(row.find('.quantity-input').val());
+            if (quantity > 1) {
+                quantity--;
+                row.find('.quantity-input').val(quantity);
+                updateQuantity(productId, quantity);
+            }
+        });
+    
+        function updateQuantity(productId, quantity) {
+    if (isNaN(quantity)) {
+        console.error('Invalid quantity:', quantity);
+        return; // Exit the function if quantity is not a number
+    }
+            $.ajax({
+                url: `/updateQuantity/${productId}`,
+                type: 'PUT',
+                data: { quantity: quantity },
+                success: function(response) {
+                    if (response.success) {
+                        $(`#update-price-${productId}`).text('₹ ' + response.updatePrice.toFixed(2));
+                    } else {
+                        console.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+    
+
+   
+    <script>
+        function updateTotalPrice() {
+            $.ajax({
+                url: '/getTotalPrice', 
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        // Update the total price element with the received data
+                        $('#total-price').text('₹ ' + response.totalPrice.toFixed(2));
+                    } else {
+                        console.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    
+        // Call the updateTotalPrice function when the page loads
+        $(document).ready(function() {
+            updateTotalPrice(); // Fetch and update total price on page load
+    
+            // Update the total price every 5 seconds (adjust the interval as needed)
+            setInterval(updateTotalPrice,100 );
+        });
+    </script>
+    
+
+    <script>
+       $(document).ready(function() {
+    $('.col.price').each(function() {
+        var productId = $(this).data('product-id'); // Get the product ID
+        var priceDiv = $(this); // Store the price div element
+
+        // Check if productId is available
+        if (productId) {
+            $.ajax({
+                url: '/getProductPrice', // Your endpoint to fetch product price
+                type: 'GET',
+                data: { productId: productId },
+                success: function(response) {
+                    // Update the price in the HTML
+                    priceDiv.html('₹ ' + (response.price * $('.quantityInput[value="' + productId + '"]').val()).toFixed(2));
+                },
+                error: function() {
+                    // Handle error
+                    priceDiv.html('Price Unavailable');
+                }
+            });
+        }
+    });
+});
+
+    </script>
+    
+
+
+    
+
+
+
+</body>
+</html>
+
+
+
+
+
+

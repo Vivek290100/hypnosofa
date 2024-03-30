@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%- include('../adminlayout/header') -%>
+
+    <head>
+      
+        <link rel="stylesheet" href="./css/userList.css">
+    
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css
+        ">
+    </head>
+   
+<body>
+
+
+	<!-- SIDEBAR -->
+	<%- include('../adminlayout/slider') -%>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<%- include('../adminlayout/navbar') -%>
+		<!-- NAVBAR -->
+
+
+		<!-- MAIN -->
+		<main>
+            <table id="usersTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% users.forEach((user,index) => { %>
+
+                    <tr>
+                        <td><%- index + 1 %></td>
+                        <td><%-user.name %></td>
+                        <td><%-user.email %></td>
+                        <td><%-user.status %></td>
+                        <td>
+                            <% if (user._id && user.status === 'active') { %>
+                                <button class="block-button" type="button" data-user-id="<%= user._id %>"  onclick="showConfirmationModal('block', '<%= user._id %>')">Block.....</button>
+                            <% } else if (user._id && user.status=== 'blocked') { %>
+                                <button class="unblock-button" type="button" data-user-id="<%= user._id %>" onclick="showConfirmationModal('unblock', '<%= user._id %>')">Unblock</button>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }) %>
+
+                </tbody>
+            </table>
+		</main>
+		<!-- MAIN -->
+
+
+	</section>
+	<!-- CONTENT -->
+	
+
+    <div id="confirmationModal" class="modal">
+        <div id="center-modal" class="d-flex justify-content-center align-items-center">
+        <div class="modal-content">
+            <p>Are you sure you want to proceed?</p>
+            <button id="confirmBtn" onclick="handleConfirmation(true)">Confirm</button>
+            <button id="cancelBtn" onclick="handleConfirmation(false)">Cancel</button>
+        </div>
+    </div>
+    </div>
+
+	<%- include('../adminlayout/footer') -%>
+    
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <script>
+        window.alert = function() {};
+    </script>
+
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(function($) {
+        $('#usersTable').DataTable();
+    });
+</script>
+
+    <script>
+
+var use = '<%- JSON.stringify(users) %>';
+
+
+
+
+var currentAction;
+var currentUserId;
+
+
+function showConfirmationModal(action, userId) {
+currentAction = action;
+currentUserId = userId;
+
+var confirmModal = document.getElementById('confirmationModal');
+confirmModal.style.display = 'block';
+}
+
+function hideConfirmationModal() {
+var confirmModal = document.getElementById('confirmationModal');
+confirmModal.style.display = 'none';
+}
+
+function handleConfirmation(confirmed) {
+hideConfirmationModal();
+
+if (confirmed) {
+var xhr = new XMLHttpRequest();
+xhr.open('POST', currentAction === 'block' ? '/block' : '/unblock', true);
+xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+xhr.onload = function () {
+    if (xhr.status === 200) {
+        console.log('Action successful');
+        window.location.reload();
+    } else {
+        console.error('Error during action:', xhr.status, xhr.statusText);
+    }
+};
+var data = 'userId=' + encodeURIComponent(currentUserId);
+console.log('XHR Request Data:', data);
+xhr.send(data);
+reloading();
+}
+function reloading(){
+setTimeout(function() {
+location.reload();
+},200);
+}
+
+}
+
+
+
+    </script>
+
+
+
+
+
+</body>
+</html>

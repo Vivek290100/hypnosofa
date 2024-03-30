@@ -1,0 +1,379 @@
+<%- include('header') -%>
+
+<style>
+  body {
+    background-color: #fff;
+    background-image: url(/assets/homeimg/login-bg.jpg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-size: cover;
+    
+  }
+
+  .container {
+    text-align: center;
+    display: flex;
+    background: rgba(240, 240, 240, 0.7);
+    margin: 0 auto;
+    max-width: 400px;
+    max-height: 600px;
+    /* padding: 0 70px; */
+    border-radius: 5px;
+    margin-bottom: 80px;
+  }
+
+  .login-container {
+    width: 100%;
+    margin: auto;
+    display: inline-block;
+  }
+
+  .input-div {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  .input {
+    width: 120%;
+    padding: 10px;
+    padding-inline: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 8px;
+    flex-direction: column;
+  }
+  .input1{
+  padding-inline: 34px;
+    margin-left: 42px;
+    width: 235px;
+    height: 45px;
+  }
+  .apply{
+    border: none;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    background-color: #156161;
+    color: #fff;
+    height: 44px;
+
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  h2 {
+    margin-bottom: 20px; /* Adjust margin for the logo */
+  }
+
+  .i {
+    margin-bottom: 10px; /* Adjust space between icon and input */
+    margin: 15px;
+
+  }
+
+  .btn1 {
+    width: 38%;
+    margin-top: 15px;
+    margin-left: 114px;
+    /* border-width: 2px; */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn1:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    background-color: #156161;
+    color: #fff;
+    border: none;
+  }
+
+  .shadow {
+    box-shadow: 10px 10px 20px #000000;
+  }
+
+  .checkbox-container {
+    margin-left: 230px;
+  }
+
+  .alert {
+    margin-top: -26px;
+    position: absolute;
+    color: red;
+  }
+  .referr{
+    margin-left: 45px;
+    color: red;
+  }
+
+</style>
+
+<div class="container" id="gradient">
+  <div class="login-container">
+    <form action="/send" method="POST" onsubmit="return validateForm()">
+      <h2>Hypnosofa</h2>
+      
+      <div class="input-div d-flex">
+        <div class="i">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="shadow">
+          <input class="input" type="text" placeholder="Name" name="name" id="name" />
+        </div>
+      </div>
+      <div class="input-div d-flex">
+        <div class="i">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div>
+          <input class="input" type="email" placeholder="Email" name="email" id="email" />
+        </div>
+      </div>
+      <div class="input-div d-flex">
+        <div class="i">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div>
+          <input class="input" type="password" placeholder="Password" name="password" id="password"
+            pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$"
+            title="Password should be a strong mixture of alphabet, numbers, and symbols." required />
+        </div>
+        <!-- <div class="checkbox-container">
+          <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+          <label for="showPassword"></label>
+        </div> -->
+      </div>
+      <div class="input-div d-flex">
+        <div class="i">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div>
+          <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password"
+            name="confirmPassword" required />
+        </div>
+        <!-- <div class="checkbox-container">
+          <input type="checkbox" id="showConfirmPassword" onchange="togglePasswordVisibility()">
+          <label for="showConfirmPassword"></label>
+        </div> -->
+        
+      </div>
+      <div>
+        <% if (error && error.length > 0) { %>
+        <p class="alert"><%= error %></p>
+        <% } %>
+      </div>
+<br>
+
+      <div class="input-div d-flex">
+        <!-- <div class="i">
+          <i class="fas fa-lock"></i>
+        </div> -->
+        <div>
+          <input class="input1" id="referralcode" name="referralcode" type="text"placeholder="Referral Code" />
+          <button type="button" class="apply" onclick="sendReferralCodeToBackend()">Apply</button>
+          <p class="referr" id="referral-message"></p>
+        </div>
+        
+      </div>
+
+
+      <input type="submit" class="btn1" value="Signup" /><br>
+      
+      <a href="/user/login" style="text-decoration: none;color:black;" id="signbtn">
+        <i>Already have an account?</i><strong>Log in</strong>
+      </a><br>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  function displayAlert(message, inputId) {
+    const inputField = document.getElementById(inputId);
+
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert';
+    alertDiv.textContent = message;
+    alertDiv.style.color = 'red';
+
+    const inputRect = inputField.getBoundingClientRect();
+    alertDiv.style.position = 'absolute';
+    alertDiv.style.top = inputRect.bottom + 'px';
+    alertDiv.style.left = inputRect.left + 'px';
+
+    document.body.appendChild(alertDiv);
+
+    setTimeout(() => {
+      alertDiv.remove();
+    }, 3000);
+  }
+
+  function validateForm() {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const referralcode = document.getElementById('referralcode').value;
+
+    if (!name) {
+      displayAlert("Name field is empty", 'name');
+      return false;
+    }
+
+    if (!email) {
+      displayAlert("Email field is empty", 'email');
+      return false;
+    }
+
+    if (!password) {
+      displayAlert("Password field is empty", 'password');
+      return false;
+    }
+
+    if (!confirmPassword) {
+      displayAlert("Confirm Password field is empty", 'confirmPassword');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      displayAlert("Password and Confirm Password do not match", 'password');
+      return false;
+    }
+
+    return true;
+  }
+</script>
+<script>
+  function togglePasswordVisibility() {
+    toggleVisibility('password');
+    toggleVisibility('confirmPassword');
+  }
+
+  function toggleVisibility(inputId) {
+    var passwordInput = document.getElementById(inputId);
+    var showPasswordCheckbox = document.getElementById(`show${inputId.charAt(0).toUpperCase() + inputId.slice(1)}`);
+
+    if (showPasswordCheckbox.checked) {
+      passwordInput.type = 'text';
+    } else {
+      passwordInput.type = 'password';
+    }
+  }
+</script>
+
+<script type="text/javascript" src="js/main.js"></script>
+
+
+
+
+<script>
+
+  var colors = new Array(
+    [62,35,155],
+    [60,255,60],
+    [155,35,98],
+    [45,175,230],
+    [255,0,255],
+    [255,128,0]);
+  
+  var step = 0;
+  //color table indices for: 
+  // current color left
+  // next color left
+  // current color right
+  // next color right
+  var colorIndices = [0,1,2,3];
+  
+  //transition speed
+  var gradientSpeed = 0.002;
+  
+  function updateGradient()
+  {
+    
+    if ( $===undefined ) return;
+    
+  var c0_0 = colors[colorIndices[0]];
+  var c0_1 = colors[colorIndices[1]];
+  var c1_0 = colors[colorIndices[2]];
+  var c1_1 = colors[colorIndices[3]];
+  
+  var istep = 1 - step;
+  var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+  var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+  var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+  var color1 = "rgb("+r1+","+g1+","+b1+")";
+  
+  var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+  var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+  var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+  var color2 = "rgb("+r2+","+g2+","+b2+")";
+  
+   $('#gradient').css({
+     background: "-webkit-gradient(linear, left top, right top, from("+color1+"), to("+color2+"))"}).css({
+      background: "-moz-linear-gradient(left, "+color1+" 0%, "+color2+" 100%)"});
+    
+    step += gradientSpeed;
+    if ( step >= 1 )
+    {
+      step %= 1;
+      colorIndices[0] = colorIndices[1];
+      colorIndices[2] = colorIndices[3];
+      
+      //pick two new target color indices
+      //do not pick the same as the current one
+      colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+      colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+      
+    }
+  }
+  
+  setInterval(updateGradient,10);
+  
+  </script>
+
+
+
+
+<!-- //referral -->
+<script>
+  function sendReferralCodeToBackend() {
+    // event.preventDefault();
+    var referralCode = document.getElementById('referralcode').value;
+    
+    fetch('/verifyReferral', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ referralCode: referralCode }),
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Failed to send referral code');
+      }
+    })
+    .then(data => {
+      console.log('data',data);
+
+      if (data.valid) {
+        document.getElementById('referral-message').textContent = 'Referral code applied successfully';
+      } else {
+        document.getElementById('referral-message').textContent = 'Invalid referral code';
+      }
+      setTimeout(() => {
+                document.getElementById('referral-message').textContent = '';
+            }, 3000);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      document.getElementById('referral-message').textContent = 'Failed to verify referral code';
+      setTimeout(() => {
+                document.getElementById('referral-message').textContent = '';
+            }, 3000);
+
+    });
+  }
+  </script>
+  

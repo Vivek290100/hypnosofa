@@ -1,0 +1,1169 @@
+
+<%- include('nav',{user:user}) -%>
+<style>
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Lato);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css);
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+@import url(https://fonts.googleapis.com/css?family=Raleway:100,200,300);
+@keyframes content-opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes content-rotate-y {
+  from {
+    -moz-transform: rotateY(90deg);
+    -ms-transform: rotateY(90deg);
+    -webkit-transform: rotateY(90deg);
+    transform: rotateY(90deg);
+  }
+  to {
+    opacity: 1;
+    -moz-transform: rotateY(0deg);
+    -ms-transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+  }
+}
+@keyframes content-rotate-x {
+  from {
+    -moz-transform: rotateX(90deg);
+    -ms-transform: rotateX(90deg);
+    -webkit-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+  }
+  to {
+    opacity: 1;
+    -moz-transform: rotateX(0deg);
+    -ms-transform: rotateX(0deg);
+    -webkit-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+  }
+}
+@keyframes content-rotate-both {
+  from {
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -moz-transform-origin: 0% 50% 50%;
+    -ms-transform-origin: 0% 50% 50%;
+    -webkit-transform-origin: 0% 50% 50%;
+    transform-origin: 0% 50% 50%;
+  }
+  to {
+    opacity: 1;
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -moz-transform-origin: 0% 50% 50%;
+    -ms-transform-origin: 0% 50% 50%;
+    -webkit-transform-origin: 0% 50% 50%;
+    transform-origin: 0% 50% 50%;
+  }
+}
+@keyframes content-pop-out {
+  0% {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes content-pop-in {
+  from {
+    opacity: 1;
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes content-slide-bot {
+  from {
+    top: 20px;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+@keyframes content-slide-top {
+  from {
+    top: -20px;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+/* used for wrapper animation after the load of the page */
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+html {
+  background: url(http://distinctionjewelry.com/info/wp-content/uploads/2013/01/blurred-background-10-2000x1250.jpg);
+  webkit-font-smoothing: antialiased;
+  font: 1em/1.5em "Raleway";
+  font-weight: normal;
+}
+
+.tabs-wrapper {
+  margin: 5% 10% 0 10%;
+}
+.tabs-wrapper input[type="radio"] {
+  display: none;
+}
+.tabs-wrapper label {
+  transition: background 0.4s ease-in-out, height 0.2s linear;
+  display: inline-block;
+  cursor: pointer;
+  color: #dbdbd3;
+  width: 20%;
+  height: 3em;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background: #525252;
+  text-align: center;
+  line-height: 3em;
+}
+.tabs-wrapper label:last-of-type {
+  border-bottom: none;
+  border: 1px solid black;
+}
+.tabs-wrapper label:hover {
+  background: #667876;
+  /*@include transform (translate(0,-0.2em));*/
+}
+@media screen and (max-width: 1600px) {
+  .tabs-wrapper label {
+    width: 32.8%;
+  }
+}
+@media screen and (max-width: 900px) {
+  .tabs-wrapper label {
+    width: 32.5%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .tabs-wrapper label {
+    width: 100%;
+    display: block;
+    border-bottom: 2px solid #4d4c47;
+    border-radius: 0;
+  }
+}
+@media screen and (max-width: 600px) {
+  .tabs-wrapper {
+    margin: 0;
+  }
+}
+
+.container{
+  background-color: #fff;
+}
+
+#tab1:checked + label,
+#tab2:checked + label,
+#tab3:checked + label,
+#tab4:checked + label {
+  background: #004c3f;
+  color: #f2f2f2;
+}
+
+.tab-body {
+  position: absolute;
+  top: -9999px;
+  opacity: 0;
+  padding: 10px;
+}
+
+.tab-body-wrapper {
+  /* background: #fff; */
+  /* border-top: #004c3f 5px solid; */
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top-right-radius: 3px;
+  animation-delay: 0.2s;
+  animation-duration: 1.5s;
+  animation-name: show;
+  animation-fill-mode: forwards;
+  height: 60vh;
+  
+}
+
+
+@media screen and (max-width: 600px) {
+  .tab-body-wrapper {
+    border: none;
+    border-radius: 0;
+  }
+}
+
+
+#tab1:checked ~ .tab-body-wrapper #tab-body-1,
+#tab2:checked ~ .tab-body-wrapper #tab-body-2,
+#tab3:checked ~ .tab-body-wrapper #tab-body-3,
+#tab4:checked ~ .tab-body-wrapper #tab-body-4 {
+  position: relative;
+  top: 0px;
+  /* Choose one - modify .tab-body opacity to 1 if you don't want any animation or set opacity to 1 here */
+  /* @include animation(0.2s,0.8s,content-rotate-y); */
+  /* @include animation(0.2s,0.8s,content-rotate-both); */
+  animation-delay: 0.1s;
+  animation-duration: 0.4s;
+  animation-name: content-pop-out;
+  animation-fill-mode: forwards;
+  /* @include animation(0.1s,1s,content-slide-bot); */
+}
+#tab-body-1 {
+        width: 400px; /* Adjust width as needed */
+        height: 200px; /* Adjust height as needed */
+        padding: 20px; /* Adding padding for spacing */
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Adjust the gap between divs as needed */
+    }
+
+    .username, .email {
+        border: 1px solid #ccc; /* Adding border */
+        padding: 10px; /* Adding padding */
+    }
+    .user-info,
+.product-info {
+    border: 1px solid #ccc; /* Adding border */
+    padding: 10px; /* Adding padding */
+    background-color: #fff; /* Adding background color */
+}
+.wallet {
+        border: 1px solid #ccc; /* Adding border */
+        padding: 10px; /* Adding padding */
+    }
+body{
+  font-family:calibri;
+  height: 100vh;
+}
+.address-row {
+  display: inline-block;
+  height: 123px;
+  width: 380px;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  vertical-align: top;
+  border-radius: 4px;
+  position: relative;
+  padding: 19px 5px 25px 42px;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(40,44,63,.08);
+  border: 1px solid #eaeaec;
+  background-color: #fff;
+}
+
+/* .address-row:hover {
+  border: 1px solid #000000!important
+} */
+
+.address-row .name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #000000;
+  padding-left: 0;
+  padding-top: 0;
+  white-space: nowrap;
+}
+.address-row .name .address-type {
+  float: right;
+  font-size: 10px;
+  padding: 2px 10px;
+  border: 1px solid #d5d6d9;
+  border-radius: 20px;
+  color: #596062;
+  margin-right: 10px;
+}
+.address-row .address {
+  padding-left: 0;
+  padding-top: 10px;
+  width: 80%;
+}
+.address-row .address .address-content {
+  color: #535766;
+  line-height: 1.4;
+}
+.address-row .address .address-content .mob {
+  display: block;
+  padding: 8px 0
+}
+.address-row .address .address-content .mobile {
+  font-weight: 600
+}
+.address-row .select {
+  position: absolute;
+  left: 12px;
+  top: 27px;
+  background: url(address-check.png) -24px 0 no-repeat;
+  border: none;
+  border-radius: 50px;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle
+}
+.address-row.selected .select {
+  background: url(address-check.png) 0 0 no-repeat;
+  background-color: #494949;
+}
+.address-row.selected {
+  /* background: #919a96; */
+  border-color: #000000;
+  color: #000000;
+  margin-bottom: 8px;
+  box-shadow: 2px 2px 2px 2px #868b8a;
+  /* background: radial-gradient(rgb(176, 179, 177), rgba(0, 0, 0, 0.2) 50%); */
+}
+  
+
+a.add-address .add-new-address {
+  display: inline-block;
+  height: 200px;
+  width: 347px;
+  margin-right: 15px;
+  margin-bottom: 17px;
+  vertical-align: top;
+  border: 1px dashed #ccd2d5;
+  border-radius: 4px;
+  position: relative;
+  text-align: center;
+  padding-left: 0;
+}
+a.add-address .add-new-address:hover {
+  border: 1px solid #8d3030;
+}
+a.add-address .add-new-address:before {
+  margin: 60px auto 10px;
+  content: ' ';
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  vertical-align: middle;
+  display: block;
+  background: url(add-new.png) 0 0 no-repeat!important;
+}
+
+ /* Custom radio button styles */
+ .form-check-input[type="radio"] {
+    width: 20px; /* Set width */
+    height: 20px; /* Set height */
+    border-radius: 50%; /* Make it circular */
+    border: 2px solid #004c3f; /* Set border */
+    background-color: #fff; /* Set background color */
+    margin-right: 5px; /* Adjust margin */
+  }
+
+  .form-check-input[type="radio"]:checked {
+    background-color: #004c3f;
+  }
+
+  /* Custom radio button label styles */
+  .form-check-label {
+    color: #004c3f; /* Set label color */
+    font-weight: bold; /* Set label font weight */
+  }
+  .overflow-hidden{
+    overflow: hidden!important;
+    height: 59vh;
+  }
+
+  .address-row1 {
+    height: 80px;
+    width: 380px;
+    margin-right: 25px;
+    margin-bottom: 25px;
+    vertical-align: top;
+    border-radius: 4px;
+    position: relative;
+    padding: 19px 5px 25px 42px;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(40,44,63,.08);
+    border: 1px solid #eaeaec;
+    background-color: #fff;
+}
+
+/* @media only screen and (max-width: 600px) {
+  .address-row {
+    display: inline-block;
+    height: 99px;
+    width: 321px;
+    margin-right: 25px;
+    margin-bottom: 7px;
+    vertical-align: top;
+    border-radius: 4px;
+    position: relative;
+    padding: 3px 5px 25px 42px;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(40,44,63,.08);
+    border: 1px solid #eaeaec;
+    background-color: #fff;
+}
+}
+
+@media only screen and (max-width: 377px) {
+
+#tab-body-1 {
+    width: 336px;
+    height: 200px;
+    padding: 9px;
+    border: 1px solid #000000;
+
+}
+} */
+
+.checkbox-item{
+  /* background-color: #8d3030; */
+  /* border: 1px solid #000000; */
+  height: 10vh;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+
+@media only screen and (max-width: 900px) {
+  /* Adjust layout for smaller screens */
+  .checkbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between checkboxes */
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center; /* Align checkbox and label vertically */
+  }
+
+  .checkbox-item img {
+    margin-right: 10px; /* Add margin between image and label */
+  }
+}
+.tab-head{
+  border: 2px solid #000000;
+}
+
+#tab-body-3.tab-body {
+  overflow-y: auto; /* Add scrollbars if needed */
+  max-height: 400px; /* Set maximum height for the container */
+}
+.overflow-hidden {
+  /* overflow: auto; */
+  height: 100vh;
+
+}
+.coupon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .coupon-input {
+  display: flex;
+  align-items: center;
+}
+
+input[type="text"] {
+  flex: 1; /* Take remaining space */
+  padding: 10px;
+  border: 1px solid #bebebe;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.applycoupon {
+  padding: 8px 10px;
+  background-color: #004c3f;
+  color: #fff;
+  /* border: none; */
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+
+    #couponMessage {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+    .placeorder {
+      margin-left: 62px;
+  padding: 2% 4%; 
+  background-color: #004c3f;
+  color: #fff;
+  /* border: none; */
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 1vw; /* Adjust font size as needed */
+  width: 20%; /* Adjust width as needed */
+}
+
+/* Adjust styles for smaller screens */
+@media screen and (max-width: 600px) {
+  .placeorder {
+    padding: 2% 7%;
+    font-size: 3.2vw;
+    width: 40%;
+  }
+}
+.addaddress{
+  background-color: #004c3f;
+  border-radius: 4px;
+  color: #fff;
+  height: 40px;
+}
+.selected-icon {
+  position: absolute;
+  left: 12px;
+  top: 27px;
+  font-size: 20px; /* Adjust the size as needed */
+  color: #004c3f; /* Color of the selected icon */
+}
+
+
+.review {
+  
+  width: 300px;
+  height: 106px;
+  font-size: 5px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #ffffff, #adc0b8);
+
+}
+
+.review h5 {
+  color: red;
+  font-size: 1rem;
+
+
+}
+.review-item {
+  border: 2px dashed #004c3f;
+    padding: 5px; 
+    margin-top: 9px;
+    background: linear-gradient(135deg, #ffffff, #adc0b8);
+    box-shadow: 10px 0px 4px -5px rgba(83, 83, 83, 0.5);
+    
+
+
+    
+}
+
+
+#see-review {
+    white-space: nowrap; 
+    background-color: #004c3f;
+    /* margin-left: -176px; */
+
+  }
+  #see-review .eye-icon {
+    margin-right: 5px; 
+  }
+  #couponCode{
+    width: 172px;
+    padding-left: 14px;
+  }
+  .copy {
+  width: 60px; 
+  height: 40px;
+  color: white;
+  font-size: 14px; 
+  font-weight: bold;
+  background-color: #004c3f;
+  border: none;
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+  display: inline-block;
+  text-align: center;
+  line-height: 40px;
+}
+#see-review.cancel-coupon {
+  background-color: #004c3f; /* Set the background color for the cancel state */
+  /* Add any additional styles you want for the cancel state */
+}
+
+.cancel-btn {
+  background-color: #004c3f; /* Red background */
+  color: white; /* White text */
+  padding: 8px 16px; /* Padding */
+  border: none; /* No border */
+  font-size: 15px;
+  margin-top: 4px;
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.cancel-btn:hover {
+  background-color: #004c3f; /* Darker red on hover */
+  color: white;
+}
+.couponCode{
+  width: 144px;
+}
+
+.tab-head{
+  border: 2px solid #000000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Website: wwww.codingdung.com-->
+<!-- <!DOCTYPE html> -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile </title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body style="background-color: #fff;">
+
+    <div class="container light-style flex-grow-1 container-p-y " style="background-color: #fff;">
+        <h4 class="font-weight-bold py-3 mb-4">
+           <!-- CHECKOUT -->
+        </h4>
+        <div class="card overflow-hidden">
+            
+
+
+
+
+
+
+            <div class="tabs-wrapper">
+                <input type="radio" name="tab" id="tab1" class="tab-head" checked="checked" />
+                <label for="tab1">ORDERs</label>
+                <!-- <input type="radio" name="tab" id="tab2" class="tab-head" />
+                <label for="tab2">ORDER SUMMARY</label> -->
+                <input type="radio" name="tab" id="tab3" class="tab-head" />
+                <label for="tab3">ADDRESS</label>
+                <input type="radio" name="tab" id="tab4" class="tab-head" />
+                <label for="tab4">PAYMENT</label>
+
+
+
+
+                <div class="tab-body-wrapper">
+                  <div id="tab-body-1" class="tab-body d-flex">
+
+                    <div>
+                    <div class="user-info">
+                        <div class="username">Name:<%= user.name %></div>
+                        <div class="email">Email: <%= user.email %></div>
+                        <div class="wallet">Wallet: ₹<%=amount %></div>
+
+
+                        <div class="coupon">
+                          <div class="coupon-input">
+                            <input
+                              type="text"
+                              id="couponCode"
+                              name="couponCode"
+                              placeholder="Enter coupon code"
+                            />
+                            <button
+                            class="applycoupon"
+                              type="button"
+                              id="couponButton"
+                              onclick="return applyOrRemoveCoupon()"
+                            >
+                              Apply Coupon
+                            </button>
+                          </div>
+                        </div>
+                        <div id="couponMessage" style="color: rgb(193, 67, 0);"></div>
+
+
+                    
+                    </div>
+                
+                    <div class="product-info">
+                        <div class="product-name">No.of Items: <%= cartItems.length %></div>
+                        <div class="total-price" id="totalPrice">Total Price: ₹ <%= totalPrice.toFixed(2) %></div>
+                    </div>
+                  </div>
+
+
+                  <div class="review-container" style="margin-left: 30px;">
+
+                    <div class='mx-auto text-center review d-none'>
+                      <% coupons.forEach(function(coupon) { %>
+                        <div class="review-item">
+                          <h5>Offer: <%= coupon.discountAmount %> /-</h5>
+                          <input class="couponCode" type="text" value="<%= coupon.couponCode %>" readonly />
+                          <% if (coupon && coupon.expiryDate) { %>
+                            <h5>Expires In: <%= coupon.expiryDate.toISOString().split('T')[0] %></h5>
+                          <% } %>  
+                          
+                        </div>
+                        <% }); %>
+                        <button class="cancel-btn">✖</button>
+                    </div>
+
+                  
+                  <div class="my-4 d-table mx-auto">
+                    <a id="see-review" class="btn  text-white">
+                      <span class="eye-icon"></span>Coupons
+                    </a>                 
+                  </div>
+                </div>
+
+
+                    
+                </div>
+
+
+               
+                    
+<!-- --------------------------------------------------- -->
+
+
+<div id="tab-body-3" class="tab-body" >
+  <a href="/user/profile"><button class="addaddress">+ Add Address</button></a><br>
+  <% if (addresses.length === 0) { %>
+    
+  <% } else { %>
+    <% addresses.forEach(function(address, index) { %>
+      <div class="address-row selected">
+        <div class="name">
+         
+          <span>ADDRESS <%= index + 1 %></span>
+          <% if (index === 0) { %>
+            <span class="address-type">PRIMARY</span>
+          <% } %>
+          <div>
+            <span><%= user.name %>,</span>
+            <span><%= address.mobile %></span>
+          </div>
+        </div>
+        <span><%= address.houseName %></span>
+        <span><%= address.locality %>,</span>
+        <span><%= address.city %>,</span>
+        <span><%= address.district %>,</span><br>
+        <span><%= address.state %> -</span>
+        <span><%= address.pincode %></span>
+        <button  class="select"> </button>
+        
+      </div>
+    <% }); %>
+  <% } %>
+</div>
+
+
+
+
+
+
+<!-- ------------------------------------------------------------ -->
+
+
+<div id="tab-body-4" class="tab-body" style="background-color: #fff;">
+  <div class="checkbox-container">
+    <div class="checkbox-item">
+      <input type="checkbox" name="my-options" id="option1" value="Cash On Delivery">
+      <img src="/assets/homeimg/COD_cash_on_delivery_shipping_payment_delivery-512.webp" alt="" style="width: 40px; height: 40px;">
+      <label for="option1">Cash On Delivery</label>
+    </div>
+    <!-- Add the id attribute to the button -->
+    <div class="checkbox-item">
+      <input type="checkbox" name="my-options" id="option2" value="RazorPay">
+      <img src="/assets/homeimg/aami6-55-256.webp" alt="" style="width: 40px; height: 40px;">
+      <label for="option2">Razorpay</label>
+    </div>
+    <div class="checkbox-item">
+      <input type="checkbox" name="my-options" id="option3" value="Wallet">
+      <img src="/assets/homeimg/2663922.png" alt="" style="width: 40px; height: 40px;">
+      <label for="option3">Wallet</label>
+    </div>
+  </div>
+  <div class="placeorder">
+    <div style="background-color: #004c3f;" id="orderButton">Place Order</div>
+  </div>
+</div>
+
+  
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+        
+    </div>
+    
+    <br><br><br><br>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+
+<script>
+  const address = document.querySelectorAll(".address-row");
+
+for (let i = 0; i < address.length; i++) {
+  address[i].addEventListener("click", function() {
+  for (let i = 0; i < address.length; i++) {
+    address[i].classList.remove("selected");
+  }
+  this.classList.add("selected");
+  });
+}
+</script>
+
+
+<script>
+  const checkboxContainer = document.querySelector('.checkbox-container');
+
+checkboxContainer.addEventListener('change', (event) => {
+  const checkedCheckbox = event.target;
+  const otherCheckboxes = checkboxContainer.querySelectorAll('input[type="checkbox"]');
+
+  // Uncheck all other checkboxes except the one clicked
+  otherCheckboxes.forEach(checkbox => {
+    if (checkbox !== checkedCheckbox) {
+      checkbox.checked = false;
+    }
+  });
+});
+
+</script>
+
+
+<script>
+  const button = document.getElementById('see-review');
+
+  button.addEventListener('click', function(){
+    const reviews = document.getElementsByClassName('review');
+
+    for (let review of reviews) {
+      if(review.classList.contains('d-none')){
+        review.classList.remove('d-none');
+      } else {
+        review.classList.add('d-none');
+      }
+    }
+    
+    // Hide the button after clicking it
+    button.style.display = 'none';
+  });
+
+ // Add event listener to each "Cancel" button
+ const cancelButtons = document.querySelectorAll('.cancel-btn');
+  cancelButtons.forEach(function(cancelButton) {
+    cancelButton.addEventListener('click', function() {
+      // Hide coupons
+      const reviews = document.getElementsByClassName('review');
+      for (let review of reviews) {
+        review.classList.add('d-none');
+      }
+      // Show the coupon button
+      button.style.display = 'inline-block'; // or 'block' based on your CSS
+    });
+  });
+
+
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const orderButton = document.getElementById('orderButton');
+
+  orderButton.addEventListener('click', function() {
+    const selectedAddress = document.querySelector('.address-row.selected');
+    const selectedPayment = document.querySelector('input[name="my-options"]:checked');
+
+    if (!selectedAddress) {
+      alert('Please select an address.');
+      return;
+    }
+
+    if (!selectedPayment) {
+      alert('Please select a payment method.');
+      return;
+    }
+
+
+    const address = document.querySelectorAll(".address-row");
+    let addressIndex;
+    for (let i = 0; i < address.length; i++) {
+      if (address[i].classList.contains('selected')) {
+        addressIndex = i;
+        break; // Exit the loop once address is found
+      }
+    }
+
+    const orderData = {
+      paymentMethod: selectedPayment.value,
+      addressIndex: addressIndex,
+      couponCode: document.getElementById("couponCode").value
+    };
+
+    console.log('requestData',orderData);
+
+    if (orderData.paymentMethod === 'RazorPay') {
+      showRazorpayInterface(orderData.addressIndex, orderData.paymentMethod);
+    } else if (orderData.paymentMethod === 'Wallet') {
+      placeOrder(orderData);
+    }else{
+      placeOrder(orderData);
+
+    }
+  });
+});
+
+
+// Function to show Razorpay payment interface
+function showRazorpayInterface(addressIndex,paymentMethod) {
+  const paymentData = {
+    amount: '<%= totalPrice.toFixed(2) %>',
+    addressIndex: addressIndex,
+    paymentMethod: paymentMethod
+  };
+  fetch('/paymentVerify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(paymentData) 
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to fetch order ID');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Initialize Razorpay
+    var options = {
+      key: 'rzp_test_Dc1MSlNThSEKkf',
+      currency: 'INR',
+      name: 'Hypnosofa',
+      description: 'Test Transaction',
+      image: 'https://example.com/your_logo',
+      order_id: data.razorpayOrder.id,
+      handler: function (response, order) {
+        var paymentId = response.razorpay_payment_id;
+        var orderId = response.razorpay_order_id;
+        var signature = response.razorpay_signature;
+        paymentVerify(paymentId, orderId, signature,paymentMethod,addressIndex);
+      },
+      theme: {
+        color: '#3399cc'
+      }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Failed to fetch order ID. Please try again.');
+  });
+}
+
+function paymentVerify(payment, order, signature,paymentMethod,addressIndex) {
+    const verifyData = {
+        order_id: order,
+        payment_id: payment,
+        signature: signature,
+        paymentMethod:paymentMethod,
+        addressIndex:addressIndex
+    };
+    placeOrder(verifyData);
+}
+
+
+// Function to place order
+function placeOrder(orderData) {
+  fetch('/placeorder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderData)
+  })
+  .then(response => {
+    if (response.ok) {
+      window.location.href = '/user/successorder';
+    } else {
+      return response.json();
+      alert('Failed to place order. Please try again.');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Failed to place order. Please try again.');
+  });
+}
+
+</script>
+
+ <script>
+    async function applyOrRemoveCoupon() {
+      const couponCode = document.getElementById("couponCode").value;
+      const couponButton = document.getElementById("couponButton");
+      var couponMessage = document.getElementById("couponMessage");
+
+      try {
+        const response = await fetch(`/validate-coupon?code=${couponCode}`);
+        const data = await response.json();
+
+        if (data.valid) {
+          const discountedTotal = parseFloat(data.discountedTotal);
+          console.log('discountedTotal',discountedTotal);
+
+          if (!isNaN(discountedTotal)) {
+            document.getElementById(
+              "totalPrice"
+            ).textContent = `${discountedTotal.toFixed(2)}`;
+
+            if (couponButton.classList.contains("applied")) {
+              await removeCoupon(couponCode);
+            } else {
+              couponMessage.innerHTML = "Coupon applied successfully!";
+              couponButton.textContent = "Remove Coupon";
+              couponButton.classList.add("applied");
+            }
+          } else {
+            document.getElementById("couponCode").value = "";
+            couponMessage.innerHTML = "An error occurred. Please try again.";
+          }
+        } else {
+          document.getElementById("couponCode").value = "";
+          couponMessage.innerHTML = data.message;
+        }
+      } catch (error) {
+        console.error("Error validating coupon:", error);
+        couponMessage.innerHTML = "An error occurred. Please try again.";
+      }
+    }
+
+
+
+
+    async function removeCoupon(couponCode) {
+      try {
+        const response = await fetch(`/remove-coupon?code=${couponCode}`, {
+          method: "POST",
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Update UI to reflect the removed coupon
+          document.getElementById("couponButton").textContent = "Apply Coupon";
+          document.getElementById("totalPrice").textContent =
+            "<%= totalPrice.toFixed(2) %>"; // Replace with the original total
+          document.getElementById("couponButton").classList.remove("applied");
+          document.getElementById("couponMessage").innerHTML =
+            "Coupon removed successfully!";
+
+          // Clear the input box value
+          document.getElementById("couponCode").value = "";
+        } else {
+          // Handle error response from the server
+          console.error("Error removing coupon:", data.error);
+          document.getElementById("couponMessage").innerHTML =
+            "An error occurred. Please try again.";
+        }
+      } catch (error) {
+        console.error("Error removing coupon:", error);
+        document.getElementById("couponMessage").innerHTML =
+          "An error occurred. Please try again.";
+      }
+    }
+  </script>

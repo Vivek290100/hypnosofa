@@ -1,0 +1,92 @@
+<%- include('userprofilelayout/header') -%>
+<%- include('userprofilelayout/nav',{user}) -%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Form</title>
+    <style>
+        body {
+            text-align: center;
+            margin: 0;
+            background-color: #fff;
+        }
+        .card-body {
+            display: inline-block;
+            text-align: left;
+            width: 80%;
+            max-width: 1128px;
+            border: 1px solid #ced4da;
+            background-color: white;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-label {
+            font-size: 14px;
+            margin-left: 27px;
+            font-weight: bold;
+        }
+        .form-control {
+            height: 40px;
+            font-size: 14px;
+            width: 400px;
+            margin-left: 77px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+    </style>
+</head>
+<body>
+    <br><br>
+    <h3>Edit Address</h3>
+    <div class="card-body pb-2">
+        <form id="address-form" action="/submit-address/<%= address._id %>" method="post">
+            <div class="row">
+                <!-- Left side form fields -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Mobile</label>
+                        <input type="text" class="form-control" name="mobile" placeholder="Mobile" value="<%= address.mobile %> %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pincode</label>
+                        <input type="text" class="form-control" name="pincode" placeholder="Pincode" value="<%= address.pincode %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">House Name</label>
+                        <input type="text" class="form-control" name="houseName" placeholder="House Name" value="<%= address.houseName %>" required>
+                    </div>
+                </div>
+                <!-- Right side form fields -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Locality</label>
+                        <input type="text" class="form-control" name="locality" placeholder="Locality" value="<%= address.locality %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-control" name="city" placeholder="City" value="<%= address.city %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">District</label>
+                        <input type="text" class="form-control" name="district" placeholder="District" value="<%= address.district %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" name="state" placeholder="State" value="<%= address.state %>" required>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <span id="address-success-message" style="display:none; color:green;">Address added successfully!</span>
+                <button type="submit" class="btn btn-success" id="btn-save-address">Submit</button>
+                <button type="reset" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>

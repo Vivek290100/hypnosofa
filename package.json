@@ -1,0 +1,40 @@
+{
+  "name": "hypnosofa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.1.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.3",
+    "flash": "^1.1.0",
+    "js-image-zoom": "^0.7.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.8",
+    "passport": "^0.7.0",
+    "puppeteer": "^22.5.0",
+    "razorpay": "^2.9.2",
+    "sharp": "^0.33.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}

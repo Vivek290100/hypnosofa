@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Verification - Sofa</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <script src="script.js" defer></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background-size: cover; */
+            background-position: center;
+            background-color: #fff;
+        }
+
+        :where(.container, form, .input-field, header) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(240, 240, 240, 0.7);
+            padding: 30px 65px;
+            border-radius: 12px;
+            row-gap: 20px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .container header {
+            height: 65px;
+            width: 65px;
+            background: #8d6e63;
+            color: #fff;
+            font-size: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container h3 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #014122;
+        }
+
+        form .input-field {
+            display: flex;
+            column-gap: 10px;
+        }
+
+        .input-field input {
+            height: 45px;
+            width: 180px; 
+            border-radius: 6px;
+            outline: none;
+            font-size: 1.125rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .input-field input:focus {
+            box-shadow: 0 1px 0 rgba(173, 21, 21, 0.1);
+        }
+
+        form button {
+            margin-top: 25px;
+            width: 100%;
+            color: #fff;
+            font-size: 1rem;
+            border: none;
+            padding: 9px 0;
+            cursor: pointer;
+            border-radius: 6px;
+            background: #014122;
+            transition: all 0.2s ease;
+        }
+
+        form button.active {
+            /* background: #8d6e63; */
+            pointer-events: auto;
+        }
+
+        form button:hover {
+            background: #00b351;
+        }
+
+        .loginDiv {
+            font-size: small;
+            font-weight: 500;
+            color: #000000;
+        }
+        #timer{
+            color: #000000;
+        }
+
+        .input-field {
+            position: relative;
+        }
+
+  input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adjust the values for the shadow */
+  }
+
+    </style>
+</head>
+
+<body class="body">
+    <div class="container">
+        <h3>Enter OTP Code</h3>
+        <form action="/verify" method="post">
+            <div class="loginDiv d-flex justify-content-center">
+                <%- msg10 -%>
+            </div>
+            <div class="input-field">
+                <input type="text" name="otp" pattern="\d{4}" required>
+            </div>
+            <input type="hidden" name="statuz" value="Active">
+            <div class="d-flex">
+                <p style="color: #000000;">Resend In: <p id="timer">0:40</p></p>
+            </div>
+            <div id="resendOtp" style="display: none;">
+                <a style="text-decoration: none; color: #000000;" href="/resend">Resend OTP</a>
+            </div>
+            <button >Verify OTP</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      let duration = 140; 
+      const timerDisplay = $("#timer");
+      const resendOtp = $("#resendOtp");
+
+      function updateTimer() {
+          const minutes = Math.floor(duration / 60);
+          let seconds = duration % 60;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+
+          timerDisplay.text(`${minutes}:${seconds}`);
+
+          if (duration === 0) {
+              clearInterval(countdown);
+              timerDisplay.text("00:00");
+              resendOtp.css("display", "block");
+          } else {
+              duration--;
+          }
+      }
+      updateTimer();
+      const countdown = setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
+
+        

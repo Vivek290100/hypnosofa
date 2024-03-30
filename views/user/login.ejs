@@ -1,0 +1,215 @@
+<%- include('header') -%>
+
+
+<style>
+  body {
+    
+    background-image: url(/assets/homeimg/login-bg.jpg);
+    background-size: cover;
+   padding: 0px;
+   margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+
+#gradient .body
+{
+  padding: 0px;
+  margin: 0px;
+  border-radius: 8px;
+}
+
+  .container {
+    text-align: center ;
+    width: auto;
+    height: auto;
+
+  }
+
+  .login-container {
+    /* background-color: white; */
+    /* background: rgba(240, 240, 240, 0.7); */
+
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    margin: 0 auto; /* Center the login container */
+  }
+
+  .input-div {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+  }
+
+  .i {
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px 0 0 5px;
+  }
+
+  .input {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+    width: 100%;
+  }
+
+  #hai {
+    text-decoration: none;
+    color: #333;
+  }
+
+  #signbtn {
+    text-decoration: none;
+    color: black;
+  }
+
+  .btn1 {
+    width: 190px;
+  }
+
+  .btn1:hover {
+    width: 190px;
+    background-color: #156161;
+    color: #FFF;
+  }
+
+</style>
+
+
+
+
+            <div class="container " id="gradient">
+            
+                <div class="login-container" >
+                  <form  action="/login1" method="post">
+                    <h2>Welcome</h2>
+                    <% if (error1) { %>
+                      <p style="color: #004c3f;"><%= error1 %></p>
+                  <% } %>
+                    <div class="input-div" one>
+                      <div class="i">
+                        <i class="fas fa-envelope"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Email" name="email" type="email" />
+                      </div>
+                    </div>
+                    <div class="input-div" two>
+                      <div class="i">
+                        <i class="fas fa-lock"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Password" name="password" type="password" id="password" />
+
+                      </div>
+                      <div class="checkbox-container">
+                        <input type="checkbox" id="showPassword" onchange="togglePasswordVisibility()">
+                        <label for="showPassword"></label>
+                      </div>
+                    </div>
+                    <br>
+                    <a id="hai"  href="/user/forgot-password">Forgot password ?</a><br>
+                    <br>
+                    <input type="submit" class="btn1" value="login" />
+                    <br><br>
+                    <a href="/user/Signup" style="text-decoration: none;color:black;" id="signbtn" ><i>Don't have an account? </i><strong>Sign Up</strong></a>
+                  </form>
+                </div>
+              </div>
+             
+
+
+
+
+
+
+
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+              <script type="text/javascript" src="js/main.js"></script>
+              <script>
+                function togglePasswordVisibility() {
+                  toggleVisibility('password');
+                  toggleVisibility('confirmPassword');
+                }
+              
+                function toggleVisibility(inputId) {
+  var passwordInput = document.getElementById(inputId);
+
+  if (passwordInput.type === 'password') {
+    passwordInput.type = 'text';
+  } else {
+    passwordInput.type = 'password';
+  }
+}
+              </script>
+
+
+<script>
+
+var colors = new Array(
+  [62,35,155],
+  [60,255,60],
+  [155,35,98],
+  [45,175,230],
+  [255,0,255],
+  [255,128,0]);
+
+var step = 0;
+//color table indices for: 
+// current color left
+// next color left
+// current color right
+// next color right
+var colorIndices = [0,1,2,3];
+
+//transition speed
+var gradientSpeed = 0.002;
+
+function updateGradient()
+{
+  
+  if ( $===undefined ) return;
+  
+var c0_0 = colors[colorIndices[0]];
+var c0_1 = colors[colorIndices[1]];
+var c1_0 = colors[colorIndices[2]];
+var c1_1 = colors[colorIndices[3]];
+
+var istep = 1 - step;
+var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+var color1 = "rgb("+r1+","+g1+","+b1+")";
+
+var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+var color2 = "rgb("+r2+","+g2+","+b2+")";
+
+ $('#gradient').css({
+   background: "-webkit-gradient(linear, left top, right top, from("+color1+"), to("+color2+"))"}).css({
+    background: "-moz-linear-gradient(left, "+color1+" 0%, "+color2+" 100%)"});
+  
+  step += gradientSpeed;
+  if ( step >= 1 )
+  {
+    step %= 1;
+    colorIndices[0] = colorIndices[1];
+    colorIndices[2] = colorIndices[3];
+    
+    //pick two new target color indices
+    //do not pick the same as the current one
+    colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+    colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+    
+  }
+}
+
+setInterval(updateGradient,10);
+
+</script>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #156161;
+       
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffffff;
+}
+
+
+        
+
+        form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            margin-bottom: 20px;
+            /* animation: bounceForm 0.5s ease-in-out; */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: black;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #014122;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #428f66;
+        }
+
+        button.back-btn {
+            background-color: #014122;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: -5px;
+            
+        }
+
+        button.back-btn:hover {
+            background-color: #428f66;
+        }
+
+      
+
+    </style>
+</head>
+<body>
+
+<h1>Add Product</h1>
+
+<form id="addProductForm" action="/addproduct" method="post" enctype="multipart/form-data">
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required min="0">
+    <label for="quantity">Quantity:</label>
+<input type="number" id="quantity" name="quantity" required min="0">
+    <label for="image">Images:</label>
+    <input type="file" id="image" name="image" accept="image/*" multiple>
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+        <% categories.forEach(category => { %>
+            <option value="<%= category._id %>"><%= category.name %></option>
+        <% }); %>
+    </select>
+    <div id="errorMessages" style="color: red;"></div>
+
+    <button type="submit" onclick="validateForm(event)">Add Product</button>
+</form>
+
+<button  class="back-btn" onclick="window.location.href='/product'">Back to Products</button>
+
+
+<script>
+    function validateForm(event) {
+        const form = document.getElementById('addProductForm');
+        const name = form.elements['name'].value.trim();
+        const description = form.elements['description'].value.trim();
+        const price = form.elements['price'].value.trim();
+        const quantity = form.elements['quantity'].value.trim();
+        const image = form.elements['image'].value.trim();
+        const category = form.elements['category'].value;
+
+        // Clear previous error messages
+        document.getElementById('errorMessages').innerHTML = '';
+
+        // Validate Name
+        if (name === '') {
+            displayErrorMessage('Product Name is required');
+            event.preventDefault();
+            return;
+        }
+
+        // Validate Description
+        if (description === '') {
+            displayErrorMessage('Product Description is required');
+            event.preventDefault();
+            return;
+        }
+
+        // Validate Price
+        if (price === '' || isNaN(price) || parseFloat(price) < 0) {
+            displayErrorMessage('Please enter a valid positive price');
+            event.preventDefault();
+            return;
+        }
+
+        // Validate Quantity
+        if (quantity === '' || isNaN(quantity) || parseInt(quantity) < 0) {
+            displayErrorMessage('Please enter a valid positive quantity');
+            event.preventDefault();
+            return;
+        }
+
+        // Validate Image
+        if (!image) {
+            displayErrorMessage('Product Image is required');
+            event.preventDefault();
+            return;
+        }
+
+        // Validate Category
+        if (category === '') {
+            displayErrorMessage('Product Category is required');
+            event.preventDefault();
+            return;
+        }
+    }
+
+    function displayErrorMessage(message) {
+        const errorDiv = document.getElementById('errorMessages');
+        errorDiv.innerHTML += `<p>${message}</p>`;
+    }
+</script>
+
+
+</body>
+</html>

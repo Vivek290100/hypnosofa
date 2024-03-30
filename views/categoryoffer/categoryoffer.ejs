@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../adminlayout/header') -%>
+<head>
+    <link rel="stylesheet" href="/css/userList.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/adminStyles.css"> <!-- Check the file path -->
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <%- include('../adminlayout/slider') -%>
+    <!-- SIDEBAR -->
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <%- include('../adminlayout/navbar') -%>
+        <!-- NAVBAR -->
+        <style>
+            .unblock-button {
+              background-color: #004c3f;
+              height: 30px;
+              font-size: small;
+            }
+            input{
+                color: #5e5e5e;
+                font-size: smaller;
+            }
+            .proname{
+                font-size: smaller;
+                width: fit-content;
+              
+            }
+           
+        </style>
+        <!-- MAIN -->
+        <main>
+            <table id="usersTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>DISCOUNT Percentage</th>
+                        <th>START DATE</th>
+                        <th>EXPIRES IN</th>
+                        <th>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% categoryData.forEach(category => { %>
+                        <tr>
+                          <td class="proname text-wrap"><%= category.category %></td>
+                          <td>
+                              <input type="number" id="offerInput_<%= category.categoryid %>" value="<%= category.offerPercentage %>" placeholder="Increase %" min="0" max="99" />
+                            </td>
+                            <td>
+                                <input type="date" id="startDateInput_<%= category.categoryid %>" value="<%= category.startDate %>" />
+                            </td>
+                            <td>
+                                <input type="date" id="expiryDateInput_<%= category.categoryid %>" value="<%= category.expiryDate %>" />
+                            </td>
+                            <td class="d-flex">
+                                <button class="unblock-button" onclick="updateCategoryOffer('<%= category.categoryid %>')">Update</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <p  onclick="deleteCategoryOffer('<%= category.categoryid %>')">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                    </svg>
+                                </p>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </main>
+        <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+    <%- include('../adminlayout/footer') -%>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        jQuery.noConflict();
+        jQuery(document).ready(function($) {
+            $('#usersTable').DataTable();
+        });
+    </script>
+
+    <script>
+        function openCustomModal(message) {
+          const modal = document.getElementById("customModal");
+          const modalMessage = document.getElementById("customModalMessage");
+
+          modalMessage.textContent = message;
+          modal.style.display = "block";
+        }
+
+        // Function to close the custom modal
+        function closeCustomModal() {
+          const modal = document.getElementById("customModal");
+          modal.style.display = "none";
+        }
+
+        function updateCategoryOffer(categoryId) {
+            const offerInput = document.getElementById(`offerInput_${categoryId}`).value;
+            const startDateInput = document.getElementById(`startDateInput_${categoryId}`).value;
+            const expiryDateInput = document.getElementById(`expiryDateInput_${categoryId}`).value;
+
+            const data = {
+                 categoryId: categoryId,
+                 offerPercentage: offerInput,
+                 startDate: startDateInput,
+                 expiryDate: expiryDateInput
+            };
+            console.log('datadata',data);
+
+            // Send data to backend using fetch
+            fetch(`/admin/edit-category-offer`, {
+                method: 'POST',
+                headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Handle success
+                    alert('Category offer updated successfully');
+                    // Optionally, you can perform additional actions like refreshing the page
+                    // window.location.reload();
+                } else {
+                    // Handle failure
+                    alert('Failed to update category offer');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating category offer:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    </script>
+
+<script>
+    function deleteCategoryOffer(categoryId) {
+    // if (!confirm("Are you sure you want to delete this category offer?")) {
+    //     return;
+    // }
+
+    // Send request to delete category offer
+    fetch(`/admin/delete-category-offer/${categoryId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Handle success
+            alert('Category offer deleted successfully');
+            // Optionally, you can perform additional actions like refreshing the page
+            window.location.reload();
+        } else {
+            // Handle failure
+            alert('Failed to delete category offer');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting category offer:', error);
+        alert('An error occurred. Please try again.');
+    });
+}
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!-- //nav.ejs -->
+<%- include('header') -%>
+
+<div class="main-navbar sticky-top ">
+    <div class="top-navbar sticky-top">
+        <div class="container-fluid ">
+            <div class="row justify-content-end">
+                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block" >
+
+                   <a href="/" style="text-decoration: none;" > <h3 class="brand-name space"   ><img src="/assets/homeimg/brand-logo2.png" alt="Logo" class="brand-logo">Hypnosofa</h3> </a> 
+                                        
+                </div>
+                
+                <div class="col-md-5 my-auto">
+                    <ul class="nav ">
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/cart">
+                                <% if (user) { %>
+                                    <% if (cartCount >= 0) { %>
+                                        <i class="fa fa-shopping-cart"></i> Cart (<%= cartCount %>)
+                                    <% } else { %>
+                                        <h1>Nothing has happened</h1>
+                                    <% } %>
+                                <% } %>
+
+                            </a>
+                        </li>
+                        <% if (user) { %>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/wishlist">
+                                            <i class="fa-solid fa-heart"></i>
+                                            <% } %>
+                                    
+    
+                                </a>
+                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/product">
+                                <% if (user) { %>
+                                <i class="fa-solid fa-store"></i> Products 
+                                <% } %>
+                            </a>
+                
+                        </li>
+                       
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <% if (user) { %>
+                                    <%= user.name %> 
+                                  <% } else { %>
+                                <i class="fa fa-user"></i> Account
+                                <% } %>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <% if (!user) { %>
+                                <li><a class="dropdown-item" href="/user/signup"><i class="fa fa-user"></i> Signup</a></li>
+                                <li><a class="dropdown-item" href="/user/login"><i class="fa fa-user"></i> Login</a></li>
+                                <% } %>
+
+
+                                <% if (user) { %>
+
+                                        <li><a class="dropdown-item" href="/user/profile"><i class="fa fa-user"></i> Profile</a></li>
+                                        <li><a class="dropdown-item" href="/user/userOrder"><i class="fa fa-list"></i> My Orders</a></li>
+        
+        
+                                        <li><a class="dropdown-item" href="/user/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                                        <li><a class="dropdown-item" href="/coupon"><i class="fa-solid fa-ticket"></i> Coupons</a></li>
+        
+        
+                                        <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+
+                                
+                                <% } %>
+
+                            </ul>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+   
+   
+<style>
+    
+
+
+
+.container-fluid{
+background-color: #fff;
+padding-left: 40px;
+
+}
+
+    .brand-logo {
+        width: 40ap;
+        height: 40px;
+        padding-bottom: 7px;
+    }
+
+    .sbtn{
+        width: 30px;
+        border-radius: 20px;
+    }
+
+
+
+    .form-control {
+        height: 35px; /* Adjust the height as needed */
+         /* Optional: Remove border-radius for a more rectangular shape */
+         border-radius: 20px;
+         border-color: #000000;
+         font-size: 14px;
+    }
+
+    .input-group {
+        position: relative;
+        width: 100%;
+    }
+
+    .main-navbar .top-navbar {
+        background-color: #ffffff;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 5px;
+        padding-right: 27px;
+    }
+
+    .main-navbar .top-navbar .brand-name {
+        color: #000000;
+        white-space: nowrap;
+        font-size: 1.5em;
+    }
+
+    .main-navbar .top-navbar .nav-link {
+        color: #000000;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 0.5rem 2.4rem
+
+    }
+
+
+    .main-navbar .top-navbar .dropdown-menu {
+        padding: 0px 0px;
+    }
+
+    .main-navbar .top-navbar .dropdown-menu .dropdown-item {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .main-navbar .top-navbar .dropdown-menu .dropdown-item i {
+        width: 20px;
+        text-align: center;
+        color: #000000;
+        font-size: 14px;
+    }
+
+    .main-navbar .navbar {
+        padding: 0px;
+        background-color: #ffffff;
+    }
+
+    .main-navbar .navbar .nav-item .nav-link {
+        padding: 17px 20px;
+        color: #000000;
+        font-size: 15px;
+        padding-left: 11px;
+    }
+
+    .space {
+        padding-left: 50px;
+        margin-left: 10px;
+        margin-left: -50px;
+        margin-top: 10px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .main-navbar .top-navbar .nav-link {
+            font-size: 12px;
+            padding: 8px 10px;
+        }
+    }
+
+    @media only screen and (min-width: 348px) and (max-width: 1247px) {
+        .brand-name {
+            display: none;
+        }
+    }
+
+    .main-navbar .top-navbar {
+    background-color: #be4949;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Ln538hAM1a6P+Lb5U8Xj6OfszFNSP6l9Ej3y6kqjLEqChDZzcf0R8HRTt8+pR6L4" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+

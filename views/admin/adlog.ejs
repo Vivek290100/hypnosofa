@@ -1,0 +1,133 @@
+<style>
+  body {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  .login-container {
+    /* background-color: white; */
+    background: rgba(240, 240, 240, 0.7);
+
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    margin: 0 auto; /* Center the login container */
+  }
+
+  .input-div {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    padding-left: 28px;
+  }
+
+  .i {
+    padding: 9px;
+    background-color:#156161;
+    border-radius: 5px 0 0 5px;
+    color: #FFF;
+  }
+
+  .input {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+    width: 100%;
+
+  }
+
+  #hai {
+    text-decoration: none;
+    color: #333;
+  }
+
+  #signbtn {
+    text-decoration: none;
+    color: black;
+  }
+
+  .btn1 {
+    width: 190px;
+  }
+
+  .btn1:hover {
+    width: 190px;
+    background-color: #156161;
+    color: #FFF;
+  }
+
+</style>
+
+            <div class="container">
+            
+                <div class="login-container">
+                  <form  action="/dashboard" method="post">
+                    <h2>Welcome Admin</h2>
+                      <p style="color: red;"></p>
+                    <div class="input-div" one>
+                      <div class="i">
+                        <i class='bx bx-envelope i'></i>
+                        </div>
+                      <div>
+                        <input class="input" placeholder="Email" name="email" type="email" />
+                      </div>
+                    </div>
+                    <div class="input-div" two>
+                      <div class="i">
+                        <i class="fas fa-lock i"></i>
+                      </div>
+                      <div>
+                        <input class="input" placeholder="Password" name="password" type="password" />
+                      </div>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn1" value="login" style="font-weight: bold;" />
+                    <br><br>
+                  </form>
+                </div>
+              </div>
+
+              <script>
+
+                function displayAlert(message, inputId) {
+                  const inputField = document.getElementById(inputId);
+                  const alertDiv = document.createElement('div');
+                  alertDiv.className = 'alert';
+                  alertDiv.textContent = message;
+                  alertDiv.style.color = 'red';
+                  const inputRect = inputField.getBoundingClientRect();
+                  alertDiv.style.position = 'absolute';
+                  alertDiv.style.top = inputRect.bottom + 'px';
+                  alertDiv.style.left = inputRect.left + 'px';
+                  document.body.appendChild(alertDiv);
+                  setTimeout(() => {
+                    alertDiv.remove();
+                  }, 3000);
+                }
+
+                function validateForm() {
+                  const email = document.getElementById('email').value;
+                  const password = document.getElementById('password').value;
+                  if (!email) {
+                    displayAlert("Email field is empty", 'email');
+                    return false;
+                  }
+                
+                  if (!password) {
+                    displayAlert("Password field is empty", 'password');
+                    return false;
+                  }
+                  return true;
+                }
+              </script>
+             
+              <script type="text/javascript" src="js/main.js"></script>
+

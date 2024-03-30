@@ -1,0 +1,730 @@
+<%- include('header') -%>
+<%- include('nav',{ user: user }) -%>
+
+<style>
+    body {
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #ffffff;
+        max-width: 100%;
+        overflow-x: hidden;
+        font-family: serif;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-bottom: 30px;
+        margin-left: 45px;
+        margin-right: 45px;
+    }
+
+    /* .container {
+        width: 24%;
+        margin: 10px;
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.125);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.3s ease;
+        box-shadow: 0 10px 5px rgba(2, 4, 8, 0.125);
+        background-color: #faffff;
+    } */
+
+    .container {
+        width: 23%;
+        margin: 10px;
+        /* backdrop-filter: blur(16px) saturate(180%); */
+        /* -webkit-backdrop-filter: blur(16px) saturate(180%); */
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        align-items: center;
+
+        text-align: center;
+        transition: transform 0.3s ease;
+        /* border-radius: 9px 9px 9px 9px; */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        filter: drop-shadow(5 5px 10px rgba(0, 0, 0, 0.5));
+    }
+
+
+    .banner-image {
+        background-position: center;
+        background-size: cover;
+        height: 150px;
+        width: 100%;
+        transition: transform 0.3s ease;
+        border-radius: 9px 9px 9px 9px;
+        object-fit: cover;
+    }
+
+    .banner-image:hover {
+        transform: scale(1.060);
+        /* box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); */
+
+    }
+
+    h5 {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        color: rgba(0, 0, 0, 0.98);
+        font-size: 1rem;
+        margin-top: 10px;
+    }
+
+    h5.card-title {
+        margin-left: 10px;
+        font-size: 17px;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+
+    p {
+        color: #000000;
+        font-family: serif;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 150%;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .button-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between; /* Add this to distribute space evenly */
+}
+
+.btn {
+    /* border: none; */
+    width: 154px;
+    height: 45px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin: 5px;
+    
+}
+.wishlist-btn {
+    margin-left: auto; /* Aligns the button to the right */
+}
+.wishlist {
+    margin-left: 10px;
+    font-size: 20px;
+    color: #fff;
+    background-color: transparent; /* Updated */
+    width: 40px;
+    height: 45px;
+    border-radius: 5px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.wishlist:hover {
+    background-color: rgba(206, 206, 206, 0.5); /* Updated */
+}
+
+    .btn + .btn {
+        margin-left: 10px;
+    }
+
+    .outline {
+        color: rgba(255, 255, 255, 0.9);
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        /* background: linear-gradient(45deg, #fff7f7, #dbdbdb, #dcdcdc, #ececec); */
+        background-color: #004c3f;
+        font-family: serif;
+        border: 1px solid #ddfff2;
+
+    }
+
+    .outline:hover {
+        color: rgba(255, 255, 255, 0.9);
+        /* border-color: rgba(255, 255, 255, 0.9); */
+        transition: all 0.3s ease;
+        box-shadow: 0px 5px 10px rgba(129, 129, 129, 0.5);
+        background-color: #005b4b;
+
+
+    }
+
+  
+
+    .fill {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    /* background: linear-gradient(45deg, #fff7f7, #dbdbdb, #dcdcdc, #ececec); */
+    background-color: #004c3f;
+    font-family: serif;
+    border: 1px solid #ddfff2;
+
+
+
+}
+
+
+.fill:hover {
+    color: rgba(255, 255, 255, 0.9);
+    /* border-color: rgba(255, 255, 255, 0.9); */
+    transition: all 0.3s ease;
+    box-shadow: 0px 5px 10px rgba(129, 129, 129, 0.5);
+    background-color: #005b4b;
+}
+
+    @media screen and (min-width: 769px) {
+        .container {
+            width: 23%;
+        }
+
+        .banner-image {
+            height: 220px;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            width: 48%;
+        }
+
+        .banner-image {
+            height: 120px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .container {
+            width: 100%;
+        }
+
+        .banner-image {
+            height: 100px;
+        }
+    }
+
+
+
+    /* Dropdown Button */
+.dropbtn {
+  background-color: #ffffff;
+;
+  color: rgb(0, 0, 0);
+  padding: 3px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+
+}
+
+/* Dropdown button on hover & focus */
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #ffffff;
+  color: #000000;
+  /* border: 1px solid black; */
+  
+}
+
+
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f6f6f6;
+  min-width: 230px;
+  border: 1px solid #ddd;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+
+
+.dropmargin{
+    margin-left: 60px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-left: 54px;
+}
+
+.input-group input[type="search"] {
+    flex: 1;
+    border-radius: 5px 0 0 5px;
+    outline: 1px solid #e0e0e0;
+
+    height: 35px;
+}
+
+.sbtn {
+    background-color: #004c3f;
+    width: 31px;
+    border-radius: 0 9px 9px 0;
+    height: 36px;
+    border: 1px solid #ffffff;
+}
+/* 
+.sbtn:hover {
+    background-color: #004c3f;
+} */
+
+/* Responsive adjustments */
+@media only screen and (max-width: 768px){
+.input-group {
+    margin-left: 44px;
+    margin-right: 57px;
+}
+
+    .input-group input[type="search"] {
+        height: 30px; /* Adjust height for smaller screens */
+    }
+
+    .sbtn {
+        width: 28px; /* Adjust button width for smaller screens */
+        height: 30px; /* Adjust button height for smaller screens */
+    }
+}
+
+
+
+/* body {
+  background: #e0e5ec;
+} */
+h1 {
+  position: relative;
+  text-align: center;
+  color: #353535;
+  font-size: 50px;
+  font-family: "Cormorant Garamond", serif;
+}
+
+p {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  text-align: center;
+  font-size: 18px;
+  color: #676767;
+}
+.frame{
+background-color: #fff;
+border-radius: 5px;
+}
+
+
+
+.custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+
+
+/* 16 */
+.btn-16 {
+  border: none;
+  color: #000000;
+}
+.btn-16:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  direction: rtl;
+  z-index: -1;
+  box-shadow:
+   -7px -7px 20px 0px #fff9,
+   -4px -4px 5px 0px #fff9,
+   7px 7px 20px 0px #0002,
+   4px 4px 5px 0px #0001;
+  transition: all 0.3s ease;
+}
+.btn-16:hover {
+  color: #000;
+}
+.btn-16:hover:after {
+  left: auto;
+  right: 0;
+  width: 100%;
+}
+.btn-16:active {
+  top: 2px;
+}
+.notfound{
+  width: 100vh;
+  height: 20vw;
+  font-weight: 900;
+  font-size: xx-large;
+}
+
+
+.nav {
+  width: 579px;
+    position: fixed; /* Keeps the navbar fixed at the top */
+    top: 0; /* Positions the navbar at the top of the page */
+    width: 100%; /* Makes the navbar span the entire width of the viewport */
+    z-index: 1000; /* Ensures the navbar stays on top of other content */
+}
+.main-navbar .top-navbar .nav-link{
+  margin-top: 17px;
+}
+.amount{
+  margin-top: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+<div class="dropdown dropmargin">
+  <div class="frame">
+    <button onclick="myFunction()" class="custom-btn btn-16 dropbtn">Filter By</button>
+  </div>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="/user/product?sort=price_low_high">Price: Low to High</a>
+    <a href="/user/product?sort=price_high_low">Price: High to Low</a>
+    <a href="/user/product?sort=name_a_z">Sort By: A - Z</a>
+    <a href="/user/product?sort=name_z_a">Sort By: Z - A</a>
+    <hr>
+    <h5> &nbsp; &nbsp; &nbsp; &nbsp; Categories:</h5>
+    <% categories.forEach(category => { %>
+      <a href="/user/product?category=<%= category.slug %>&sort=<%= sortCriteria %>&page=<%= currentPage %>" class="category-link"><%= category.name %></a>
+    <% }); %>
+    
+  </div>
+</div>
+
+
+
+
+
+
+  <div class="dropdown">
+    <div class="input-group">
+        <form id="searchForm"  action="/user/product" method="GET"> <!-- Update action and method -->
+            <input type="search" name="q" placeholder="Search your product">
+            <button class="sbtn" type="submit">
+                <i class="fa fa-search" style="color:white;"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+  
+  <!-- <div class="input-group">
+    <input type="search" placeholder="Search your product" class="form-control" />
+    <button class="btn bg-dark sbtn" type="submit">
+        <i class="fa fa-search" style="color:white;"></i>
+    </button>
+</div> -->
+
+
+
+
+<% if (products.length === 0) { %>
+  <div class="notfound d-flex justify-content-center align-items-center">  Sorry, No results found  !</div>
+  <% } else { %>
+  <% products.forEach((product, index) => { %>
+      <% if (index % 4 === 0) { %>
+          <div class="row">
+      <% } %>
+      <div class="container">
+          <% if (product.images.length > 0) { %>
+              <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
+                  onclick="openModal('<%= product.images[0] %>')"><br>
+          <% }  %>
+              <!-- <img src="/assets/default-image.jpg" class="banner-image" id="image-zoom" alt="Default Image"><br> -->
+          
+          <h5 class="card-title"><%= product.name %></h5>
+          <h5>Category: <%=product.category.name %></h5>
+         
+          <div class="d-flex">
+
+            <% if (product.discountedPrice === product.price) { %>
+                <h3 style="font-family: Noto Sans ; font-size: 22px;"><%= "₹" + product.price %>/-</h3>
+            <% } else { %>
+              <h3 class="amount" style="font-size: 22px;"><%= "₹" + product.discountedPrice.toFixed(0)%></h3>&nbsp;&nbsp;&nbsp;
+                <h5 style="color: rgb(159, 131, 131); "><del><%= "₹" + product.price %> </del></h5> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h5 style="color: #ac4e4e;"><%= product.offer.discountPercentage %>% Offer</h5> 
+                <% } %>
+        </div>
+        
+
+
+          <div class="button-wrapper d-flex">
+            <a href="/user/mainproduct/<%= product._id %>">  
+              <button class="btn fill" >
+                  VIEW DETAILS
+              </button>
+          </a>
+              
+
+
+              <button class="btn wishlist-btn outline" data-product-id="<%= product._id %>" >
+                Add to Wishlist
+            </button>
+            
+
+          </div>
+      </div>
+      <% if ((index + 1) % 4 === 0 || (index + 1) === products.length) { %>
+          </div>
+      <% } %>
+  <% }); %>
+<% } %>
+
+
+
+
+<style>
+  .pagination-container {
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.pagination-item {
+  display: inline;
+}
+
+.pagination-link {
+  padding: 8px 12px;
+  margin: 0 4px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.pagination-link:hover {
+  background-color: #f4f4f4;
+}
+
+.pagination-link.active {
+  background-color: #004c3f;
+  color: #fff;
+}
+
+</style>
+
+
+
+
+<div class="pagination-container">
+  <ul class="pagination">
+    <% if (currentPage > 1) { %>
+      <li class="pagination-item">
+        <a href="?page=<%= currentPage - 1 %>" class="pagination-link">&laquo; Previous</a>
+      </li>
+    <% } %>
+    
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <li class="pagination-item">
+        <a href="?page=<%= i %>" class="pagination-link <% if (i === currentPage) { %> active <% } %>"><%= i %></a>
+      </li>
+    <% } %>
+
+    <% if (currentPage < totalPages) { %>
+      <li class="pagination-item">
+        <a href="?page=<%= currentPage + 1 %>" class="pagination-link">Next &raquo;</a>
+      </li>
+    <% } %>
+  </ul>
+</div>
+
+
+
+
+
+
+<script>
+document.querySelectorAll('.wishlist-btn').forEach(button => {
+    button.addEventListener('click', function(event) {
+      const productId = this.dataset.productId;
+      console.log('productId',productId);
+
+      fetch('/wishlist/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId: productId ,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Optionally, you can provide feedback to the user here
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Optionally, handle the error here
+      });
+    });
+  });
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+
+</script>
+
+<script>
+    window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn') && !event.target.matches('#myInput')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('.input-group form');
+  const input = document.querySelector('.input-group input[type="search"]');
+  const searchBar = document.querySelector('.input-group input[type="search"]'); // Reference for result page (optional)
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const searchQuery = input.value.trim();
+    if (searchQuery !== '') {
+      const actionUrl = '/user/product?q=' + encodeURIComponent(searchQuery);
+
+      // Store the action URL for later retrieval on the result page
+      localStorage.setItem('actionUrl', actionUrl);
+
+      form.action = actionUrl;
+      form.submit();
+    }
+  });
+
+  // Access and display search query on result page (optional)
+  if (searchBar) {
+    const storedUrl = localStorage.getItem('actionUrl');
+    if (storedUrl) {
+      // Extract the search query from the URL
+      const query = new URLSearchParams(storedUrl.split('?')[1]).get('q');
+      if (query) {
+        searchBar.value = query;
+      }
+      localStorage.removeItem('actionUrl'); // Clear storage
+    }
+  }
+});
+
+</script>
+
+
+
+
+    
+<%- include('footer') -%>
+    
+  
+

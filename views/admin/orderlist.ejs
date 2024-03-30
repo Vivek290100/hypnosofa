@@ -1,0 +1,299 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../adminlayout/header') -%>
+
+
+    <head>
+        <link rel="stylesheet" href="/css/userList.css">
+    
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+    </head>
+
+   
+<body>
+    
+
+
+	<!-- SIDEBAR -->
+	<%- include('../adminlayout/slider') -%>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <%- include('../adminlayout/navbar') -%>
+		<!-- NAVBAR -->
+		
+		<!-- NAVBAR -->
+
+
+        <style>
+            /* Modal styles */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1000; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+        
+            /* Modal content */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+                max-width: 500px; /* Limiting max width */
+            }
+        
+            /* Close button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+        
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            td{
+                font-size: small;
+            }
+   
+
+            td.description {
+                max-height: 100px;
+                overflow: hidden;
+                white-space: pre-line;
+            }
+            .vieworder{
+                border-radius: 4px;
+            }
+    .status-select {
+        margin-right: 10px;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+    .btn-success {
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .btnn{
+        width: 125px;
+        height: 40px;
+        font-size: 11px;
+    }
+    #usersTable_length{
+        display: none;
+    }
+    .dataTables_length{
+        display: none;
+    }
+    .dataTables_info{
+        display: none;
+    }
+    #dataTables_previous{
+        display: none;
+    }
+    #dataTables_next{
+        display: none;
+    }
+    .pagination{
+        display:none
+    }
+    .pagination1{
+        width: 100px;
+        margin-left: 500px;
+    
+    }
+    
+</style>
+
+
+
+        
+
+
+
+		<!-- MAIN -->
+		<main>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>User Orders</h2>
+                        <table id="usersTable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>ORDER ID</th>
+                                    <th>TOTAL PRICE</th>
+                                    <th>PAYMENT</th>
+                                    <th>NAME</th>
+                                    <th>Quantity</th>
+                                    <th>Date & Time</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (Orders.length > 0) { %>
+                                    <% Orders.forEach((order, orderIndex) => { %>
+                                        <% order.products.forEach((product, productIndex) => { %>
+                                            <tr>
+                                                <% if(productIndex === 0) { %>
+                                                    <td rowspan="<%= order.products.length %>"><%- orderIndex + 1 %></td>
+                                                    <td rowspan="<%= order.products.length %>"><%= order._id %></td>
+                                                    <td rowspan="<%= order.products.length %>">Rs. <%= order.totals.totalprice %>.00</td>
+                                                <% } %>
+                                                <!-- <td>%= product.product._id %></td> -->
+                                                <td><%= order.paymentMethod %></td>
+                                                <td><%= product.product.name %></td>
+                                                <td><%= product.quantity %></td>
+                                                <td><%= order.orderDate %>, <%= order.orderTime %></td>
+                                                <td>
+                                                    <form action="/updateOrderStatus" method="POST">
+                                                        <input type="hidden" name="orderId" value="<%= order._id %>">
+                                                        <input type="hidden" name="productId" value="<%= product.product._id %>">
+                                                        <select name="newStatus" class="status-select" <%= order.status === 'Cancelled' ? 'disabled' : '' %>>
+                                                            <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                            <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                                            <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                                            <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                                            <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option> 
+
+                                                        </select>
+                                                        <button id="update" class="btnn btn-success" type="submit">Update Status</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="8">No orders found.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Pagination Controls -->
+    <ul class="pagination1 d-flex">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+            </li>
+        <% } %>
+    </ul>
+        </main>
+		<!-- MAIN -->
+
+
+	</section>
+	<!-- CONTENT -->
+	
+    </div>
+
+    <script>
+        window.alert = function() {};
+    </script>
+  
+
+
+	<%- include('../adminlayout/footer') -%>
+    
+
+    
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+
+   
+
+
+    <script>
+    jQuery.noConflict();
+    jQuery(document).ready(function($) {
+        $('#usersTable').DataTable();
+        
+    });
+</script>
+
+
+<script>
+$('form[action="/updateOrderStatus"]').submit(function(event) {
+    event.preventDefault(); 
+    var form = $(this);
+    var orderId = form.find('input[name="orderId"]').val();
+    var newStatus = form.find('select[name="newStatus"]').val();
+    
+    $.ajax({
+        url: form.attr('action'),
+        method: form.attr('method'),
+        data: {
+            orderId: orderId,
+            newStatus: newStatus
+        },
+        success: function(response) {
+            
+            console.log('statussuccessfully updated');      
+            },
+        error: function(xhr, status, error) {
+            console.error('Error updating order status:', error);
+        }
+    });
+});
+
+</script>
+
+<!-- 
+<script>
+    document.getElementById('update').addEventListener('click', function() {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Status successfully updated!",
+        showConfirmButton: false,
+        timer: 1500
+      }).then(function() {
+        location.reload();
+      });
+    });
+    </script> -->
+
+
+
+
+</body>
+</html>

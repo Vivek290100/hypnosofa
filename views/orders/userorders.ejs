@@ -1,0 +1,153 @@
+<%- include('nav') -%>
+
+<title>User Orders</title>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Custom CSS -->
+<style>
+  .row-border {
+    border: 1px solid #dee2e6;
+    /* Add border to row */
+    border-radius: 5px;
+    /* Optional: Add border radius */
+    padding: 15px;
+    /* Optional: Add padding */
+    margin-bottom: 20px;
+    /* Optional: Add margin to separate rows */
+  }
+
+  .row-border {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .field-name {
+    font-weight: bold; /* Making field names bold */
+  }
+
+</style>
+</head>
+
+<body style="background-color: #fff;">
+
+<div class="container mt-5">
+  <% if (Orders.length === 0) { %>
+    <div class="alert alert-info" role="alert">
+      No orders found.
+    </div>
+  <% } else { %>
+    <% Orders.reverse().forEach((order, index)=> { %>
+      <div class="row row-border">
+        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;  text-align: center;">
+          <h4 style="margin-top: 0;"><%= index + 1 %>. ORDER ID: <%= order._id %></h4>
+        </div>
+
+        <div class="col-md-6 flex"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+          <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+            <div class="border p-3" >
+              <h5 class="field-name">PRODUCT DETAILS</h5>
+            </div>
+            <br>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="field-name">Product Name</th>
+                  <th class="field-name">Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% order.products.forEach(product=> { %>
+                <tr>
+                  <td><%= product.product.name %></td>
+                  <td><%= product.quantity %></td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-6"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+          <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+            <div class="border p-3"  >
+              <h5 class="field-name" >ORDER SUMMARY</h5>
+            </div><br>
+            <p class="field-name">Total Price: ₹<%= order.totals.discountTotal%>
+            <p class="field-name">Ordered Date: <%= order.orderDate %>
+            <p class="field-name">Ordered Time: <%= order.orderTime %>
+            <p class="field-name">Payment method: <%= order.paymentMethod %>
+            </p>
+            <p class="field-name">Status: <%= order.status %>
+            </p>
+            <div class="d-flex"> 
+              <!-- <a href="/viewproduct"> <button class="btn btn-success">View Product</button> </a>&nbsp; -->
+              <button class="btn btn-danger cancel-order-btn <%= order.status === 'Cancelled' ? 'cancelled' : '' %>" onclick="cancelOrder('<%= order._id %>')">
+                <% if (order.status === 'Cancelled') { %>
+                  ✖ Order Cancelled
+                <% } else { %>
+                  Cancel Order
+                <% } %>
+              </button>
+              <% if (order.status === 'Delivered') { %>
+                <button>
+                 Return Product
+                </button>
+                <% }  %>
+                 
+                       
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } %>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+
+<script>
+  function cancelOrder(orderId) {
+    $.ajax({
+      url: '/cancelOrder', 
+      type: 'POST', 
+      data: { orderId: orderId },
+      success: function(response) {
+        console.log('Order canceled successfully:', response);
+      },
+      error: function(xhr, status, error) {
+        console.error('Error canceling order:', error);
+      }
+    });
+  }
+</script>
+
+<script>
+  document.querySelectorAll('.cancel-order-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      // Check if the order is already cancelled
+      if (!this.classList.contains('cancelled')) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Order Cancelled",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(function() {
+          location.reload();
+        });
+      } else {
+        Swal.fire({
+          position: "center",
+          icon: "info",
+          title: "Order already cancelled",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    });
+  });
+</script>
+

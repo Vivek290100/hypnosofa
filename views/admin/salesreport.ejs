@@ -1,0 +1,76 @@
+<!-- salesReport.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Report</title>
+    <style>
+      body {
+        font-family: "Helvetica", sans-serif;
+      }
+      .title {
+        font-size: 16px;
+        text-align: center;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        font-size: smaller;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title">Sales Report (<%= startDate %> to <%= endDate %>)</div>
+    <table>
+      <tr>
+        <th>S.No</th>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Order Date</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total</th>
+      </tr>
+      <!-- <script>
+        console.log('ordersorders',orders);
+      </script> -->
+      <% let totalOrderPrice = 0; %>
+      <% orders.forEach((order,index )=> { %>
+      <tr>
+        <td><%= index+1 %></td>
+        <td><%= order.orderID %></td>
+        <td>
+          <%= order.customer ? order.customer.name : 'Unknown Customer' %>
+        </td>
+        <td><%= order.orderDate %></td>
+        <td>
+          <% order.products.forEach(product => { %> <%= product.product ?
+          product.product.name : 'Unknown Product' %><br /><br><br>
+          <% }); %>
+        </td>
+        <td>
+          <% order.products.forEach(product => { %>
+             <%= product.quantity %><br /><br><br>
+          <% }); %>
+        </td>
+        <td>₹<%= order.totals.totalprice %>/-</td>
+      </tr>
+      <% totalOrderPrice += order.totals.totalprice; %>
+
+      <% }); %>
+      <tr>
+        <td colspan="6" style="text-align: right;"><strong>Total Order Price:</strong></td>
+        <td><strong>₹<%= totalOrderPrice %>/-</strong></td>
+    </tr>
+    </table>
+  </body>
+</html>

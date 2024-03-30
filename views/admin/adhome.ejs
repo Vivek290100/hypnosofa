@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%- include('../adminlayout/header') -%>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+<link href="https://demo.dashboardpack.com/architectui-html-free/main.css" rel="stylesheet"></head>
+
+<body>
+
+
+	<!-- SIDEBAR -->
+	<%- include('../adminlayout/slider') -%>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<%- include('../adminlayout/navbar') -%>
+		<!-- NAVBAR -->
+
+
+		<!-- MAIN -->
+		<main>
+			<style>
+				body {
+				  margin: 0;
+				  overflow: hidden; 
+				}
+			  
+			   
+				body {
+				  font-family: Arial, sans-serif;
+				  margin: 0;
+				  padding: 0;
+				  background-color: #f4f4f4;
+				  overflow-y: scroll;
+				}
+			  
+				header {
+				  position: fixed;
+				  top: 0;
+				  width: 100%;
+				  background-color: #333;
+				  color: white;
+				  text-align: center;
+				  font-size: smaller;
+				  z-index: 10;
+				  height: 60px;
+				}
+			  
+				nav {
+				  background-color: #4CAF50;
+				  color: white;
+				  padding: 10px;
+				}
+			  
+				nav a {
+				  color: white;
+				  text-decoration: none;
+				  padding: 10px;
+				  margin: 0 10px;
+				}
+			  
+				.dashboard-container {
+				 
+				  display: flex;
+				  flex-wrap: wrap;
+				  justify-content: space-around;
+				  padding: 20px;
+				  margin-top: 30px;
+				}
+			  
+				.dashboard-card {
+				  background-color: white;
+				  border-radius: 8px;
+				  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				  margin: 15px;
+				  padding: 20px;
+				  width: 300px;
+				  text-align: center;
+				  max-width: 100%;
+				  text-align: center;
+				}
+			  
+				canvas {
+				  max-width: 100%;
+				  max-height: 100%;
+				}
+			  
+				footer {
+				  background-color: #333;
+				  color: white;
+				  padding: 10px;
+				  text-align: center;
+				  position: fixed;
+				  bottom: 0;
+				  width: 100%;
+				}
+			  
+			   
+				.dashboard-card i {
+				  font-size: 48px; 
+				  margin-bottom: 10px;
+				}
+				.time-interval-selector {
+				  margin-bottom: 20px;
+				}
+				.time-interval-selector select, 
+    .time-interval-selector button {
+        padding: 8px 12px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+	.time-interval-selector button {
+        background-color: #00683D;
+        color: #fff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+	
+				.recent-orders-table {
+				width: 100%;
+				border-collapse: collapse; 
+				margin-top: 20px; 
+			  }
+			  
+			  .recent-orders-table th, .recent-orders-table td {
+				border: 1px solid #ddd; 
+				padding: 8px; 
+				text-align: left; 
+			  }
+			  
+			  .recent-orders-table th {
+				background-color: #f2f2f2;
+			  }
+			  
+			  .recent-orders-table tbody tr:nth-child(even) {
+				background-color: #f9f9f9; 
+			  }
+			  .badge {
+				  padding: 5px 10px;
+				  border-radius: 5px;
+				  font-size: 12px;
+				  font-weight: bold;
+				  display: inline-block;
+				}
+			  
+				.badge-danger {
+				  background-color: #dc3545; 
+				  color: #fff;
+				}
+			  
+				.badge-warning {
+				  background-color: #ffc107; 
+				  color: #000;
+				}
+			  
+				.badge-info {
+				  background-color: #17b868;
+				  color: #fff;
+				}
+			  
+				.badge-primary {
+				  background-color: #007bff; 
+				  color: #fff;
+				}
+			  
+				.badge-success {
+				  background-color: #28a745;
+				  color: #fff;
+				}
+				
+			  .test {
+				position: absolute;
+				top:30px;
+				left: 30px;
+				width: 66px;
+				height: 66px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border: 4px solid #000;
+				border-radius: 50%;
+				cursor: pointer;
+			  }
+			  .test svg {
+				rotate: 0deg;
+			  }
+			  .test svg path{
+				fill: #000;
+			  }
+			  .test:hover {
+				background: rgba(255,255,255,1);
+			  }
+			  .test.small svg {
+				rotate: 90deg;
+			  }
+			  .card{
+				background-color: #00683D;
+			  }
+			  .time-interval-selector {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.time-interval-selector select {
+    margin-right: 10px; 
+}
+.download{
+	margin-top: 31px;
+	background-color: #004c3f;
+}
+.download:hover{
+	margin-top: 31px;
+	background-color: #004c3f;
+}
+.form-control {
+	width: 150px;
+}
+.chart:hover{
+	pointer-events: none;
+}
+			  
+			  </style>
+			  
+			  
+<!-- 			  
+				<header>
+				  <h1>Admin Dashboard</h1>
+				</header> -->
+
+
+				<!-- ----------------------------------- -->
+				<br>
+				<br>
+			
+				<div class="row " >
+					<div class="col-md-6 col-xl-4" >
+						<div class="card mb-3 widget-content ">
+							<div class="widget-content-wrapper text-white">
+								<div class="widget-content-left">
+									<div class="widget-heading ">Total Orders</div>
+									<div class="widget-subheading">Total Orders</div>
+								</div>
+								<div class="widget-content-right">
+									<div class="widget-numbers text-white"><span><%= totalOrders %></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-xl-4">
+						<div class="card mb-3 widget-content ">
+							<div class="widget-content-wrapper text-white">
+								<div class="widget-content-left">
+									<div class="widget-heading">Total Users</div>
+									<div class="widget-subheading">Total Users</div>
+								</div>
+								<div class="widget-content-right">
+									<div class="widget-numbers text-white"><span><%= totalUsers %></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-xl-4">
+						<div class="card mb-3 widget-content ">
+							<div class="widget-content-wrapper text-white">
+								<div class="widget-content-left">
+									<div class="widget-heading">Total Products Sold</div>
+									<div class="widget-subheading">Total Products Sold</div>
+								</div>
+								<div class="widget-content-right">
+									<div class="widget-numbers text-white"><span><%= productQuantity %></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
+						<div class="card mb-3 widget-content bg-grow-early">
+							<div class="widget-content-wrapper text-white">
+								<div class="widget-content-left">
+									<div class="widget-heading">Products Sold</div>
+									<div class="widget-subheading">Revenue streams</div>
+								</div>
+								<div class="widget-content-right">
+									<div class="widget-numbers text-warning"><span><%= productQuantity %></span></div>
+								</div>
+							</div>
+						</div>
+					</div> -->
+				</div>
+			   
+</div>
+</div>
+
+			
+			  
+				  <div style="width: 100%;" class="dashboard-graph-container">
+					<div class="container">
+						<div class="row" >
+							<div class="col-md-12 col-lg-4 mb-3">
+								<div class="form-group">
+									<label for="time-interval">Select Time Interval:</label>
+									<select id="time-interval" class="form-control" onchange="updateChart()">
+										<option value="daily">Daily</option>
+										<!-- <option value="weekly">Weekly</option> -->
+										<option value="monthly">Monthly</option>
+										<option value="yearly">Yearly</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-12 col-lg-8">
+								<div class="reservation-box">
+									<div class="top d-flex">
+										<div class="static">
+											<div class="form-group">
+												<label for="startDate">Start-date</label>
+												<input type="date" id="startDate" class="form-control date-field" name="date-from">
+											</div>
+										</div>
+										<div class="flex d-flex">
+											<div class="form-group">
+												<label for="endDate">End-date</label>
+												<input type="date" id="endDate" class="form-control date-field" name="date-to">
+											</div> &nbsp;&nbsp;
+											<div class="button-container ml-md-auto">
+												<button class="btn btn-primary download" onclick="downloadSalesReport()"><i class="bx bxs-download"></i>
+													Download</button> 
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					
+					<canvas id="myChart" class="chart" ></canvas>
+					<!-- <canvas id="myChart" class="responsive-chart"></canvas> -->
+				
+				</div>
+				
+
+
+				 
+				  
+				  <div style="width: 100%;"> 
+					<h2>Recently Placed Orders</h2>
+					<table class="recent-orders-table">
+					  <thead>
+						<tr>
+						  <th>Order ID</th>
+						  <th>Products</th>
+						  <th>Quantity</th>
+						  <th>Order Date</th>
+						  <th>Status</th>
+						</tr>
+					  </thead>
+					  <tbody>
+
+
+						<% for (const order of recentlyPlacedOrders) { %>
+						  <% for (const product of order.products) { %>
+							<tr>
+							  <td><%= order.orderID %></td>
+							  <td><%= product.product.name %></td>
+							  <td><%= product.quantity %></td>
+							  <td><%= order.orderDate %></td>
+							  <td>
+								<span class="badge <%= order.status.toLowerCase() === 'cancelled' ? 'badge-danger' : (order.status.toLowerCase() === 'pending' ? 'badge-warning' : (order.status.toLowerCase() === 'processing' ? 'badge-info' : (order.status.toLowerCase() === 'shipped' ? 'badge-primary' : 'badge-success'))) %>">
+								  <%= order.status %>
+								</span>
+							  </td>
+							</tr>
+						  <% } %>
+						<% } %>
+					  </tbody>
+					  
+					</table>
+				  </div>
+				</div>
+
+
+
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+
+				<script>
+					document.addEventListener('DOMContentLoaded', function () {
+						let selectedTimeInterval = 'daily';
+				
+						function updateChart() {
+							selectedTimeInterval = document.getElementById('time-interval').value;
+							updateChartData(selectedTimeInterval);
+						}
+				
+						function updateChartData(timeInterval) {
+							const timeFormats = {
+								// 'weekly': { unit: 'week', unitStepSize: 1, tooltipFormat: 'W YYYY' },
+								'monthly': { unit: 'month', unitStepSize: 1, tooltipFormat: 'MMM YYYY' },
+								'yearly': { unit: 'year', unitStepSize: 1, tooltipFormat: 'YYYY' },
+								'daily': { unit: 'day', unitStepSize: 1, tooltipFormat: 'MMM DD, YYYY' }
+							};
+				
+							const { unit, unitStepSize, tooltipFormat } = timeFormats[timeInterval];
+							const xValues = JSON.parse('<%- xValues %>');
+							const yValues = JSON.parse('<%- JSON.stringify(yValues) %>');
+							const formattedXValues = xValues.map(dateString => formatXLabel(dateString, timeInterval));
+				
+							new Chart("myChart", {
+								type: "line",
+								data: {
+									labels: formattedXValues,
+									datasets: [{
+										label: 'Hypnosofa',
+										fill: false,
+										lineTension: 0,
+										backgroundColor: "black",
+										borderColor: "#4edd8a",
+										data: yValues
+									}]
+								},
+								options: {
+									scales: {
+										xAxes: [{
+											type: 'time',
+											time: { unit, unitStepSize, tooltipFormat },
+											scaleLabel: { display: true }
+										}],
+										yAxes: [{
+											ticks: { min: 0, stepSize: 1 },
+										scaleLabel: { display: true, labelString: 'Number of Products' }
+										}]
+									},
+									elements: { point: { radius: 4 } },
+									tooltips: { intersect: false, mode: 'index' }
+								}
+							});
+						}
+				
+						function formatXLabel(dateString, timeInterval) {
+							const date = new Date(dateString);
+							if (timeInterval === 'monthly') return `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
+							if (timeInterval === 'yearly') return `${date.getFullYear()}`;
+							return `${getMonthName(date.getMonth())} ${date.getDate()}, ${date.getFullYear()}`;
+						}
+				
+						function getMonthName(monthIndex) {
+							const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+							return months[monthIndex];
+						}
+				
+						document.getElementById('time-interval').addEventListener('change', updateChart);
+						updateChartData(selectedTimeInterval);
+					});
+				</script>
+				
+				
+				
+				
+			
+			  
+			  <script>
+				function downloadSalesReport() {
+				  var startDate = document.getElementById('startDate').value;
+				  var endDate = document.getElementById('endDate').value;
+				  if (startDate === "" || endDate === "") {
+					alert("Please select both start and end dates.");
+					return;
+				  }
+				  var downloadURL = '/download-sales-report?startDate=' + startDate + '&endDate=' + endDate;
+				  window.open(downloadURL, '_blank');
+				}
+			  </script>
+			
+		</main>
+		<!-- MAIN -->
+
+
+	</section>
+	<!-- CONTENT -->
+	
+
+	<%- include('../adminlayout/footer') -%>
+</body>
+</html>
