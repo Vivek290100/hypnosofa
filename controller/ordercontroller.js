@@ -352,6 +352,55 @@ const cancelorder = async (req, res) => {
 }
 
 
+const addaddresscheckout = async (req, res) => {
+    try {
+        const user = req.session.user;
+
+        const userId = req.session.user._id;
+        console.log('User ID:', userId);
+
+        const addresses = await Address.find();
+        const addressIds = addresses.map(address => address._id);
+        console.log('Address IDs:', addressIds);
+
+        res.render('./orders/addaddress', { userId: userId, addressId: addressIds , user:user});
+    } catch (error) {
+        console.error('Error rendering add address page:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+const addaddresscheckoutt = async (req, res) => {
+    try {
+        
+        console.log('Request Body:', req.body);
+        const userId = req.session.user._id;
+        console.log('User ID:', userId);
+
+        const { mobile, pincode, houseName, locality, city, district, state } = req.body;
+
+        // Create a new Address document
+        const newAddress = new Address({
+            mobile,
+            pincode,
+            houseName,
+            locality,
+            city,
+            district,
+            state
+        });
+
+        // Save the new address
+        await newAddress.save();
+
+        res.status(200).json({ success: true, message: 'Address added successfully' });
+    } catch (error) {
+        console.error('Error adding new address:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+
 
 
 
@@ -365,5 +414,7 @@ module.exports={
     userorders,
     viewproduct,
     cancelorder,
-    paymentVerify
+    paymentVerify,
+    addaddresscheckout,
+    addaddresscheckoutt
 } 

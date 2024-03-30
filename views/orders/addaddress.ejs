@@ -1,0 +1,241 @@
+
+<%- include('nav',{user:user}) -%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Address</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #addressForm {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            /* background-color: #fff; */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: inline-block;
+            width: 100px; /* Adjust this width as needed */
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 110px); /* Adjust the width accordingly to fit input */
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        @media screen and (max-width: 600px) {
+            form {
+                padding: 10px;
+            }
+        }
+        .btn{
+            margin-left: 105px;
+            border: 1px solid black;
+            background-color: #004c3f;
+            color: white;
+        }
+        span{
+            margin-left: 110px;
+            color: red;
+        }
+       
+    </style>
+
+</head>
+<body>
+    <h1>Add Address</h1>
+    <div id="addressForm">
+        <label for="mobile">Mobile:</label>
+        <input type="text" id="mobile" name="mobile" required>
+        <span id="mobile-error" class="error-message"></span><br><br>
+        
+        <label for="pincode">Pincode:</label>
+        <input type="text" id="pincode" name="pincode" required>
+        <span id="pincode-error" class="error-message"></span><br><br>
+        
+        <label for="housename">House Name:</label>
+        <input type="text" id="housename" name="housename" required>
+        <span id="housename-error" class="error-message"></span><br><br>
+        
+        <label for="locality">Locality:</label>
+        <input type="text" id="locality" name="locality" required>
+        <span id="locality-error" class="error-message"></span><br><br>
+        
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required>
+        <span id="city-error" class="error-message"></span><br><br>
+        
+        <label for="district">District:</label>
+        <input type="text" id="district" name="district" required>
+        <span id="district-error" class="error-message"></span><br><br>
+        
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required>
+        <span id="state-error" class="error-message"></span><br><br>
+        
+        <h4 class="success-message" style="display: none; text-align: center; color: green; margin-bottom: 37px;">Address added successfully!</h4>
+
+        <button class="btn"  type="button" onclick="submitForm()">Submit</button>
+        <a href="/checkout"><button class="btn" type="button">cancel</button></a>
+    </div>
+    <input type="hidden" id="addressId" name="addressId" value="<%= addressId %>">
+
+
+    <!-- <div>
+        <h2>User ID: <%= userId %></h2>
+        <h3>Address IDs:</h3>
+        <% addressId.forEach(addressId => { %>
+            <p><%= addressId %></p>
+        <% }); %>
+    </div> -->
+    
+
+    <script>
+        function submitForm() {
+            var mobile = document.getElementById("mobile").value;
+            var pincode = document.getElementById("pincode").value;
+            var housename = document.getElementById("housename").value;
+            var locality = document.getElementById("locality").value;
+            var city = document.getElementById("city").value;
+            var district = document.getElementById("district").value;
+            var state = document.getElementById("state").value;
+            var addressId = document.getElementById("addressId").value;
+
+
+            // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(function(element) {
+            element.textContent = '';
+        });
+
+        // Validation
+        var isValid = true;
+
+        if (mobile.trim() === "") {
+            document.getElementById("mobile-error").textContent = "Mobile is required";
+            isValid = false;
+        }
+
+        if (pincode.trim() === "") {
+            document.getElementById("pincode-error").textContent = "Pincode is required";
+            isValid = false;
+        }
+
+        if (housename.trim() === "") {
+            document.getElementById("housename-error").textContent = "House Name is required";
+            isValid = false;
+        }
+
+        if (locality.trim() === "") {
+            document.getElementById("locality-error").textContent = "Locality is required";
+            isValid = false;
+        }
+
+        if (city.trim() === "") {
+            document.getElementById("city-error").textContent = "City is required";
+            isValid = false;
+        }
+
+        if (district.trim() === "") {
+            document.getElementById("district-error").textContent = "District is required";
+            isValid = false;
+        }
+
+        if (state.trim() === "") {
+            document.getElementById("state-error").textContent = "State is required";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        // Validate mobile number
+        var mobilePattern = /^[0-9]{10}$/;
+        if (!mobilePattern.test(mobile)) {
+            document.getElementById("mobile-error").textContent = "Please enter a valid 10-digit mobile number";
+            return;
+        }
+
+        // Validate pincode (assuming 6-digit pincode)
+        var pincodePattern = /^[0-9]{6}$/;
+        if (!pincodePattern.test(pincode)) {
+            document.getElementById("pincode-error").textContent = "Please enter a valid 6-digit pincode";
+            return;
+        }
+    
+            var data = {
+                mobile: mobile,
+                pincode: pincode,
+                houseName: housename,
+                locality: locality,
+                city: city,
+                district: district,
+                state: state,
+                addressId: addressId 
+            };
+            console.log('dataaa',data);
+    
+            // Make AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/addaddresscheckoutt", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                        // window.location.href = "/checkout"; 
+                        document.querySelector(".success-message").style.display = "block"; // Show success message
+
+                } else {
+                    console.error("Error adding address:", xhr.responseText);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(data));
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".success-message").style.display = "none"; // Hide success message initially
+    });
+   
+    </script>
+
+
+
+   
+    
+</body>
+</html>

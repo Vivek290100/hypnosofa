@@ -72,6 +72,8 @@ router.get('/user/userOrder',verifyUser, controller5.userorders);
 router.get('/viewproduct',verifyUser, controller5.viewproduct)
 router.post('/cancelOrder',verifyUser,controller5.cancelorder)
 router.post('/paymentVerify',verifyUser,controller5.paymentVerify)
+router.get('/addaddresscheckout',verifyUser,controller5.addaddresscheckout)
+router.post('/addaddresscheckoutt',verifyUser,controller5.addaddresscheckoutt)
 
 
 
