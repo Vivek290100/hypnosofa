@@ -183,7 +183,7 @@ const resend = function (req, res) {
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        res.render('./user/otp', { msg: "OTP has been sent" });
+        res.render('./user/otp', { msg: "OTP has been sent." });
     });
 };
 
