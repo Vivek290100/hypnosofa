@@ -64,10 +64,12 @@ const checkout = async (req, res) => {
         const amount =  walletBalance; 
 
         const userCoupons = await Coupon.find();
+        const length = cartItems.length
+        console.log('length',length);
 
-  
+        // console.log('carttitermsss',cartItems);
 
-        res.render('./orders/checkout', { addresses, user, cartItems, totalPrice, amount,coupons: userCoupons});
+        res.render('./orders/checkout', { addresses, user, cartItems, totalPrice, amount,coupons: userCoupons, length: length});
     } catch (error) {
         console.error('Error fetching user addresses and cart data for checkout:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -103,9 +105,6 @@ const createOrder = async (req, res, addresses) => {
 
         // console.log('appliedCoupon',appliedCoupon);
         // console.log('coupondb',coupondb);
-
-
-
         // console.log("productsss",products);
         for (const item of cartItems) {
             try {
@@ -142,13 +141,9 @@ const createOrder = async (req, res, addresses) => {
           couponCodeApplied = appliedCoupon.couponCode;
         } 
         }
-        
         // console.log('appliedCoupon',appliedCoupon);
-
-
         const TotalPriceAfterDiscount = totalPrice - discountAmount;
         // console.log('TotalPriceAfterDiscount',TotalPriceAfterDiscount);
-
 
         const newOrderId = new ObjectId().toString(); 
             const newOrderData = {
@@ -193,20 +188,17 @@ const createOrder = async (req, res, addresses) => {
             
             // console.log("User Wallet:", userWallet); 
 
-
             if (!userWallet) {
                 return res.status(400).json({ success: false, message: 'Wallet not found for user' });
             }
             if (userWallet.balance < TotalPriceAfterDiscount) {
                 return res.status(400).json({ success: false, message: 'Insufficient funds in wallet' });
             }
-
             // console.log("Total Price of Order:", totalPrice); 
 
 
             userWallet.balance -= TotalPriceAfterDiscount;
             await userWallet.save();
-
             // console.log("Updated Wallet Balance:", userWallet.balance);
 
 
@@ -218,10 +210,7 @@ const createOrder = async (req, res, addresses) => {
         }
         else {
             res.status(400).json({ success: false, message: 'Invalid payment method' });
-
         }
-
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Failed to create order' });
@@ -231,26 +220,19 @@ const createOrder = async (req, res, addresses) => {
 
 
 
-
 const paymentVerify = async (req, res) => {
     const { amount } = req.body;
 
     const razorpaySecretKey = 'rzp_test_Dc1MSlNThSEKkf';
-
     let amountParsed = parseInt(amount);
     const amountInPaise = Math.round(amountParsed * 100);
-
     const razorpayOptions = {
         amount: amountInPaise,
         currency: 'INR',
         receipt: generateOrderID() // Assuming generateOrderID is defined elsewhere
     };
-
-    // Place the order
     instance.orders.create(razorpayOptions, function (err, razorpayOrder) {
-        
-        // Assuming the order creation is successful, directly return the order details
-        res.status(200).json({ razorpayOrder });
+    res.status(200).json({ razorpayOrder });
     });
 };
 
@@ -263,7 +245,6 @@ const paymentVerify = async (req, res) => {
 const successorder = async (req, res) => {
     try {
         const user = req.session.user;
-  
         res.render("./orders/successorder", { pageTitle: "confirm", user});
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -277,7 +258,6 @@ const userorders = async (req,res)=>{
         const user = req.session.user;
         const userId = req.session.user._id;
        
-
         const Orders = await orderModels.find({ customer: userId }).populate('products.product');
 
         res.render('./orders/userorders', { user: req.session.user, Orders });
@@ -341,9 +321,8 @@ const cancelorder = async (req, res) => {
         }
 
         await orderData.save();
-        res.render('./orders/checkout', { user: user, amount: TotalPrice });
-
-        
+        res.redirect('/user/orders');
+        // res.render('./orders/checkout', { user: user, amount: TotalPrice });
         // res.status(200).json({ success: true, message: 'Order cancelled successfully' });
     } catch (error) {
         console.error('Error cancelling order:', error);
@@ -379,7 +358,6 @@ const addaddresscheckoutt = async (req, res) => {
 
         const { mobile, pincode, houseName, locality, city, district, state } = req.body;
 
-        // Create a new Address document
         const newAddress = new Address({
             mobile,
             pincode,
@@ -390,17 +368,13 @@ const addaddresscheckoutt = async (req, res) => {
             state
         });
 
-        // Save the new address
         await newAddress.save();
-
         res.status(200).json({ success: true, message: 'Address added successfully' });
     } catch (error) {
         console.error('Error adding new address:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
-
-
 
 
 

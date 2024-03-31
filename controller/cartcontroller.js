@@ -136,7 +136,7 @@ const updateQuantity = async (req, res) => {
         const originalQuantity = product.quantity;
 
         
-        console.log('quantityquantity',quantity);//==============
+        // console.log('quantityquantity',quantity);
         if (quantity > 0 && quantity<=10) {
           // console.log('Updating quantity for product:', product);
 

@@ -747,7 +747,7 @@ input[type="text"] {
                               id="couponButton"
                               onclick="return applyOrRemoveCoupon()"
                             >
-                              Apply Coupon
+                              Apply
                             </button>
                           </div>
                         </div>
@@ -758,9 +758,15 @@ input[type="text"] {
                     </div>
                 
                     <div class="product-info">
-                        <div class="product-name">No.of Items: <%= cartItems.length %></div>
-                        <div class="total-price" id="totalPrice">Total Price: ₹ <%= totalPrice.toFixed(2) %></div>
-                    </div>
+                      <% if (length > 0) { %>
+                          <div class="product-name">No.of Items: <%= length %></div>
+                          <div class="total-price" id="totalPrice">Total Price: ₹ <%= totalPrice.toFixed(2) %></div>
+                      <% } else { %>
+                          <div class="product-name">No items in cart</div>
+                      <% } %>
+                  </div>
+                  
+                  
                   </div>
 
 
@@ -1115,7 +1121,7 @@ function placeOrder(orderData) {
               await removeCoupon(couponCode);
             } else {
               couponMessage.innerHTML = "Coupon applied successfully!";
-              couponButton.textContent = "Remove Coupon";
+              couponButton.textContent = "Remove ";
               couponButton.classList.add("applied");
             }
           } else {
@@ -1145,7 +1151,7 @@ function placeOrder(orderData) {
 
         if (response.ok) {
           // Update UI to reflect the removed coupon
-          document.getElementById("couponButton").textContent = "Apply Coupon";
+          document.getElementById("couponButton").textContent = "Apply";
           document.getElementById("totalPrice").textContent =
             "<%= totalPrice.toFixed(2) %>"; // Replace with the original total
           document.getElementById("couponButton").classList.remove("applied");
