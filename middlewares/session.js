@@ -58,6 +58,11 @@ const verifyUser = (req, res, next) => {
     next();
   };
 
+  const handle404 = (req, res) => {
+    res.status(404).render("./user/404");
+  };
+  
+
   
 
 
@@ -69,4 +74,5 @@ const verifyUser = (req, res, next) => {
     adminExist,
     verifyAdmin,
     verifyAdminLoggedOut,
+    handle404
   }

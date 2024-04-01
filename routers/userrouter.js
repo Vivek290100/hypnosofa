@@ -9,7 +9,7 @@ const controller4= require('../controller/cartcontroller');
 const controller5= require('../controller/ordercontroller');
 const controller6 = require('../controller/usercoupon.controller')
 
-const { verifyUser, userExist,checkUserStatus } = require("../middlewares/session");
+const { verifyUser, userExist,checkUserStatus,handle404 } = require("../middlewares/session");
 
 
 
@@ -75,6 +75,7 @@ router.post('/paymentVerify',verifyUser,controller5.paymentVerify)
 router.get('/addaddresscheckout',verifyUser,controller5.addaddresscheckout)
 router.post('/addaddresscheckoutt',verifyUser,controller5.addaddresscheckoutt)
 
+// router.use(handle404);
 
 
 

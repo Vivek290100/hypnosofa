@@ -9,7 +9,7 @@ const controller5=require('../controller/couponcontroller')
 const controller6 = require('../controller/categoryoffercontroller')
 const controller7 = require('../controller/productoffercontroller')
 
-const { adminExist,verifyAdmin,verifyAdminLoggedOut, } = require("../middlewares/session");
+const { adminExist,verifyAdmin,verifyAdminLoggedOut,handle404 } = require("../middlewares/session");
 
 
 
@@ -67,5 +67,7 @@ router.get('/admin/productoffer',verifyAdmin,controller7.ProductOffers)
 router.put('/admin/edit-product-offer/:productId/:startDate/:expiryDate/:percentage',verifyAdmin,controller7.editProductOffer);
 router.delete('/admin/delete-category-offer/:categoryId', verifyAdmin, controller6.deleteOffer);
 
+
+router.use(handle404);
 
 module.exports = router
