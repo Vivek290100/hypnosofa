@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../adminlayout/header') -%>
+
+<head>
+    <link rel="stylesheet" href="/css/userList.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+</head>
+
+
+<body>
+
+    <!-- SIDEBAR -->
+    <%- include('../adminlayout/slider') -%>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <%- include('../adminlayout/navbar') -%>
+        <!-- NAVBAR -->
+
+        <!-- NAVBAR -->
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+
+            .container {
+                /* max-width: 600px; */
+                margin: 50px auto;
+            }
+
+            #bannerForm {
+                display: none;
+            }
+
+            #previewImage {
+                max-width: 100%;
+                height: auto;
+                margin-top: 10px;
+            }
+            /* .imagePreview{
+                max-width: 46%;
+                height: auto;
+            } */
+            img{
+                width: 28%;
+            }
+            .form-control {
+                width: 28%;
+            }
+        </style>
+        </head>
+
+        <body>
+
+            <div class="container">
+                <h1>Manage Banners</h1>
+                <button class="btn btn-primary mb-3" onclick="toggleForm()">Add Banner</button>
+                <div id="bannerForm">
+                    <form action="/admin/banner" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="image">Select Image:</label>
+                            <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required onchange="previewImage(event)">
+                        </div>
+                        <div class="form-group" id="imagePreviewContainer" style="display: none;">
+                            <label>Selected Image:</label>
+                            <div id="imagePreview"></div>
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <label for="caption">Caption:</label>
+                            <input type="text" class="form-control" id="caption" name="caption" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="link">URL:</label>
+                            <input type="text" class="form-control" id="link" name="link" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Banner</button>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                function toggleForm() {
+                    var form = document.getElementById("bannerForm");
+                    form.style.display = (form.style.display === "none") ? "block" : "none";
+                }
+
+                function previewImage(event) {
+                    var preview = document.getElementById('imagePreview');
+                    var previewContainer = document.getElementById('imagePreviewContainer');
+                    var file = event.target.files[0];
+                    var reader = new FileReader();
+
+                    reader.onloadend = function() {
+                        preview.innerHTML = '<img src="' + reader.result + '" alt="Preview Image" style="max-width:100%;height:auto;">';
+                        previewContainer.style.display = 'block';
+                    }
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    } else {
+                        preview.innerHTML = '';
+                        previewContainer.style.display = 'none';
+                    }
+                }
+            </script>
+
+        </body>
+        </html>

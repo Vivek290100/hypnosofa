@@ -112,6 +112,7 @@ const verify = async function (req, res) {
             console.log("referredCode", referredCode);
             const referredUser = await User.findOne({ referralCode: referredCode });
             console.log("refferedUser", referredUser);
+            let updatedWallet;
             if (referredUser) {
               if (!referredUser.wallet) {
                 const newWallet = new Wallet({ user: referredUser._id });
@@ -126,6 +127,10 @@ const verify = async function (req, res) {
                 { new: true }
               );
             }
+            if (updatedWallet) {
+              await updatedWallet.save();
+          }
+
             const newUser = new User({
               name: user.name,
               email: user.email,

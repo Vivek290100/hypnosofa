@@ -4,6 +4,8 @@ const orderModels = require('../models/orderModel');
 const moment = require("moment");
 const fs = require("fs");
 const puppeteer = require("puppeteer");
+const Banner = require('../models/bannerModel');
+
 
 
 
@@ -345,6 +347,46 @@ const salesReport = async (req, res) => {
 
 
 
+const banner = async(req,res)=>{
+  res.render('./admin/banner')
+}
+
+const createBanner = async (req, res) => {
+  try {
+      const { imageUrl, caption, link } = req.body;
+      const banner = new Banner({ imageUrl, caption, link });
+      await banner.save();
+      res.status(201).json({ message: 'Banner created successfully' });
+  } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Controller to update a banner
+const updateBanner = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { imageUrl, caption, link } = req.body;
+      await Banner.findByIdAndUpdate(id, { imageUrl, caption, link });
+      res.status(200).json({ message: 'Banner updated successfully' });
+  } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Controller to delete a banner
+const deleteBanner = async (req, res) => {
+  try {
+      const { id } = req.params;
+      await Banner.findByIdAndDelete(id);
+      res.status(200).json({ message: 'Banner deleted successfully' });
+  } catch (error) {
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
 
   module.exports = {
     admin,
@@ -356,5 +398,9 @@ const salesReport = async (req, res) => {
     userOrder,
     updateOrderStatus,
     logout,
-    salesReport
+    salesReport,
+    banner,
+    createBanner,
+    updateBanner,
+    deleteBanner
   }

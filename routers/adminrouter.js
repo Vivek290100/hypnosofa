@@ -22,6 +22,13 @@ router.post("/block",verifyAdmin,controller2.block)
 router.post('/unblock',verifyAdmin,controller2.unblock)
 router.get('/adlogout',verifyAdmin,controller2.logout)
 
+// Banner management routes
+router.get('/banner', verifyAdmin, controller2.banner);
+router.post('/createBanner', verifyAdmin, controller2.createBanner);
+router.put('/banner/:id', verifyAdmin, controller2.updateBanner);
+router.delete('/banner/:id', verifyAdmin, controller2.deleteBanner);
+
+
 
 //order list-------------------------------------------->
 router.get("/userorder",verifyAdmin,controller2.userOrder);
@@ -66,6 +73,7 @@ router.delete('/admin/delete-offer', verifyAdmin, controller6.deleteOffer);
 router.get('/admin/productoffer',verifyAdmin,controller7.ProductOffers)
 router.put('/admin/edit-product-offer/:productId/:startDate/:expiryDate/:percentage',verifyAdmin,controller7.editProductOffer);
 router.delete('/admin/delete-category-offer/:categoryId', verifyAdmin, controller6.deleteOffer);
+
 
 
 router.use(handle404);
