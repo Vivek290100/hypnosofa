@@ -211,7 +211,7 @@ const totalprice = async (req, res) => {
     const user = req.session.user;
     const cart = await cartModels.findOne({ userId: user._id });
     const cartItems = cart ? cart.products : [];
-    let totalPrice = 0;
+    let totalPrice = 100;
 
     for (const item of cartItems) {
       const product = await Product.findById(item.productId);

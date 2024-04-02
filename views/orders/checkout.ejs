@@ -1019,6 +1019,7 @@ function showRazorpayInterface(addressIndex,paymentMethod) {
     addressIndex: addressIndex,
     paymentMethod: paymentMethod
   };
+  console.log('paymentData',paymentData);
   fetch('/paymentVerify', {
     method: 'POST',
     headers: {

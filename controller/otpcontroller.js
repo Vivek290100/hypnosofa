@@ -51,7 +51,8 @@ const otp1 = async function (req, res) {
         }
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const email = req.body.email;
-        const referral = req.body.referralCode;
+        // const referral = req.body.referralCode;
+        const referral = generateReferralCode()
         console.log('req.body.referralCode',req.body.referralCode);
         req.session.user = {
           name: req.body.name,
@@ -132,6 +133,7 @@ const verify = async function (req, res) {
               referralCode: referral,
             });
             const savedUser = await newUser.save();
+            
             req.session.userId = newUser._id;
             // console.log("User data inserted successfully:", savedUser);
             const error1 = "Welcome ,you are a member of Hypnosofa!";

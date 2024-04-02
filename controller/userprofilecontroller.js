@@ -13,6 +13,8 @@ const Wallet=require('../models/walletModel')
 const userprofile = async (req, res) => { 
     try {
         const user = req.session.user || {};
+    
+        console.log(user,'userrrrrrrrrrrrrrrrrrrrrrr');
         const userId = user._id;
         const addresses = await Address.find({ userId });
 
@@ -22,9 +24,12 @@ const userprofile = async (req, res) => {
         const walletBalance = wallet ? wallet.balance : 0;
         
         const amount =  walletBalance; 
+
+        const userWithReferralCode = await User.findById(userId);
+        const referralCode = userWithReferralCode.referralCode;
         
 
-        res.render('./userprofile/profile.ejs', { pageTitle: 'userprofile', user, addresses,amount });
+        res.render('./userprofile/profile.ejs', { pageTitle: 'userprofile', user, addresses,amount,referralCode });
     } catch (error) {
         console.error('Error fetching addresses:', error);
         res.status(500).send('Internal Server Error');

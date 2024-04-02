@@ -58,6 +58,7 @@ const checkout = async (req, res) => {
             res.redirect('/user/cart')
         }
 
+
         const wallet = await Wallet.findOne({ user: user._id });
         const walletBalance = wallet ? wallet.balance : 0;
         

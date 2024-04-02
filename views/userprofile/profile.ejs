@@ -125,6 +125,14 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
             margin-left: 5px;
             cursor: pointer;
         }
+        .referralcodecolor{
+            font-weight: bold;
+            width: 80px;
+            height: 30px;
+            padding-left: 7px;
+            background-color: #bababa;
+            border-radius: 2px;
+        }
 
 </style>
 
@@ -195,8 +203,9 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                     <label class="form-label">E-mail</label>
                                     <input type="text" class="form-control mb-1" value="<%=user.email%>">
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Referal Code: <%=user.referralCode%> </label>
+                                <div class="form-group d-flex">
+                                    <label class="form-label ">Referal Code:  </label>
+                                        <p class="referralcodecolor"><%=referralCode%></p>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Wallet: ₹<%= amount%>/-</label>

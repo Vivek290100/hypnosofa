@@ -300,16 +300,17 @@
         <div class="col-md-4 summary">
             <div><h5><b>PRICE DETAILS</b></h5></div>
             <hr>
+          
+            <div class="row">
+                <div class="col" style="padding-left:0;">Shipping Charge </div>
+                <div class="col text-right">₹ 100.00</div>
+            </div><br>
             <div class="row">
                 <div class="col" style="padding-left:0;">TOTAL PRICE (<%= cartItems.length %> items)</div>
                 <div class="col text-right" id="total-price">₹ <%= totalPrice.toFixed(2) %></div>
             </div><br>
-            <!-- <form>
-                <p>SHIPPING</p>
-                <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
-                <p>GIVE CODE</p>
-                <input id="code" placeholder="Enter your code">
-            </form> -->
+
+                
             
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                 <!-- <div class="col">PACKAGING FEE</div>
