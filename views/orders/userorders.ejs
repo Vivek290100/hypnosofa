@@ -80,7 +80,7 @@
             </p>
             <div class="d-flex"> 
               <!-- <a href="/viewproduct"> <button class="btn btn-success">View Product</button> </a>&nbsp; -->
-              <button class="btn btn-danger cancel-order-btn <%= order.status === 'Cancelled' ? 'cancelled' : '' %>" onclick="cancelOrder('<%= order._id %>')">
+              <!-- <button class="btn btn-danger cancel-order-btn <%= order.status === 'Cancelled' ? 'cancelled' : '' %>" onclick="cancelOrder('<%= order._id %>')">
                 <% if (order.status === 'Cancelled') { %>
                   ✖ Order Cancelled
                 <% } else { %>
@@ -91,7 +91,17 @@
                 <button>
                  Return Product
                 </button>
-                <% }  %>
+                <% }  %> -->
+
+                <button class="btn btn-danger cancel-order-btn <%= order.status === 'Cancelled' ? 'cancelled' : '' %>" onclick="cancelOrder('<%= order._id %>')" <%= order.status === 'Delivered' ? 'disabled' : '' %>>
+                  <% if (order.status === 'Cancelled') { %>
+                    ✖ Order Cancelled
+                  <% } else if (order.status === 'Delivered') { %>
+                    ✔ Delivered
+                  <% } else { %>
+                    Cancel Order
+                  <% } %>
+                </button>
                  
                        
             </div>
