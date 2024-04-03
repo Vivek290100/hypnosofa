@@ -188,6 +188,7 @@ const resend = function (req, res) {
     const user=req.session.user
     let email=user.email
     console.log(email);
+    console.log('resend',otp);
     const mailOptions = {
         to: email,
         subject: "Otp for registration is: ",
@@ -199,7 +200,7 @@ const resend = function (req, res) {
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        res.render('./user/otp', { msg: "OTP has been sent" });
+        res.render('./user/otp', { msg10: "OTP has been sent" });
     });
 };
 
