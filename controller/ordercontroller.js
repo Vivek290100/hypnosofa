@@ -321,7 +321,7 @@ const cancelorder = async (req, res) => {
                 console.log('Wallet updated successfully.');
             }
             
-        }
+        } 
 
         await orderData.save();
         res.redirect('/user/orders');

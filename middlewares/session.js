@@ -15,7 +15,7 @@ const verifyUser = (req, res, next) => {
       next();
     }
   };
-
+ 
 
   const verifyAdmin = (req, res, next) => {
     if (req.session.adLogged) {

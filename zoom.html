@@ -1,92 +1,50 @@
-
-const product = async (req, res) => {
+const cancelorder = async (req, res) => {
     try {
+        const id = req.body.orderId;
+        const userId = req.session.user._id;
         const user = req.session.user;
-        let query = {}; 
-        const searchQuery = req.query.q; 
-        let sortCriteria = req.query.sort; 
-        let categoryFilter = req.query.category;
-        
-        // Pagination
-        const currentPage = parseInt(req.query.page) || 1; 
-        const perPage = 8;
-        const skip = (currentPage - 1) * perPage;
 
-        if (searchQuery) {
-            query.name = { $regex: new RegExp(searchQuery, 'i')  };
+        const orderData = await orderModels.findById(id);
+        if (!orderData) {
+            return res.status(404).json({ error: 'Order not found' });
         }
 
-        if (categoryFilter) {
-            query.category = categoryFilter;
-        }
-        
-
-        let sortOptions = {};
-        switch (sortCriteria) {
-            case 'price_low_high':
-                sortOptions = { price: 1 };
-                break;
-            case 'price_high_low':
-                sortOptions = { price: -1 };
-                break;
-            case 'name_a_z':
-                sortOptions = { name: 1 };
-                break;
-            case 'name_z_a':
-                sortOptions = { name: -1 };
-                break;
-            default:
-                break;
+        if (orderData.status !== 'Delivered') {
+            orderData.status = 'Cancelled';
         }
 
-        // Count total number of products
-        const totalProducts = await Product.countDocuments({ ...query, isDeleted: false });
-
-        // Calculate total number of pages
-        const totalPages = Math.ceil(totalProducts / perPage);
-
-        const products = await Product.find({ ...query, isDeleted: false })
-                                      .sort(sortOptions)
-                                      .populate('category')
-                                      .skip(skip)
-                                      .limit(perPage);
-
-        //product Offer
-        const productoffer = await ProductOffer.find().select('discountPercentage product').exec();        
-        // console.log('productoffer',productoffer);
-
-       
+        const orderpayment = orderData.paymentMethod;
+        // console.log("orderpayment",orderpayment);
 
 
-        // Calculate discounted prices
-        const discountedProducts = products.map(product => {
-            const offer = productoffer.find(offer => offer.product.equals(product._id));
-            const discountedPrice = offer ? product.price * (1 - offer.discountPercentage / 100) : product.price;
-            return { ...product.toObject(), discountedPrice,offer };
-        });
+        let TotalPrice = 0;
 
-        // console.log('discountedProducts',discountedProducts); 
+        if (orderpayment === 'RazorPay' || orderpayment === 'Wallet') {
+             TotalPrice = orderData.totals.subtotal;
+            // console.log('TotalPrice',TotalPrice);
 
-        const cartItemCount = req.session.cartItemCount;
-        const categories = await Category.find(); 
-
-      
-
-
-
-        res.render('./user/products', {
-            title: 'Products',
-            products: discountedProducts,
-            user,
-            cartItemCount,
-            categories,
-            currentPage,
-            sortCriteria,
-            totalPages,
+            const userWallet = await Wallet.findOne({ user: userId });
+            if (!userWallet) {
+                // Create new wallet if it doesn't exist
+                const newWallet = new Wallet({ user: userId, balance: 0 });
+                newWallet.balance = TotalPrice;
+                await newWallet.save();
+                console.log('Wallet created and saved successfully.');
+            } else {
+                // Update existing wallet balance
+                userWallet.balance += TotalPrice;
+                await userWallet.save();
+                console.log('Wallet updated successfully.');
+            }
             
-        });
+        }
+
+        await orderData.save();
+        res.redirect('/user/orders');
+        // res.render('./orders/checkout', { user: user, amount: TotalPrice });
+        // res.status(200).json({ success: true, message: 'Order cancelled successfully' });
     } catch (error) {
-        console.error('Error fetching products:', error);
-        res.status(500).render('error500');
+        console.error('Error cancelling order:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
-};
+}

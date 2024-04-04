@@ -44,7 +44,7 @@ router.get('/user/forgot-password', controller2.showForgotPasswordForm);
 router.post('/user/forgot-password', controller2.forgotPassword);
 router.post('/user/reset-password', controller2.resetPassword);
 router.get('/otpresend',controller2.otpresend)
-
+ 
 //user profile------------------------------------------------------->
 router.get("/user/profile",verifyUser,controller3.userprofile);
 router.post("/change-password",verifyUser,controller3.changepassword)
