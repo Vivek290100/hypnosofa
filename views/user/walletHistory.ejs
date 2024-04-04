@@ -78,74 +78,42 @@
 </style>
 </head>
 <body>
-
-<div class="container-fluid">
-<div style="height: 5vh;"></div>
-<div class="wallet-container">
-   
-
-    <div style="">
-        <h2 >&nbsp;Wallet History </h2>
+    <!-- Wallet history content -->
+    <div class="container-fluid">
+        <!-- Header and balance display -->
+        <div class="wallet-container">
+            <div>
+                <h2>&nbsp;Wallet History</h2>
+            </div>
+            <div class="balance">
+                <!-- Display available balance dynamically -->
+                <p>Available Balance: ₹ <%= balance %></p>
+            </div>
+            <!-- Wallet history table -->
+            <table id="wallet">
+                <!-- Table headers -->
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <!-- Table body for wallet history data -->
+                <tbody>
+                    <% walletHistory.forEach(transaction => { %>
+                        <tr class="transaction">
+                            <td><%= transaction.type %></td>
+                            <td><%= transaction.amount %></td>
+                            <td><%= transaction.description %></td>
+                            <td><%= transaction.date %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div style="background-color: #004c3f; border-radius: 10px; height: 80px; width: 350px; line-height: 0.7rem; text-align: center; margin-left: 300px; color: #fff;">
-            <br>
-            <p style="font-size: medium;">Available Balance:</p>
-            <p>₹ 0</p>
-    </div>
-    
-
-        
-        <table id="wallet" class="table-responsive">
-            <thead >
-                <tr style="color: black;">
-                    <th><p>Type</p></th>
-                    <th><p>Amount</p></th>
-                    <th><p>Description</p></th>
-                    <th><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p></th>
-                </tr>&nbsp;
-            </thead>
-            <tbody style="font-weight: 600;">
-                <tr>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                </tr>
-                <tr>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                </tr>
-                <tr>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                    <td>wertyu</td>
-                </tr>
-            </tbody>
-        </table>
-</div>
-
-<div style="height: 5vh;"></div>
-<!-- <nav aria-label="Page navigation example" class="d-flex justify-content-end mt-3" id="pagination-navbar">
-    <ul class="pagination">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" style="color: black;" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="/user-wallet?page=" style="color: black">1</a>
-        </li>
-        <li class="page-item disabled">
-            <a class="page-link" href="#" style="color: black;" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
-</nav> -->
-</div>
 
 <style>
     @media (max-width: 500px) {

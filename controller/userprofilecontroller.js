@@ -221,15 +221,20 @@ const updateAddress = async (req, res) => {
 
 
 
-const walletHistory = async(req,res)=>{
-    try{
-        const user = req.session.user
+const walletHistory = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const userId = user._id;
 
+        // Assuming walletHistory is an array of transactions
+        const walletHistory = await Wallet.find({ user: userId }).populate('user');
 
-        res.render('./user/walletHistory',{user})
+        // Assuming balance is fetched from somewhere
+        const balance = 0; // Fetch balance here
 
+        res.render('./user/walletHistory', { user, walletHistory, balance });
     } catch (error) {
-        console.error('Error fetching address:', error);
+        console.error('Error fetching wallet history:', error);
         res.status(500).send('Internal Server Error');
     }
 }

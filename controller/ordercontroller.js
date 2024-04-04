@@ -66,7 +66,7 @@ const checkout = async (req, res) => {
 
         const userCoupons = await Coupon.find();
         const length = cartItems.length
-        console.log('length',length);
+        // console.log('length',length);
 
         // console.log('carttitermsss',cartItems);
 
@@ -87,7 +87,7 @@ function getCurrentTime() {
 //-----create orderdatabase----------------------------------------
 const createOrder = async (req, res, addresses) => {
     try {
-        console.log("Request Body:", req.body);
+        // console.log("Request Body:", req.body);
         const orderTime = getCurrentTime();
         const currentDate = moment();
         const orderDate = currentDate.format('DD-MM-YYYY');
@@ -170,7 +170,7 @@ const createOrder = async (req, res, addresses) => {
 
         if (paymentMethod === 'Cash On Delivery') {
             const newOrder = new orderModels(newOrderData);
-            // console.log('neworderrrr', newOrder);
+            console.log('cod order', newOrder);
             await cartModels.findOneAndDelete({ userId: userId });
             await newOrder.save();
             res.status(200).json({ success: true, message: 'Order created successfully' });
@@ -178,7 +178,7 @@ const createOrder = async (req, res, addresses) => {
             const razorpay_signature = 'rzp_test_Dc1MSlNThSEKkf';
             if (razorpay_signature == razorpay_signature) {
                 const newOrder = new orderModels(newOrderData);
-                // console.log('neworderrrrazorpay', newOrder); 
+                console.log('razorpay order', newOrder); 
                 await cartModels.findOneAndDelete({ userId: userId });
                 await newOrder.save();
                 res.status(200).json({ success: true, message: 'Order created successfully' });
@@ -204,6 +204,7 @@ const createOrder = async (req, res, addresses) => {
 
 
             const newOrder = new orderModels(newOrderData);
+            console.log('wallet order',newOrder);
             await cartModels.findOneAndDelete({ userId: userId });
             await newOrder.save();
             res.status(200).json({ success: true, message: 'Order created successfully' });
@@ -297,7 +298,7 @@ const cancelorder = async (req, res) => {
         }
 
         const orderpayment = orderData.paymentMethod;
-        console.log("orderpayment",orderpayment);
+        // console.log("orderpayment",orderpayment);
 
 
         let TotalPrice = 0;
@@ -319,6 +320,7 @@ const cancelorder = async (req, res) => {
                 await userWallet.save();
                 console.log('Wallet updated successfully.');
             }
+            
         }
 
         await orderData.save();
@@ -337,11 +339,11 @@ const addaddresscheckout = async (req, res) => {
         const user = req.session.user;
 
         const userId = req.session.user._id;
-        console.log('User ID:', userId);
+        // console.log('User ID:', userId);
 
         const addresses = await Address.find();
         const addressIds = addresses.map(address => address._id);
-        console.log('Address IDs:', addressIds);
+        // console.log('Address IDs:', addressIds);
 
         res.render('./orders/addaddress', { userId: userId, addressId: addressIds , user:user});
     } catch (error) {
@@ -353,9 +355,9 @@ const addaddresscheckout = async (req, res) => {
 const addaddresscheckoutt = async (req, res) => {
     try {
         
-        console.log('Request Body:', req.body);
+        // console.log('Request Body:', req.body);
         const userId = req.session.user._id;
-        console.log('User ID:', userId);
+        // console.log('User ID:', userId);
 
         const { mobile, pincode, houseName, locality, city, district, state } = req.body;
 
