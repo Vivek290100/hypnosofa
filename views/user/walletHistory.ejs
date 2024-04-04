@@ -1,0 +1,163 @@
+<%- include('header') -%>
+<%- include('nav',{ user: user }) -%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet</title>
+
+<!-- External Libraries -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.6.0/css/searchBuilder.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color:whitesmoke;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .wallet-container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    .balance {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .history {
+        border-top: 1px solid #ccc;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+    .transaction {
+        margin-bottom: 10px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        width: 33.33%;
+    }
+
+    table#wallet {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    table#wallet th, table#wallet td {
+        border: 1px solid #808080;
+        padding: 8px; 
+        text-align: center; 
+    }
+</style>
+</head>
+<body>
+
+<div class="container-fluid">
+<div style="height: 5vh;"></div>
+<div class="wallet-container">
+   
+
+    <div style="">
+        <h2 >&nbsp;Wallet History </h2>
+    </div>
+    <div style="background-color: #004c3f; border-radius: 10px; height: 80px; width: 350px; line-height: 0.7rem; text-align: center; margin-left: 300px; color: #fff;">
+            <br>
+            <p style="font-size: medium;">Available Balance:</p>
+            <p>₹ 0</p>
+    </div>
+    
+
+        
+        <table id="wallet" class="table-responsive">
+            <thead >
+                <tr style="color: black;">
+                    <th><p>Type</p></th>
+                    <th><p>Amount</p></th>
+                    <th><p>Description</p></th>
+                    <th><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p></th>
+                </tr>&nbsp;
+            </thead>
+            <tbody style="font-weight: 600;">
+                <tr>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                </tr>
+                <tr>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                </tr>
+                <tr>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                    <td>wertyu</td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+
+<div style="height: 5vh;"></div>
+<!-- <nav aria-label="Page navigation example" class="d-flex justify-content-end mt-3" id="pagination-navbar">
+    <ul class="pagination">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" style="color: black;" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="/user-wallet?page=" style="color: black">1</a>
+        </li>
+        <li class="page-item disabled">
+            <a class="page-link" href="#" style="color: black;" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav> -->
+</div>
+
+<style>
+    @media (max-width: 500px) {
+        table#wallet {
+            font-size: 10px; 
+        }
+
+        table#wallet th, table#wallet td {
+            padding: 4px; 
+        }
+    }
+</style>
+
+</body>
+</html>

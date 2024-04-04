@@ -14,7 +14,7 @@ const userprofile = async (req, res) => {
     try {
         const user = req.session.user || {};
     
-        console.log(user,'userrrrrrrrrrrrrrrrrrrrrrr');
+        // console.log(user,'userrrrrrrrrrrrrrrrrrrrrrr');
         const userId = user._id;
         const addresses = await Address.find({ userId });
 
@@ -221,6 +221,21 @@ const updateAddress = async (req, res) => {
 
 
 
+const walletHistory = async(req,res)=>{
+    try{
+        const user = req.session.user
+
+
+        res.render('./user/walletHistory',{user})
+
+    } catch (error) {
+        console.error('Error fetching address:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+
 
 
 
@@ -233,6 +248,7 @@ module.exports = {
     deleteAddress,
     saveUser,
     editaddress,
-    updateAddress
+    updateAddress,
+    walletHistory
    
 };

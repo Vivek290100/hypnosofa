@@ -53,6 +53,8 @@ router.get('/user/deleteaddress/:id',verifyUser,controller3.deleteAddress);
 router.post('/save-user',verifyUser, controller3.saveUser);
 router.get('/edit-address/:id',verifyUser, controller3.editaddress)
 router.post('/submit-address/:addressId',verifyUser, controller3.updateAddress);
+router.get('/walletHistory',verifyUser,controller3.walletHistory)
+
 
 //user cart------------------------------------------------------->
 router.get('/user/cart',verifyUser,controller4.usercart);

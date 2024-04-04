@@ -40,7 +40,7 @@ const checkout = async (req, res) => {
         const cart = await cartModels.findOne({ userId: user._id });
         const cartItems = cart ? cart.products : [];
 
-        let totalPrice = 0;
+        let totalPrice = 100;
 
         for (const item of cartItems) {
             try {
@@ -230,7 +230,7 @@ const paymentVerify = async (req, res) => {
     const razorpayOptions = {
         amount: amountInPaise,
         currency: 'INR',
-        receipt: generateOrderID() // Assuming generateOrderID is defined elsewhere
+        receipt: generateOrderID() 
     };
     instance.orders.create(razorpayOptions, function (err, razorpayOrder) {
     res.status(200).json({ razorpayOrder });

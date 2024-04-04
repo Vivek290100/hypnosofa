@@ -51,7 +51,8 @@ const admin = (req, res) => {
         // console.log('productQuantity',productQuantity);
 
       const totalUsers = await User.countDocuments();
-      const orders = await orderModels.find();
+      const deliveredOrders = await orderModels.find({ status: "Delivered" });
+      console.log('orderswswswsws',deliveredOrders);
       const selectedTimeInterval = req.query.interval || "daily";
       // console.log('selectedTimeInterval',selectedTimeInterval);
       let timeFormat, timeUnit, dateFormat;
@@ -68,42 +69,21 @@ const admin = (req, res) => {
         timeUnit = "$dayOfMonth";
         dateFormat = "MMMM DD, YYYY";
       }
-      const ordersWithDate = await orderModels
-        .aggregate([
-          {
-            $match: { orderDate: { $exists: true } },
-          },
-          {
-            $addFields: {
-              orderDate: {
-                $toDate: "$orderDate"
-              }
-            }
-          },
-          {
-            $group: {
-              _id: {
-                $dateToString: {
-                  format: timeFormat,
-                  date: "$orderDate",
-                  timezone: "+0530",
-                },
-              },
-              count: { $sum: 1 },
-            },
-          },
-          {
-            $project: {
-              _id: 0,
-              date: "$_id",
-              count: 1,
-            },
-          },
-          {
-            $sort: { date: 1 },
-          },
-        ])
-        .exec();
+     // Aggregate delivered orders based on time interval
+    const ordersWithDate = await orderModels
+    .aggregate([
+      { $match: { _id: { $in: deliveredOrders.map(order => order._id) }, orderDate: { $exists: true } } },
+      { $addFields: { orderDate: { $toDate: "$orderDate" } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: timeFormat, date: "$orderDate", timezone: "+0530" } },
+          count: { $sum: 1 }
+        }
+      },
+      { $project: { _id: 0, date: "$_id", count: 1 } },
+      { $sort: { date: 1 } }
+    ])
+    .exec();
 
         // console.log('ordersWithDate',ordersWithDate);
       const validOrdersWithDate = ordersWithDate.filter(
@@ -129,7 +109,7 @@ const admin = (req, res) => {
         totalOrders,
         productQuantity,
         totalUsers,
-        orders,
+        orders: deliveredOrders,
         xValues: JSON.stringify(xValues),
         yValues,
         recentlyPlacedOrders,

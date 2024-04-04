@@ -1011,9 +1011,11 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
+let timer;
 // Function to show Razorpay payment interface
 function showRazorpayInterface(addressIndex,paymentMethod) {
+  clearInterval(timer);
+
   const paymentData = {
     amount: '<%= totalPrice.toFixed(2) %>',
     addressIndex: addressIndex,

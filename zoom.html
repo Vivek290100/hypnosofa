@@ -1,180 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #156161;
+
+const product = async (req, res) => {
+    try {
+        const user = req.session.user;
+        let query = {}; 
+        const searchQuery = req.query.q; 
+        let sortCriteria = req.query.sort; 
+        let categoryFilter = req.query.category;
+        
+        // Pagination
+        const currentPage = parseInt(req.query.page) || 1; 
+        const perPage = 8;
+        const skip = (currentPage - 1) * perPage;
+
+        if (searchQuery) {
+            query.name = { $regex: new RegExp(searchQuery, 'i')  };
+        }
+
+        if (categoryFilter) {
+            query.category = categoryFilter;
+        }
+        
+
+        let sortOptions = {};
+        switch (sortCriteria) {
+            case 'price_low_high':
+                sortOptions = { price: 1 };
+                break;
+            case 'price_high_low':
+                sortOptions = { price: -1 };
+                break;
+            case 'name_a_z':
+                sortOptions = { name: 1 };
+                break;
+            case 'name_z_a':
+                sortOptions = { name: -1 };
+                break;
+            default:
+                break;
+        }
+
+        // Count total number of products
+        const totalProducts = await Product.countDocuments({ ...query, isDeleted: false });
+
+        // Calculate total number of pages
+        const totalPages = Math.ceil(totalProducts / perPage);
+
+        const products = await Product.find({ ...query, isDeleted: false })
+                                      .sort(sortOptions)
+                                      .populate('category')
+                                      .skip(skip)
+                                      .limit(perPage);
+
+        //product Offer
+        const productoffer = await ProductOffer.find().select('discountPercentage product').exec();        
+        // console.log('productoffer',productoffer);
+
        
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ffffff;
-}
 
 
-        
+        // Calculate discounted prices
+        const discountedProducts = products.map(product => {
+            const offer = productoffer.find(offer => offer.product.equals(product._id));
+            const discountedPrice = offer ? product.price * (1 - offer.discountPercentage / 100) : product.price;
+            return { ...product.toObject(), discountedPrice,offer };
+        });
 
-        form {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 500px;
-            margin-bottom: 20px;
-            /* animation: bounceForm 0.5s ease-in-out; */
-        }
+        // console.log('discountedProducts',discountedProducts); 
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: black;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #014122;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #428f66;
-        }
-
-        button.back-btn {
-            background-color: #014122;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: -5px;
-            
-        }
-
-        button.back-btn:hover {
-            background-color: #428f66;
-        }
+        const cartItemCount = req.session.cartItemCount;
+        const categories = await Category.find(); 
 
       
 
-    </style>
-</head>
-<body>
-
-<h1>Add Product</h1>
-
-<form id="addProductForm" action="/addproduct" method="post" enctype="multipart/form-data">
-    <label for="name">Product Name:</label>
-    <input type="text" id="name" name="name" required>
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required></textarea>
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" required min="0">
-    <label for="quantity">Quantity:</label>
-<input type="number" id="quantity" name="quantity" required min="0">
-    <label for="image">Images:</label>
-    <input type="file" id="image" name="image" accept="image/*" multiple>
-    <label for="category">Category:</label>
-    <select id="category" name="category" required>
-        <% categories.forEach(category => { %>
-            <option value="<%= category._id %>"><%= category.name %></option>
-        <% }); %>
-    </select>
-    <div id="errorMessages" style="color: red;"></div>
-
-    <button type="submit" onclick="validateForm(event)">Add Product</button>
-</form>
-
-<button  class="back-btn" onclick="window.location.href='/product'">Back to Products</button>
 
 
-<script>
-    function validateForm(event) {
-        const form = document.getElementById('addProductForm');
-        const name = form.elements['name'].value.trim();
-        const description = form.elements['description'].value.trim();
-        const price = form.elements['price'].value.trim();
-        const quantity = form.elements['quantity'].value.trim();
-        const image = form.elements['image'].value.trim();
-        const category = form.elements['category'].value;
-
-        // Clear previous error messages
-        document.getElementById('errorMessages').innerHTML = '';
-
-        // Validate Name
-        if (name === '') {
-            displayErrorMessage('Product Name is required');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Description
-        if (description === '') {
-            displayErrorMessage('Product Description is required');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Price
-        if (price === '' || isNaN(price) || parseFloat(price) < 0) {
-            displayErrorMessage('Please enter a valid positive price');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Quantity
-        if (quantity === '' || isNaN(quantity) || parseInt(quantity) < 0) {
-            displayErrorMessage('Please enter a valid positive quantity');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Image
-        if (!image) {
-            displayErrorMessage('Product Image is required');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Category
-        if (category === '') {
-            displayErrorMessage('Product Category is required');
-            event.preventDefault();
-            return;
-        }
+        res.render('./user/products', {
+            title: 'Products',
+            products: discountedProducts,
+            user,
+            cartItemCount,
+            categories,
+            currentPage,
+            sortCriteria,
+            totalPages,
+            
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).render('error500');
     }
-
-    function displayErrorMessage(message) {
-        const errorDiv = document.getElementById('errorMessages');
-        errorDiv.innerHTML += `<p>${message}</p>`;
-    }
-</script>
-
-
-</body>
-</html>
+};

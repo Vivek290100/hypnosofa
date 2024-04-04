@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -57,7 +58,7 @@
         img {
             max-width: 50px;
             max-height: 50px;
-            margin-bottom: 10px;
+            margin-bottom: -10px;
         }
 
         .checkbox-group {
@@ -130,10 +131,11 @@
     <label for="existingImage">Existing Image:</label>
     <% if (product.images && product.images.length > 0) { %>
         <% product.images.forEach((image, index) => { %>
-            <div>
+            <div style="border: 1px solid rgb(11, 130, 88); margin-inline: 15px; background-color: #45a049;">
                 <img src="/assets/product-images/<%= image %>" alt="<%= product.name %>">
                 <br>
-                <label>Delete Existing Image:</label>
+                <label><i class="fa fa-trash-o"></i>
+                </label>
                 <input type="checkbox" name="deleteExistingImage<%= index %>" value="<%= image %>">
             </div>
         <% }); %>
