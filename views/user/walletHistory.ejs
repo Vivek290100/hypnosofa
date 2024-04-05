@@ -79,7 +79,7 @@
 </head>
 <body>
     <!-- Wallet history content -->
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color: #F4F4F4;">
         <!-- Header and balance display -->
         <div class="wallet-container">
             <div>
@@ -97,15 +97,15 @@
                         <th>Type</th>
                         <th>Amount</th>
                         <th>Description</th>
-                        <th>Date</th>
+                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                 </thead>
                 <!-- Table body for wallet history data -->
                 <tbody>
-                    <% walletHistory.forEach(transaction => { %>
+                    <% transactions.forEach(transaction => { %>
                         <tr class="transaction">
                             <td><%= transaction.type %></td>
-                            <td><%= transaction.amount %></td>
+                            <td>₹<%= transaction.amount %>/-</td>
                             <td><%= transaction.description %></td>
                             <td><%= transaction.date %></td>
                         </tr>

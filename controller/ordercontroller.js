@@ -8,6 +8,7 @@ const { Types: { ObjectId } } = require('mongoose');
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
 const Wallet=require('../models/walletModel')
+const WalletHistory = require('../models/walletHistoryModel')
 const Coupon = require('../models/couponModel')
 
 
@@ -203,6 +204,15 @@ const createOrder = async (req, res, addresses) => {
             // console.log("Updated Wallet Balance:", userWallet.balance);
 
 
+            // Creating wallet history record for the transaction (debit)
+            const walletHistory = new WalletHistory({
+                wallet: userWallet._id,
+                transactionType: 'debit',
+                amount: TotalPriceAfterDiscount,
+                description: 'Amount debited for order purchase',
+            });
+            await walletHistory.save();
+
             const newOrder = new orderModels(newOrderData);
             console.log('wallet order',newOrder);
             await cartModels.findOneAndDelete({ userId: userId });
@@ -320,6 +330,16 @@ const cancelorder = async (req, res) => {
                 await userWallet.save();
                 console.log('Wallet updated successfully.');
             }
+
+            // Creating wallet history record for the transaction
+            const walletHistory = new WalletHistory({
+                wallet: userWallet._id,
+                transactionType: 'credit',
+                amount: TotalPrice,
+                description: 'Amount credited to wallet due to order cancellation',
+            });
+            await walletHistory.save();
+
             
         } 
 

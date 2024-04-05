@@ -2,6 +2,9 @@ const User = require('../models/userModel');
 const Address = require('../models/addressModel');
 const bcrypt = require('bcrypt');
 const Wallet=require('../models/walletModel')
+const WalletHistory = require('../models/walletHistoryModel')
+const moment = require('moment');
+
 
 
 
@@ -226,13 +229,38 @@ const walletHistory = async (req, res) => {
         const user = req.session.user;
         const userId = user._id;
 
+        const walletId = await Wallet.findOne({ user: userId });
+        console.log('walletId',walletId);        
+
         // Assuming walletHistory is an array of transactions
-        const walletHistory = await Wallet.find({ user: userId }).populate('user');
+        const walletHistory = await WalletHistory.find({ wallet: walletId });
+        console.log('walletHistory',walletHistory);
 
-        // Assuming balance is fetched from somewhere
-        const balance = 0; // Fetch balance here
+        
+         // Calculate the total balance from wallet history
+         let balance = walletId.balance;
+         
+         const transactions = walletHistory.map(transaction => ({
+            type: transaction.transactionType,
+            amount: transaction.amount,
+            description: transaction.description,
+            date: moment(transaction.timestamp).format("DD-MM-YYYY")        }));
 
-        res.render('./user/walletHistory', { user, walletHistory, balance });
+        console.log('transactions', transactions);
+
+
+        transactions.forEach(transaction => {
+            if (transaction.type === 'credit') {
+                balance += transaction.amount;
+            } else if (transaction.type === 'debit') {
+                balance -= transaction.amount;
+            }
+        });
+
+        console.log('balance', balance);
+
+
+        res.render('./user/walletHistory', { user, transactions, balance });
     } catch (error) {
         console.error('Error fetching wallet history:', error);
         res.status(500).send('Internal Server Error');
