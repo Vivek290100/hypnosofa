@@ -262,7 +262,7 @@ const walletHistory = async (req, res) => {
             type: transaction.transactionType,
             amount: transaction.amount,
             description: transaction.description,
-            date: moment(transaction.timestamp).format("DD-MM-YYYY")        }));
+            date: moment(transaction.timestamp).format("DD-MM-YYYY, HH:mm A")}));
 
         console.log('transactions', transactions);
 

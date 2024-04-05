@@ -11,13 +11,15 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.6.0/css/searchBuilder.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
 <style>
     body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background-color:whitesmoke;
+        background-color:rgb(255, 255, 255);
     }
 
     header {
@@ -75,10 +77,11 @@
         padding: 8px; 
         text-align: center; 
     }
+    
 </style>
 </head>
 <body>
-    <div class="container-fluid" style="background-color: #F4F4F4;">
+    <div class="container-fluid" style="background-color: #ffffff;">
         <div class="wallet-container">
             <div>
                 <h2>&nbsp;Wallet History</h2>
@@ -104,7 +107,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% transactions.forEach(transaction => { %>
+                    <% transactions.reverse().forEach(transaction => { %>
                         <tr class="transaction">
                             <td><%= transaction.type %></td>
                             <td>₹<%= transaction.amount %>/-</td>
@@ -118,17 +121,18 @@
         </div>
     </div>
 
-<style>
-    @media (max-width: 500px) {
-        table#wallet {
-            font-size: 10px; 
-        }
-
-        table#wallet th, table#wallet td {
-            padding: 4px; 
-        }
-    }
-</style>
+    <script>
+        $(document).ready(function() {
+            $('#wallet').DataTable({
+                "paging": true,
+                "searching": true,
+                "pageLength": 5, // Set the number of rows per page
+                "order": [], // Disable default sorting
+                "pagingType": "simple" // or "simple_numbers"
+            });
+        });
+    </script>
+    
 
 </body>
 </html>
