@@ -78,20 +78,23 @@
 </style>
 </head>
 <body>
-    <!-- Wallet history content -->
     <div class="container-fluid" style="background-color: #F4F4F4;">
-        <!-- Header and balance display -->
         <div class="wallet-container">
             <div>
                 <h2>&nbsp;Wallet History</h2>
             </div>
-            <div class="balance">
-                <!-- Display available balance dynamically -->
-                <p>Available Balance: ₹ <%= balance %></p>
-            </div>
-            <!-- Wallet history table -->
+                <!-- <div class="error-message">
+                    <p style="margin: 40px;">&nbsp;&nbsp;<%= errorMessage %></p>
+                </div> -->
+                <div class="balance">
+                    <p>Available Balance: ₹ <%= balance  %>/-</p>
+                </div>
+                <% if(transactions.length === 0) { %>
+                    <div class="error-message">
+                        <p style="margin: 40px;">&nbsp;&nbsp;No credit or debit transactions found.</p>
+                    </div>
+                <% } else { %>
             <table id="wallet">
-                <!-- Table headers -->
                 <thead>
                     <tr>
                         <th>Type</th>
@@ -100,7 +103,6 @@
                         <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                     </tr>
                 </thead>
-                <!-- Table body for wallet history data -->
                 <tbody>
                     <% transactions.forEach(transaction => { %>
                         <tr class="transaction">
@@ -112,6 +114,7 @@
                     <% }) %>
                 </tbody>
             </table>
+            <% } %>
         </div>
     </div>
 

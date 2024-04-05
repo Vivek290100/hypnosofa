@@ -230,7 +230,18 @@ const walletHistory = async (req, res) => {
         const userId = user._id;
 
         const walletId = await Wallet.findOne({ user: userId });
-        console.log('walletId',walletId);        
+        console.log('walletId',walletId);    
+
+        let transactions = [];
+        let errorMessage = '';
+
+        if (!walletId) {
+            // If wallet is not found, set an error message
+            const errorMessage = "No credit or debit transactions found.";
+            return res.render('./user/walletHistory', { user, errorMessage, transactions, balance });
+        }
+        
+        
 
         // Assuming walletHistory is an array of transactions
         const walletHistory = await WalletHistory.find({ wallet: walletId });
@@ -239,8 +250,15 @@ const walletHistory = async (req, res) => {
         
          // Calculate the total balance from wallet history
          let balance = walletId.balance;
+        const creditTransactions = walletHistory.filter(transaction => transaction.transactionType === 'credit');
+        const debitTransactions = walletHistory.filter(transaction => transaction.transactionType === 'debit');
+
+        if (creditTransactions.length === 0 && debitTransactions.length === 0) {
+            errorMessage = "No credit or debit transactions found.";
+            return res.render('./user/walletHistory', { user, errorMessage, transactions, balance });
+        }
          
-         const transactions = walletHistory.map(transaction => ({
+         transactions = walletHistory.map(transaction => ({
             type: transaction.transactionType,
             amount: transaction.amount,
             description: transaction.description,
@@ -260,7 +278,7 @@ const walletHistory = async (req, res) => {
         console.log('balance', balance);
 
 
-        res.render('./user/walletHistory', { user, transactions, balance });
+        res.render('./user/walletHistory', { user, transactions, balance, errorMessage });
     } catch (error) {
         console.error('Error fetching wallet history:', error);
         res.status(500).send('Internal Server Error');
