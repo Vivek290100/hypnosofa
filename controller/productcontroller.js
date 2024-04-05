@@ -58,6 +58,7 @@ const addproduct = async function (req, res) {
         }
 
     }
+    console.log('images', images)
 
         const newProduct = new Product({
             name,
@@ -77,7 +78,7 @@ const addproduct = async function (req, res) {
     }
 };
 
-//fetching product id and category id to edit product------------------------------------------------------->
+//Edit product------------------------------------------------------->
 const editform = function(req, res) {
     const productId = req.params.id;
     Promise.all([
@@ -93,7 +94,7 @@ const editform = function(req, res) {
     });
 };
 
-//updateproduct in the admin side------------------------------------------------------->
+//Update product------------------------------------------------------->
 const updateproduct = async function (req, res) {
     const productId = req.params.id;
     const { name, description, category, price, quantity } = req.body;

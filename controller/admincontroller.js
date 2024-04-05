@@ -52,7 +52,7 @@ const admin = (req, res) => {
 
       const totalUsers = await User.countDocuments();
       const deliveredOrders = await orderModels.find({ status: "Delivered" });
-      console.log('orderswswswsws',deliveredOrders);
+      // console.log('orderswswswsws',deliveredOrders); 
       const selectedTimeInterval = req.query.interval || "daily";
       // console.log('selectedTimeInterval',selectedTimeInterval);
       let timeFormat, timeUnit, dateFormat;

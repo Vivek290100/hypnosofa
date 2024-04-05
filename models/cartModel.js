@@ -12,7 +12,7 @@ const cartSchema = new Schema({
     },
   ],
   totals: {
-    // total:{type: Number, default: 0},
+    total:{type: Number, default: 0}, 
     subtotal: {type: Number,default: 0},
     totalprice: { type: Number, default: 0 },
   },

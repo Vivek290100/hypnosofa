@@ -65,12 +65,14 @@ const usercart = async (req, res) => {
     });
 
 
-    // const productIds = cartItems.map(item => item.productId._id);
+    // Extract product IDs
+    const productIds = cartItems.map(item => item.productId._id);
+    console.log('Product IDs:', productIds);
 
-    // const productOffers = await ProductOffer.find({ product: { $in: productIds } });
+    // Query the database to get quantities
+    const productQuantities = await Product.find({ _id: { $in: productIds } }, { _id: 1, quantity: 1 });
+    console.log('Product Quantities:', productQuantities);
 
-    // console.log('productOffers', productOffers);
-  
 
 
     res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice,updatePrice });
