@@ -145,6 +145,25 @@
 			  .recent-orders-table tbody tr:nth-child(even) {
 				background-color: #f9f9f9; 
 			  }
+				.top-selling {
+				width: 100%;
+				border-collapse: collapse; 
+				margin-top: 20px; 
+			  }
+			  
+			  .top-selling th, .top-selling td {
+				border: 1px solid #ddd; 
+				padding: 8px; 
+				text-align: left; 
+			  }
+			  
+			  .top-selling th {
+				background-color: #f2f2f2;
+			  }
+			  
+			  .top-selling tbody tr:nth-child(even) {
+				background-color: #f9f9f9; 
+			  }
 			  .badge {
 				  padding: 5px 10px;
 				  border-radius: 5px;
@@ -401,6 +420,65 @@
 					</table>
 				  </div>
 				</div>
+
+
+
+				<div style="width: 100%;"> 
+					<h2>Top Selling Products</h2>
+					<table class="top-selling">
+						<thead>
+							<tr>
+								<th>Order ID</th>
+								<th>Product</th>
+								<th>Total Quantity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% for (const item of topSellingProduct) { %>
+								<tr>
+									<td><%= item._id %></td>
+									<td>
+										<% for (const product of item.product) { %>
+											<%= product.name %> <!-- Assuming 'name' is the property that holds the product name -->
+										<% } %>
+									</td>
+									<td><%= item.totalQuantity %></td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+
+
+				<div style="width: 100%;"> 
+    <h2>Top Selling Categories</h2>
+    <table class="top-selling">
+        <thead>
+            <tr>
+                <th>Category ID</th>
+                <th>Category Name</th>
+                <th>Total Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (const category of topSellingCategories) { %>
+                <tr>
+                    <td><%= category._id %></td>
+                    <td><%= category.name %></td>
+                    <td><%= category.totalQuantity %></td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+				
+				
+				
+				
+				
+				
+
 
 
 
