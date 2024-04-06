@@ -65,15 +65,6 @@ const usercart = async (req, res) => {
     });
 
 
-    // Extract product IDs
-    const productIds = cartItems.map(item => item.productId._id);
-    console.log('Product IDs:', productIds);
-
-    // Query the database to get quantities
-    const productQuantities = await Product.find({ _id: { $in: productIds } }, { _id: 1, quantity: 1 });
-    console.log('Product Quantities:', productQuantities);
-
-
 
     res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice,updatePrice });
   } catch (error) {
@@ -175,6 +166,13 @@ const updateQuantity = async (req, res) => {
         // }
       }
     }
+
+            console.log('quantityquantity',quantity);
+            const product = await Product.findOne({ _id: productId });
+            const dbquantity = product.quantity
+            console.log('Quantitydb:', dbquantity);
+
+
 
     let subtotal = 0;
     cart.products.forEach(item => {
