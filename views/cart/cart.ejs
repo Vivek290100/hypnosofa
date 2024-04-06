@@ -227,9 +227,9 @@
             <div class="row border-top border-bottom">
                 <% if (cartItems && cartItems.length > 0) { %>
     <% cartItems.forEach(item => { %>
-
         <div class="row main align-items-center" data-product-id="<%= item.productId._id %>">
             <% if (item.productId && item.productId.images[0]) { %>
+                <p class="dbquantity"> <%= item.productId.quantity %></p>
             <div class="col-2">
                 <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
             </div>
@@ -369,10 +369,13 @@
         const row = $(this).closest('.main');
         const productId = row.attr('data-product-id'); 
         let quantity = parseInt(row.find('.quantity-input').val());
-        const maxQuantity = parseInt(row.find('.max-quantity').text());
+        const dbquantity = parseFloat(row.find('.dbquantity').text());
+        const dbquantityy = dbquantity-quantity
+        
+        console.log('dbquantity',dbquantity);
+        console.log('dbquantityy',dbquantityy);
 
-
-        if (quantity >= 10) {
+        if (quantity >= 10 || dbquantityy==0) {
             alert('Maximum quantity reached.');
             return;
         }
