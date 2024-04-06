@@ -202,12 +202,42 @@
     background-color: #004c3f;
     color: #fff;
 }
+.alert {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            padding: 15px;
+            margin-top: 90px;
+            text-align: center;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 64%;
+            z-index: 999;
+            /* background: linear-gradient(to bottom, #1b98e0, #2b00ff); */
+            background-color: #ddd;
+
+            /* width: 90%;  */
+            text-align: center; 
+            margin-left: 200px;
+            border-radius: 20px 20px 5 6;
+        }
+
       
         
     </style>
 </head>
 <body>
-<div class="card">
+    <div class="card">
+        <div style="text-align: center;"> 
+
+            <div class="alert" id="global-alert">
+                <div>
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    "Sorry, the stock for this item is currently insufficient. Please select a lower quantity or check back later."
+                </div>
+            </div>
+        </div>
     <div class="row">
         <div class="col-md-8 cart">
             <div class="title">
@@ -227,9 +257,12 @@
             <div class="row border-top border-bottom">
                 <% if (cartItems && cartItems.length > 0) { %>
     <% cartItems.forEach(item => { %>
-        <div class="row main align-items-center" data-product-id="<%= item.productId._id %>">
+        <div class="row main align-items-center" data-product-id="<%= item.productId._id %>" >
+            
+            
             <% if (item.productId && item.productId.images[0]) { %>
-                <p class="dbquantity"> <%= item.productId.quantity %></p>
+                <p class="dbquantity" style="color: #fff;"> <%= item.productId.quantity %></p>
+                
             <div class="col-2">
                 <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
             </div>
@@ -246,8 +279,9 @@
             <div class="col quantity-control">
                 <button class="decrease" >-</button>
                 <input type="text" class="quantity-input" value="<%=item.quantity%>" max=<%=item.productId.quantity%> readonly>
-                <button class="increase" >+</button>
+                <button class="increase" >+</button>   
             </div>
+            
             
 
             <% if (item.productId && item.productId.price) { %>
@@ -327,8 +361,9 @@
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 
 
@@ -375,10 +410,13 @@
         console.log('dbquantity',dbquantity);
         console.log('dbquantityy',dbquantityy);
 
-        if (quantity >= 10 || dbquantityy==0) {
-            alert('Maximum quantity reached.');
-            return;
-        }
+        if (quantity >= 10 || dbquantityy == 0) {
+                    $('#global-alert').show();
+                    setTimeout(function() {
+                        $('#global-alert').hide();
+                    }, 3000);
+                    return;
+                }
 
         quantity++;
         row.find('.quantity-input').val(quantity);
