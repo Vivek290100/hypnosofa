@@ -245,7 +245,7 @@
 
             <div class="col quantity-control">
                 <button class="decrease" >-</button>
-                <input type="text" class="quantity-input" value="<%=item.quantity%>" readonly>
+                <input type="text" class="quantity-input" value="<%=item.quantity%>" max=<%=item.productId.quantity%> readonly>
                 <button class="increase" >+</button>
             </div>
             

@@ -54,7 +54,7 @@ const usercart = async (req, res) => {
       { userId: user._id },
       { $setOnInsert: { userId: user._id, products: [] } },
       { upsert: true, new: true }
-    ).populate('products.productId', 'name price description images');
+    ).populate('products.productId', 'name price description images quantity');
 
     const cartItems = cart.products || [];
     let totalPrice = 0;
@@ -130,10 +130,10 @@ const updateQuantity = async (req, res) => {
 
         
         // console.log('quantityquantity',quantity);
-        if (quantity > 0 && quantity<=10) {
+        // if (quantity > 0 && quantity<=10) {
           // console.log('Updating quantity for product:', product);
 
-          product.quantity = quantity;
+          // product.quantity = quantity;
           
 
           
@@ -149,16 +149,16 @@ const updateQuantity = async (req, res) => {
             }
             updatePrice += discountedPrice * product.quantity;
 
-            const quantityDifference = quantity - originalQuantity;
+            // const quantityDifference = quantity - originalQuantity;
 
-            await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
+            // await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
           }
           
           product.updateprice = updatePrice;
           // console.log('Updated product:', product);
 
 
-        }
+        // }
         //else if(quantity==10){
         //   console.log('Max quantity reached .' );
         //   return res.status(400).json({ success: false, message: 'Max quantity reached .' });
@@ -269,8 +269,7 @@ const getUpdatedPrice = async (req, res) => {
       let updatePrice = 0;
       for (const item of cart.products) {
           if (item.productId.toString() === productId) {
-              updatePrice = item.updateprice || item.productId.price;
-              break;
+              updatePrice = item.price*item.quantity
           }
       }
 
