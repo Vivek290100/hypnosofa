@@ -224,7 +224,8 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 
 
 <!-- ===================change password=================================================== -->
-                        <div class="tab-pane fade" id="account-change-password">
+                        <div class="tab-pane fade" id="account-change-password">                            <div id="alert-area" class="mt-3"></div>
+
                             <div class="card-body pb-2">
                             <img src="/assets/homeimg/change pass.png" class="d-block ui-w-80" alt="" >
 
@@ -245,6 +246,8 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
                                 <button type="button" class="btn " style="background-color: #014122; color: #fff;" id="btn-save-changess" >Save changes</button>&nbsp;
                                 <a href="/user/profile"> <button type="button" class="btn btn-danger">Cancel</button> </a>
                             </div>
+                            <div id="alert-area" class="mt-3"></div>
+
                         </div>
 
 
@@ -369,12 +372,12 @@ $(document).ready(function() {
         console.log('repeatNewPassword',repeatNewPassword);
 
         if (currentPassword === '' || newPassword === '' || repeatNewPassword === '') {
-            alert("Please fill in all fields.");
+            showAlert("Please fill in all fields.");
             return;
         }
 
         if (newPassword !== repeatNewPassword) {
-            alert("New password and repeated new password do not match.");
+            showAlert("New password and repeated new password do not match.");
             return;
         }
 
@@ -387,14 +390,40 @@ $(document).ready(function() {
                 repeatNewPassword: repeatNewPassword 
             },
             success: function(response) {
-                alert(response.message);
-                window.location.reload(); 
+                // showAlert(response.message);
+                // window.location.reload(); 
+                showSuccessAlert(response.message);
             },
             error: function(xhr, status, error) {
-                alert(xhr.responseJSON.error);
+                showAlert(xhr.responseJSON.error);
             }
         });
     });
+
+
+     // Function to display success alert with OK button
+     function showSuccessAlert(message) {
+        $("#alert-area").html('<div class="alert alert-success" role="alert">' + message + '<button id="ok-button" class="btn btn-primary">OK</button></div>');
+
+        // Handle click event for OK button
+        $("#ok-button").click(function() {
+            window.location.href = "/user/login"; // Redirect to login page
+        });
+
+        // Remove the alert after 3 seconds
+        // setTimeout(function() {
+        //     $("#alert-area").empty();
+        // }, 3000);
+    }
+
+
+    // Function to display alert within the webpage
+    function showAlert(message) {
+        $("#alert-area").html('<div class="alert alert-danger" role="alert">' + message + '</div>');
+        setTimeout(function() {
+        $("#alert-area").empty();
+    }, 3000);
+    }
 });
 
 // change password script end=========================

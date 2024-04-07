@@ -1,3 +1,432 @@
+const orderModels = require('../models/orderModel');
+const cartModels = require('../models/cartModel');
+const Address = require('../models/addressModel');
+const Product = require('../models/productModel');
+const moment = require('moment');
+const mongoose = require('mongoose');
+const { Types: { ObjectId } } = require('mongoose');
+const Razorpay = require('razorpay')
+const crypto = require('crypto');
+const Wallet=require('../models/walletModel')
+const WalletHistory = require('../models/walletHistoryModel')
+const Coupon = require('../models/couponModel')
+const Category = require("../models/categoryModel");
+
+
+
+
+var instance = new Razorpay({
+    key_id: 'rzp_test_Dc1MSlNThSEKkf',
+    key_secret: 'ojehzUEvc0lwVxNXI57xnRPj',
+  });
+
+  function generateOrderID(){
+    const safeIndex=Math.floor(Math.random()*100000)
+    const fiveDigitId=String(safeIndex+1).padStart(5,"0")
+    return fiveDigitId
+  }
+
+  function hmac_sha256(data, key_secret) {
+    const hmac = crypto.createHmac('sha256', key_secret);
+    hmac.update(data);
+    return hmac.digest('hex');
+  }
+
+
+
+  
+
+const checkout = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const addresses = await Address.find();
+        const cart = await cartModels.findOne({ userId: user._id });
+        const cartItems = cart ? cart.products : [];
+
+        let totalPrice = 100;
+
+        for (const item of cartItems) {
+            try {
+                const product = await Product.findById(item.productId);
+                
+                if (product && product.price) {
+                    totalPrice += item.price * item.quantity;
+                }
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        }
+
+        if(totalPrice<1){
+            res.redirect('/user/cart')
+        }
+
+
+        const wallet = await Wallet.findOne({ user: user._id });
+        const walletBalance = wallet ? wallet.balance : 0;
+        
+        const amount =  walletBalance; 
+
+        const userCoupons = await Coupon.find();
+        const length = cartItems.length
+        // console.log('length',length);
+
+        // console.log('carttitermsss',cartItems);
+
+        res.render('./orders/checkout', { addresses, user, cartItems, totalPrice, amount,coupons: userCoupons, length: length});
+    } catch (error) {
+        console.error('Error fetching user addresses and cart data for checkout:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+
+}
+
+//order time------------------------------------------------------->
+function getCurrentTime() {
+    return moment().format('hh:mm A');
+}
+
+
+//-----create orderdatabase----------------------------------------
+const createOrder = async (req, res, addresses) => {
+    try {
+        // console.log("Request Body:", req.body);
+        const orderTime = getCurrentTime();
+        const currentDate = moment();
+        const orderDate = currentDate.format('DD-MM-YYYY');
+        const userId = req.session.user._id;
+        const { addressIndex, paymentMethod,couponCode } = req.body;
+        // const couponCode = req.query.code; 
+        // console.log('couponCode',couponCode);
+        let totalPrice = 0;
+
+        // console.log(req.body);
+        const coupondb = await Coupon.findOne();
+
+        
+        const cart = await cartModels.findOne({ userId: userId })
+        const cartItems = cart ? cart.products : [];
+
+        // console.log('appliedCoupon',appliedCoupon);
+        // console.log('coupondb',coupondb);
+        // console.log("productsss",products);
+        for (const item of cartItems) {
+            try {
+                const product = await Product.findById(item.productId);
+
+                if (product && product.price) {
+                    totalPrice += product.price * item.quantity;
+                    const category = await Category.findById(product.category);
+                    item.categoryName = category ? category.name : null;
+                } else {
+                    console.log('Product ID or price not available');
+                }
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        }
+
+
+        totalPrice = cart.totals.totalprice;
+
+        const products = cartItems.map(async (item) => {
+            const product = await Product.findById(item.productId);
+            const category = await Category.findById(product.category);
+            return {
+                product: item.productId,
+                quantity: item.quantity,
+                categoryName: item.categoryName || (category ? category.name : null),
+            };
+        });
+
+        // Wait for all promises to resolve
+        const resolvedProducts = await Promise.all(products);
+        console.log('productsssssss', resolvedProducts);
+
+        let discountTotal = 0;
+        let discountAmount = 0;
+        let couponCodeApplied = '';
+
+        if (couponCode) {
+            const appliedCoupon = await Coupon.findOne({ couponCode });
+
+        if (appliedCoupon) {
+          discountAmount = appliedCoupon.discountAmount;
+          couponCodeApplied = appliedCoupon.couponCode;
+        } 
+        }
+        // console.log('appliedCoupon',appliedCoupon);
+        const TotalPriceAfterDiscount = totalPrice - discountAmount;
+        // console.log('TotalPriceAfterDiscount',TotalPriceAfterDiscount);
+
+        const newOrderId = new ObjectId().toString(); 
+            const newOrderData = {
+            orderID: newOrderId,
+            customer: userId,
+            products: resolvedProducts,
+            address: addresses[addressIndex],
+            totals: {
+                subtotal: totalPrice,
+                totalprice: TotalPriceAfterDiscount,
+                discountTotal : TotalPriceAfterDiscount,
+                couponCode: couponCodeApplied,
+                discountAmount: discountAmount,
+            },
+            orderDate: orderDate,
+            orderTime: orderTime,
+            paymentMethod: paymentMethod,
+
+        };
+        // console.log('discountTotal',discountTotal);
+        // console.log('couponCode',couponCode);
+        // console.log('discountAmount',discountAmount);
+
+        if (paymentMethod === 'Cash On Delivery') {
+            const newOrder = new orderModels(newOrderData);
+            console.log('cod order', newOrder);
+            await cartModels.findOneAndDelete({ userId: userId });
+            await newOrder.save();
+            res.status(200).json({ success: true, message: 'Order created successfully' });
+        } else if (paymentMethod === 'RazorPay') {
+            const razorpay_signature = 'rzp_test_Dc1MSlNThSEKkf';
+            if (razorpay_signature == razorpay_signature) {
+                const newOrder = new orderModels(newOrderData);
+                console.log('razorpay order', newOrder); 
+                await cartModels.findOneAndDelete({ userId: userId });
+                await newOrder.save();
+                res.status(200).json({ success: true, message: 'Order created successfully' });
+            }
+        }
+        else if(paymentMethod=='Wallet'){
+            const userWallet = await Wallet.findOne({ user: userId });
+            
+            // console.log("User Wallet:", userWallet); 
+
+            if (!userWallet) {
+                return res.status(400).json({ success: false, message: 'Wallet not found for user' });
+            }
+            if (userWallet.balance < TotalPriceAfterDiscount) {
+                return res.status(400).json({ success: false, message: 'Insufficient funds in wallet' });
+            }
+            // console.log("Total Price of Order:", totalPrice); 
+
+
+            userWallet.balance -= TotalPriceAfterDiscount;
+            await userWallet.save();
+            // console.log("Updated Wallet Balance:", userWallet.balance);
+
+
+            // Creating wallet history record for the transaction (debit)
+            const walletHistory = new WalletHistory({
+                wallet: userWallet._id,
+                transactionType: 'debit',
+                amount: TotalPriceAfterDiscount,
+                description: 'Amount debited for order purchase',
+            });
+            await walletHistory.save();
+
+            const newOrder = new orderModels(newOrderData);
+            console.log('wallet order',newOrder);
+            await cartModels.findOneAndDelete({ userId: userId });
+            await newOrder.save();
+            res.status(200).json({ success: true, message: 'Order created successfully' });
+            
+        }
+        else {
+            res.status(400).json({ success: false, message: 'Invalid payment method' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to create order' });
+    }
+
+};
+
+
+
+const paymentVerify = async (req, res) => {
+    const { amount } = req.body;
+
+    const razorpaySecretKey = 'rzp_test_Dc1MSlNThSEKkf';
+    let amountParsed = parseInt(amount);
+    const amountInPaise = Math.round(amountParsed * 100);
+    const razorpayOptions = {
+        amount: amountInPaise,
+        currency: 'INR',
+        receipt: generateOrderID() 
+    };
+    instance.orders.create(razorpayOptions, function (err, razorpayOrder) {
+    res.status(200).json({ razorpayOrder });
+    });
+};
+
+
+
+
+
+
+//successorder---------------------------------------------------->
+const successorder = async (req, res) => {
+    try {
+        const user = req.session.user;
+        res.render("./orders/successorder", { pageTitle: "confirm", user});
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  };
+
+//user orders-------------------------------------------->  
+const userorders = async (req,res)=>{
+    try{
+        const user = req.session.user;
+        const userId = req.session.user._id;
+       
+        const Orders = await orderModels.find({ customer: userId }).populate('products.product');
+
+        res.render('./orders/userorders', { user: req.session.user, Orders });
+    } catch (error){
+        console.error('Error fetching user orders:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+
+const viewproduct = async (req,res)=>{
+    try{ 
+        const user = req.session.user;
+        res.render('./orders/viewproduct',{user})
+    }catch(error){
+        console.error('Error fetching user orders:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+
+
+const cancelorder = async (req, res) => {
+    try {
+        const id = req.body.orderId;
+        const userId = req.session.user._id;
+        const user = req.session.user;
+
+        const orderData = await orderModels.findById(id);
+        if (!orderData) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        if (orderData.status !== 'Delivered') {
+            orderData.status = 'Cancelled';
+        }
+
+        const orderpayment = orderData.paymentMethod;
+        // console.log("orderpayment",orderpayment);
+
+
+        let TotalPrice = 0;
+
+        if (orderpayment === 'RazorPay' || orderpayment === 'Wallet') {
+             TotalPrice = orderData.totals.subtotal;
+            // console.log('TotalPrice',TotalPrice);
+
+            const userWallet = await Wallet.findOne({ user: userId });
+            if (!userWallet) {
+                // Create new wallet if it doesn't exist
+                const newWallet = new Wallet({ user: userId, balance: 0 });
+                newWallet.balance = TotalPrice;
+                await newWallet.save();
+                console.log('Wallet created and saved successfully.');
+            } else {
+                // Update existing wallet balance
+                userWallet.balance += TotalPrice;
+                await userWallet.save();
+                console.log('Wallet updated successfully.');
+            }
+
+            // Creating wallet history record for the transaction
+            const walletHistory = new WalletHistory({
+                wallet: userWallet._id,
+                transactionType: 'credit',
+                amount: TotalPrice,
+                description: 'Amount credited to wallet due to order cancellation',
+            });
+            await walletHistory.save();
+
+            
+        } 
+
+        await orderData.save();
+        res.redirect('/user/orders');
+        // res.render('./orders/checkout', { user: user, amount: TotalPrice });
+        // res.status(200).json({ success: true, message: 'Order cancelled successfully' });
+    } catch (error) {
+        console.error('Error cancelling order:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+
+const addaddresscheckout = async (req, res) => {
+    try {
+        const user = req.session.user;
+
+        const userId = req.session.user._id;
+        // console.log('User ID:', userId);
+
+        const addresses = await Address.find();
+        const addressIds = addresses.map(address => address._id);
+        // console.log('Address IDs:', addressIds);
+
+        res.render('./orders/addaddress', { userId: userId, addressId: addressIds , user:user});
+    } catch (error) {
+        console.error('Error rendering add address page:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+const addaddresscheckoutt = async (req, res) => {
+    try {
+        
+        // console.log('Request Body:', req.body);
+        const userId = req.session.user._id;
+        // console.log('User ID:', userId);
+
+        const { mobile, pincode, houseName, locality, city, district, state } = req.body;
+
+        const newAddress = new Address({
+            mobile,
+            pincode,
+            houseName,
+            locality,
+            city,
+            district,
+            state
+        });
+
+        await newAddress.save();
+        res.status(200).json({ success: true, message: 'Address added successfully' });
+    } catch (error) {
+        console.error('Error adding new address:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+
+
+
+
+//modules------------------------------------------------------->
+module.exports={
+    checkout,
+    createOrder,
+    successorder,
+    userorders,
+    viewproduct,
+    cancelorder,
+    paymentVerify,
+    addaddresscheckout,
+    addaddresscheckoutt
+} 
 
 
 
@@ -11,239 +440,184 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('nav') -%>
+
+<title>User Orders</title>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- Custom CSS -->
 <style>
-    body
-{
-  background: #000e29;
-}
-
-.alert>.start-icon {
-    margin-right: 0;
-    min-width: 20px;
-    text-align: center;
-}
-
-.alert>.start-icon {
-    margin-right: 5px;
-}
-
-.greencross
-{
-  font-size:18px;
-      color: #25ff0b;
-    text-shadow: none;
-}
-
-.alert-simple.alert-success
-{
-  border: 1px solid rgba(36, 241, 6, 0.46);
-    background-color: rgba(7, 149, 66, 0.12156862745098039);
-    box-shadow: 0px 0px 2px #259c08;
-    color: #0ad406;
-  text-shadow: 2px 1px #00040a;
-  transition:0.5s;
-  cursor:pointer;
-}
-.alert-success:hover{
-  background-color: rgba(7, 149, 66, 0.35);
-  transition:0.5s;
-}
-.alert-simple.alert-info
-{
-  border: 1px solid rgba(6, 44, 241, 0.46);
-    background-color: rgba(7, 73, 149, 0.12156862745098039);
-    box-shadow: 0px 0px 2px #0396ff;
-    color: #0396ff;
-  text-shadow: 2px 1px #00040a;
-  transition:0.5s;
-  cursor:pointer;
-}
-
-.alert-info:hover
-{
-  background-color: rgba(7, 73, 149, 0.35);
-  transition:0.5s;
-}
-
-.blue-cross
-{
-  font-size: 18px;
-    color: #0bd2ff;
-    text-shadow: none;
-}
-
-.alert-simple.alert-warning
-{
-      border: 1px solid rgba(241, 142, 6, 0.81);
-    background-color: rgba(220, 128, 1, 0.16);
-    box-shadow: 0px 0px 2px #ffb103;
-    color: #ffb103;
-    text-shadow: 2px 1px #00040a;
-  transition:0.5s;
-  cursor:pointer;
-}
-
-.alert-warning:hover{
-  background-color: rgba(220, 128, 1, 0.33);
-  transition:0.5s;
-}
-
-.warning
-{
-      font-size: 18px;
-    color: #ffb40b;
-    text-shadow: none;
-}
-
-.alert-simple.alert-danger
-{
-  border: 1px solid rgba(241, 6, 6, 0.81);
-    background-color: rgba(220, 17, 1, 0.16);
-    box-shadow: 0px 0px 2px #ff0303;
-    color: #ff0303;
-    text-shadow: 2px 1px #00040a;
-  transition:0.5s;
-  cursor:pointer;
-}
-
-.alert-danger:hover
-{
-     background-color: rgba(220, 17, 1, 0.33);
-  transition:0.5s;
-}
-
-.danger
-{
-      font-size: 18px;
-    color: #ff0303;
-    text-shadow: none;
-}
-
-.alert-simple.alert-primary
-{
-  border: 1px solid rgba(6, 241, 226, 0.81);
-    background-color: rgba(1, 204, 220, 0.16);
-    box-shadow: 0px 0px 2px #03fff5;
-    color: #03d0ff;
-    text-shadow: 2px 1px #00040a;
-  transition:0.5s;
-  cursor:pointer;
-}
-
-.alert-primary:hover{
-  background-color: rgba(1, 204, 220, 0.33);
-   transition:0.5s;
-}
-
-.alertprimary
-{
-      font-size: 18px;
-    color: #03d0ff;
-    text-shadow: none;
-}
-
-.square_box {
-    position: absolute;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    border-top-left-radius: 45px;
-    opacity: 0.302;
-}
-
-.square_box.box_three {
-    background-image: -moz-linear-gradient(-90deg, #290a59 0%, #3d57f4 100%);
-    background-image: -webkit-linear-gradient(-90deg, #290a59 0%, #3d57f4 100%);
-    background-image: -ms-linear-gradient(-90deg, #290a59 0%, #3d57f4 100%);
-    opacity: 0.059;
-    left: -80px;
-    top: -60px;
-    width: 500px;
-    height: 500px;
-    border-radius: 45px;
-}
-
-.square_box.box_four {
-    background-image: -moz-linear-gradient(-90deg, #290a59 0%, #3d57f4 100%);
-    background-image: -webkit-linear-gradient(-90deg, #290a59 0%, #3d57f4 100%);
-    background-image: -ms-linear-gradient(-90deg, #290a59 0%, #3d57f4 100%);
-    opacity: 0.059;
-    left: 150px;
-    top: -25px;
-    width: 550px;
-    height: 550px;
-    border-radius: 45px;
-}
-
-.alert:before {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: calc(100% - 44px);
-    border-left: 1px solid;
-    border-right: 2px solid;
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-    left: 0;
-    top: 50%;
-    transform: translate(0,-50%);
-      height: 20px;
-}
-
-.fa-times
-{
--webkit-animation: blink-1 2s infinite both;
-	        animation: blink-1 2s infinite both;
-}
-
-
-/**
- * ----------------------------------------
- * animation blink-1
- * ----------------------------------------
- */
-@-webkit-keyframes blink-1 {
-  0%,
-  50%,
-  100% {
-    opacity: 1;
+  .row-border {
+    border: 1px solid #dee2e6;
+    /* Add border to row */
+    border-radius: 5px;
+    /* Optional: Add border radius */
+    padding: 15px;
+    /* Optional: Add padding */
+    margin-bottom: 20px;
+    /* Optional: Add margin to separate rows */
   }
-  25%,
-  75% {
-    opacity: 0;
+
+  .row-border {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-}
-@keyframes blink-1 {
-  0%,
-  50%,
-  100% {
-    opacity: 1;
+
+  .field-name {
+    font-weight: bold; /* Making field names bold */
   }
-  25%,
-  75% {
-    opacity: 0;
-  }
-}
 
 </style>
+</head>
+
+<body style="background-color: #fff;">
+
+<div class="container mt-5">
+  <% if (Orders.length === 0) { %>
+    <div class="alert alert-info" role="alert">
+      No orders found.
+    </div>
+  <% } else { %>
+    <% Orders.reverse().forEach((order, index)=> { %>
+      <div class="row row-border">
+        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;  text-align: center;">
+          <h4 style="margin-top: 0;"><%= index + 1 %>. ORDER ID: <%= order._id %></h4>
+        </div>
+
+        <div class="col-md-6 flex"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+          <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+            <div class="border p-3" >
+              <h5 class="field-name">PRODUCT DETAILS</h5>
+            </div>
+            <br>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="field-name">Product Name</th>
+                  <th class="field-name">Quantity</th>
+                  <th class="field-name">Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% order.products.forEach(product=> { %>
+                <tr>
+                  <td><%= product.product.name %></td>
+                  <td><%= product.quantity %></td>
+                  <td><%= product.catName %></td>
+
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-6"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+          <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+            <div class="border p-3"  >
+              <h5 class="field-name" >ORDER SUMMARY</h5>
+            </div><br>
+            <p class="field-name">Total Price: ₹<%= order.totals.discountTotal%>
+            <p class="field-name">Ordered Date: <%= order.orderDate %>
+            <p class="field-name">Ordered Time: <%= order.orderTime %>
+            <p class="field-name">Payment method: <%= order.paymentMethod %>
+            </p>
+            <p class="field-name">Status: <%= order.status %>
+            </p>
+            <div class="d-flex"> 
+              <!-- <a href="/viewproduct"> <button class="btn btn-success">View Product</button> </a>&nbsp; -->
+              <!-- <button class="btn btn-danger cancel-order-btn <%= order.status === 'Cancelled' ? 'cancelled' : '' %>" onclick="cancelOrder('<%= order._id %>')">
+                <% if (order.status === 'Cancelled') { %>
+                  ✖ Order Cancelled
+                <% } else { %>
+                  Cancel Order
+                <% } %>
+              </button>
+              <% if (order.status === 'Delivered') { %>
+                <button>
+                 Return Product
+                </button>
+                <% }  %> -->
+
+                <button class="btn btn-danger cancel-order-btn <%= order.status === 'Cancelled' ? 'cancelled' : '' %>" onclick="cancelOrder('<%= order._id %>')" <%= order.status === 'Delivered' ? 'disabled' : '' %>>
+                  <% if (order.status === 'Cancelled') { %>
+                    ✖ Order Cancelled
+                  <% } else if (order.status === 'Delivered') { %>
+                    ✔ Delivered
+                  <% } else { %>
+                    Cancel Order
+                  <% } %>
+                </button>
+                 
+                       
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } %>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+
+<script>
+  function cancelOrder(orderId) {
+    $.ajax({
+      url: '/cancelOrder', 
+      type: 'POST', 
+      data: { orderId: orderId },
+      success: function(response) {
+        console.log('Order canceled successfully:', response);
+      },
+      error: function(xhr, status, error) {
+        console.error('Error canceling order:', error);
+      }
+    });
+  }
+</script>
+
+<script>
+  document.querySelectorAll('.cancel-order-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      // Check if the order is already cancelled
+      if (!this.classList.contains('cancelled')) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Order Cancelled",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(function() {
+          location.reload();
+        });
+      } else {
+        Swal.fire({
+          position: "center",
+          icon: "info",
+          title: "Order already cancelled",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    });
+  });
+</script>
 
 
 
-
- 
-  <div class="container mt-5">
-    <div class="row">
-
-      <div class="col-sm-12">
-        <div class="alert fade alert-simple alert-success alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show">
-          <button type="button" class="close font__size-18" data-dismiss="alert">
-									<span aria-hidden="true"><a>
-                    <i class="fa fa-times greencross"></i>
-                    </a></span>
-									<span class="sr-only">Close</span> 
-								</button>
-          <i class="start-icon far fa-check-circle faa-tada animated"></i>
-          <strong class="font__weight-semibold">Well done!</strong> You successfullyread this important.
-        
-
-     
