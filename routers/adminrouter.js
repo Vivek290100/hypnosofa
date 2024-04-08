@@ -67,12 +67,12 @@ router.delete('/delete-coupons/:couponId',verifyAdmin,controller5.deletecoupon)
 //category offer---------------------------------------------------
 router.get('/admin/categoryoffer',verifyAdmin,controller6.CategoryOffers)
 router.post('/admin/edit-category-offer',verifyAdmin,controller6.editOffer);
-router.delete('/admin/delete-offer', verifyAdmin, controller6.deleteOffer);
+router.delete('/admin/delete-category-offer/:categoryId', verifyAdmin, controller6.deleteOffer);
 
 //product offer---------------------------------------------------
 router.get('/admin/productoffer',verifyAdmin,controller7.ProductOffers)
 router.put('/admin/edit-product-offer/:productId/:startDate/:expiryDate/:percentage',verifyAdmin,controller7.editProductOffer);
-router.delete('/admin/delete-category-offer/:categoryId', verifyAdmin, controller6.deleteOffer);
+router.delete('/admin/delete-product-offer/:productId', verifyAdmin, controller7.deleteProductOffer);
 
 
 

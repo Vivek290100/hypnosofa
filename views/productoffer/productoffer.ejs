@@ -174,7 +174,9 @@
 
 
 function deleteProductOffer(productId) {
-  if (confirm(`Are you sure you want to delete the offer for product ${productId}?`)) {
+    console.log("Delete product offer function called with productId:", productId);
+
+//   if (confirm(`Are you sure you want to delete the offer for product ${productId}?`)) {
     fetch(`/admin/delete-product-offer/${productId}`, {
       method: "DELETE",
     })
@@ -190,7 +192,7 @@ function deleteProductOffer(productId) {
         console.error("Error:", error);
         // alert("An error occurred. Please try again.");
       });
-  }
+//   }
 }
 
   </script>

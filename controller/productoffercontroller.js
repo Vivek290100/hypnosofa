@@ -115,9 +115,11 @@ const editProductOffer = async (req, res) => {
 const deleteProductOffer = async (req, res) => {
   try {
     const { productId } = req.params;
+    console.log('productId',productId);
     const deletedProductOffer = await ProductOffer.findOneAndDelete({
       product: productId,
     });
+    console.log('deletedProductOffer',deletedProductOffer);
 
     if (deletedProductOffer) {
       const product = await Product.findById(productId);

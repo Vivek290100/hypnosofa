@@ -5,6 +5,8 @@ const moment = require("moment");
 const fs = require("fs");
 const puppeteer = require("puppeteer");
 const Banner = require('../models/bannerModel');
+const Category = require("../models/categoryModel"); 
+
 
 
 
@@ -123,33 +125,37 @@ const admin = (req, res) => {
     })
     .exec();
       
-    console.log('topSellingProduct',topSellingProduct);
+    // console.log('topSellingProduct',topSellingProduct);
 
     const topSellingCategories = await orderModels.aggregate([
       { $unwind: "$products" },
       {
-          $lookup: {
-              from: "products",
-              localField: "products.product",
-              foreignField: "_id",
-              as: "product"
-          }
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "productInfo"
+        }
       },
-      { $unwind: "$product" },
-      {
-          $group: {
-              _id: "$product.category",
-              totalQuantity: { $sum: "$products.quantity" }
-          }
-      },
-      { $sort: { totalQuantity: -1 } },
+      { $unwind: "$productInfo" },
+      { $group: { _id: "$productInfo.category", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
       { $limit: 5 }
-  ]).exec();
+    ]).exec();
+    const categoryIds = topSellingCategories.map(category => category._id);
 
-  console.log('topSellingCategories', topSellingCategories);
+    const categoryNames = await Category.find({ _id: { $in: categoryIds } });
     
+    const categoriesWithNames = topSellingCategories.map(category => {
+      const categoryName = categoryNames.find(name => name._id.equals(category._id));
+      return {
+        _id: category._id,
+        name: categoryName ? categoryName.name : "Unknown", 
+        count: category.count
+      };
+    });
 
-        // console.log('recentlyPlacedOrders',recentlyPlacedOrders);
+
       res.render("./admin/adhome", {
         title: "Admin Home",
         totalOrders,
@@ -160,7 +166,7 @@ const admin = (req, res) => {
         yValues,
         recentlyPlacedOrders,
         topSellingProduct,
-        topSellingCategories,
+        topSellingCategories: categoriesWithNames,         
         selectedTimeInterval,
         dateFormat,
         err: false,
