@@ -76,6 +76,7 @@ router.post('/cancelOrder',verifyUser,controller5.cancelorder)
 router.post('/paymentVerify',verifyUser,controller5.paymentVerify)
 router.get('/addaddresscheckout',verifyUser,controller5.addaddresscheckout)
 router.post('/addaddresscheckoutt',verifyUser,controller5.addaddresscheckoutt)
+router.get('/downloadinvoice', verifyUser,controller5.downloadinvoice)
 
 // router.use(handle404);
 

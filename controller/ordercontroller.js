@@ -4,12 +4,17 @@ const Address = require('../models/addressModel');
 const Product = require('../models/productModel');
 const moment = require('moment');
 const mongoose = require('mongoose');
+const ejs = require('ejs');
 const { Types: { ObjectId } } = require('mongoose');
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
 const Wallet=require('../models/walletModel')
 const WalletHistory = require('../models/walletHistoryModel')
 const Coupon = require('../models/couponModel')
+const fs = require("fs");
+const puppeteer = require("puppeteer");
+const User = require("../models/userModel");
+
 
 
 
@@ -401,6 +406,56 @@ const addaddresscheckoutt = async (req, res) => {
 
 
 
+const downloadinvoice = async (req, res) => {
+    try {
+
+        const orderId = req.query.orderId; 
+        console.log('orderiddd',orderId);
+
+         // Fetch details from MongoDB using Mongoose's findById function
+         const orderDetails = await orderModels.findById(orderId);
+
+         console.log('orderDetails',orderDetails);
+        
+        //  if (!orderDetails) {
+        //      return res.status(404).json({ success: false, message: 'Order not found' });
+        //  }
+
+        // Fetch product details
+        const productDetails = await Product.findById(orderDetails.products[0].product);
+        console.log('productDetails',productDetails);
+        // Fetch user details
+        const userDetails = await User.findById(orderDetails.customer);
+        console.log('userDetails',userDetails);
+
+        
+        const templatePath = "views/orders/invoice.ejs";
+        const templateContent = fs.readFileSync(templatePath, "utf-8");
+        const renderedHTML = ejs.render(templateContent, { 
+            orderDetails,
+            productDetails,
+            userDetails });
+        
+        const browser = await puppeteer.launch({ headless: "new" });
+        const page = await browser.newPage();
+        await page.setContent(renderedHTML);
+    
+        const pdfBuffer = await page.pdf({ format: "Letter" });
+    
+        await browser.close();
+    
+        
+        res.setHeader("Content-Type", "application/pdf");
+        res.send(pdfBuffer);
+      } catch (error) {
+        console.error('Error adding new address:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
+  
+
+
+
 
 
 //modules------------------------------------------------------->
@@ -413,5 +468,6 @@ module.exports={
     cancelorder,
     paymentVerify,
     addaddresscheckout,
-    addaddresscheckoutt
+    addaddresscheckoutt,
+    downloadinvoice
 } 
