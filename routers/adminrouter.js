@@ -14,7 +14,7 @@ const { adminExist,verifyAdmin,verifyAdminLoggedOut,handle404 } = require("../mi
 
 
 //admin side------------------------------------------------------->
-router.get("/admin/login",controller2.admin);
+router.get("/admin/login",adminExist,controller2.admin);
 router.all("/dashboard",adminExist,verifyAdminLoggedOut,controller2.dashboard)
 router.get("/adhome",verifyAdmin,controller2.adhome)
 router.all("/userlist",verifyAdmin,controller2.users)

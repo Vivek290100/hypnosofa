@@ -1057,11 +1057,50 @@ function showRazorpayInterface(addressIndex,paymentMethod) {
 
     var rzp = new Razorpay(options);
     rzp.open();
+    rzp.on("payment.failed", function (response) {
+    
+    alert('order failed')
+    FailedErrorHandler(addressIndex,paymentMethod)
+
+    });
   })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('Failed to fetch order ID. Please try again.');
-  });
+}
+
+
+function FailedErrorHandler(){
+const verifyDATA = paymentVerifyForFailedPayments();
+
+$.ajax({
+  url: '/paymentErrorHandler',
+  type: 'POST',
+  contentType: 'application/json',
+  data: JSON.stringify(verifyDATA),
+  success: function(response) {
+    if (response.ok) {
+      setTimeout(function() {
+        window.location.href = '/user/Orders';
+      }, 500);
+    } else {
+      alert('Failed to inform your order error, contact us.');
+    }
+  },
+  error: function(xhr, status, error) {
+    console.error(xhr.responseText);
+    alert('An error occurred while processing your request. Please try again later.');
+  }
+});
+
+   }
+
+   function paymentVerifyForFailedPayments(payment, order, signature,paymentMethod,addressIndex) {
+    const verifyData = {
+        order_id: order,
+        payment_id: payment,
+        signature: signature,
+        paymentMethod:paymentMethod,
+        addressIndex:addressIndex
+    };
+   return verifyData;
 }
 
 function paymentVerify(payment, order, signature,paymentMethod,addressIndex) {

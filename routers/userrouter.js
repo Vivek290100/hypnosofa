@@ -81,6 +81,12 @@ router.get('/downloadinvoice', verifyUser,controller5.downloadinvoice)
 // router.use(handle404);
 
 
+//Error handle 
+
+router.post('/paymentErrorHandler',verifyUser,controller5.faildPaymentHandler);
+// router.post('/GenerateOrderForFailedPayments',verifyUser , controller5.generateRazorpay);
+
+
 
 
 

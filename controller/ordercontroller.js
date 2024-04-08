@@ -84,6 +84,8 @@ const checkout = async (req, res) => {
 
 }
 
+
+
 //order time------------------------------------------------------->
 function getCurrentTime() {
     return moment().format('hh:mm A');
@@ -233,6 +235,96 @@ const createOrder = async (req, res, addresses) => {
         res.status(500).json({ success: false, message: 'Failed to create order' });
     }
 
+};
+
+//---------Custom Payment Error Handler -----------------
+const faildPaymentHandler = async (req, res, addresses) => {
+        const orderTime = getCurrentTime();
+        const currentDate = moment();
+        const orderDate = currentDate.format('DD-MM-YYYY');
+        const userId = req.session.user._id;
+        const { addressIndex, paymentMethod,couponCode } = req.body;
+
+        let totalPrice = 0;
+
+        const coupondb = await Coupon.findOne();
+
+        
+        const cart = await cartModels.findOne({ userId: userId });
+        const cartItems = cart ? cart.products : [];
+
+        for (const item of cartItems) {
+            try {
+                const product = await Product.findById(item.productId);
+
+                if (product && product.price) {
+                    totalPrice += product.price * item.quantity;
+                } else {
+                    console.log('Product ID or price not available');
+                }
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        }
+
+
+        totalPrice = cart.totals.totalprice;
+
+        const products = cart.products.map(cartItem => ({
+            product: cartItem.productId,
+            name: cartItem.name,
+            quantity: cartItem.quantity,
+        }));
+
+        let discountTotal = 0;
+        let discountAmount = 0;
+        let couponCodeApplied = '';
+
+        if (couponCode) {
+            const appliedCoupon = await Coupon.findOne({ couponCode });
+
+        if (appliedCoupon) {
+          discountAmount = appliedCoupon.discountAmount;
+          couponCodeApplied = appliedCoupon.couponCode;
+        } 
+        }
+        const TotalPriceAfterDiscount = totalPrice - discountAmount;
+
+        const newOrderId = new ObjectId().toString(); 
+            const newOrderData = {
+            orderID: newOrderId,
+            customer: userId,
+            products: cartItems.map(item => ({ product: item.productId, quantity: item.quantity })),
+            address: addresses[addressIndex],
+            totals: {
+                subtotal: totalPrice,
+                totalprice: TotalPriceAfterDiscount,
+                discountTotal : TotalPriceAfterDiscount,
+                couponCode: couponCodeApplied,
+                discountAmount: discountAmount,
+            },
+            orderDate: orderDate,
+            orderTime: orderTime,
+            paymentMethod: 'RazorPay',
+            status : 'Failed'
+
+        };
+            const razorpay_signature = 'rzp_test_Dc1MSlNThSEKkf';
+                const newOrder = new orderModels(newOrderData);
+                console.log('razorpay order', newOrder); 
+                await cartModels.findOneAndDelete({ userId: userId });
+                try {
+                    const saveStatus = await newOrder.save();
+                    if (!saveStatus) {
+                        res.status(400).json({ success: false, message: 'Failed to save order' });
+                        return; // Exit the function
+                    }
+                    res.status(200).json({ success: true, message: 'Order created successfully' });
+                } catch (error) {
+                    console.error('Error saving order:', error);
+                    res.status(500).json({ success: false, message: 'Failed to create order' });
+                }
+                
 };
 
 
@@ -454,6 +546,11 @@ const downloadinvoice = async (req, res) => {
   };
   
 
+//   const generateRazorpay = async (req,res ) =>{
+
+
+//   }
+
 
 
 
@@ -469,5 +566,7 @@ module.exports={
     paymentVerify,
     addaddresscheckout,
     addaddresscheckoutt,
-    downloadinvoice
+    downloadinvoice,
+    faildPaymentHandler,
+    // generateRazorpay
 } 

@@ -4,6 +4,9 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
 <!-- Custom CSS -->
 <style>
   .row-border {
@@ -112,8 +115,13 @@
                     Cancel Order
                   <% } %>
                 </button>
-                 
-                       
+
+                <% if (order.status === 'Failed') { %>
+                  <button class="btn btn-primary ml-1" onclick="PaymentComplete('<%= order._id %>','<%= order.totals.discountTotal%>')" >
+                  Complete Order
+                  </button>
+                  <% } %>  
+                   
             </div>
           </div>
         </div>
@@ -127,6 +135,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 
 <script>
   function cancelOrder(orderId) {
@@ -172,20 +183,6 @@
 </script>
 
 
-<!-- <script>
-  function downloadinvoice() {
-   
-    var downloadURL = '/downloadinvoice';
-    window.open(downloadURL, '_blank');
-  }
-  </script> -->
-
-<!-- <script>
-  function downloadinvoice(orderId) {
-    var downloadURL = '/downloadinvoice?orderId=' + orderId;
-    window.open(downloadURL, '_blank');
-  }
-</script> -->
 
 <script>
   function downloadinvoice(orderId) {
@@ -206,6 +203,91 @@
       .catch(error => console.error('Error downloading invoice:', error));
   }
 </script>
+
+
+<script>
+
+  function PaymentComplete(objectId,TotalAmount) {
+
+
+    
+      $.ajax({
+          url: '/GenerateOrderForFailedPayments',
+          type: 'GET',
+          contentType: 'application/json',
+          success: function (response) {
+             const orderId = response.orderId;
+          },
+          error: function (xhr, status, error) {
+              alert('An error occurred while processing your request. Please try again later.');
+          }
+      });
+  
+      const paymentData = {
+          amount: TotalAmount,
+      };
+  
+      var options = {
+          key: 'rzp_test_Dc1MSlNThSEKkf',
+          currency: 'INR',
+          name: 'Hypnosofa',
+          description: 'Test Transaction',
+          image: 'https://example.com/your_logo',
+          order_id: orderId, 
+          handler: function (response) { 
+              var paymentId = response.razorpay_payment_id;
+              var orderId = response.razorpay_order_id; 
+              var signature = response.razorpay_signature;
+              paymentVerify(paymentId, orderId, signature, paymentMethod, addressIndex);
+          },
+          theme: {
+              color: '#3399cc'
+          }
+      };
+  
+      var rzp = new Razorpay(options);
+      rzp.open();
+      rzp.on("payment.failed", function (response) {
+          alert('order failed');
+          FailedErrorHandler(addressIndex, paymentMethod);
+      });
+  
+      console.log('completing .............')
+  
+      // $.ajax({
+      //     url: '/FailedPaymentComplete',
+      //     type: 'POST',
+      //     contentType: 'application/json',
+      //     data: JSON.stringify(orderId),
+      //     success: function (response) {
+      //         if (response.ok) {
+      //             setTimeout(function () {
+      //                 window.location.href = '/user/Orders';
+      //             }, 500);
+      //         } else {
+      //             alert('Failed to inform your order error, contact us.');
+      //         }
+      //     },
+      //     error: function (xhr, status, error) {
+      //         console.error(xhr.responseText);
+      //         alert('An error occurred while processing your request. Please try again later.');
+      //     }
+      // });
+  
+  }
+  
+  </script>
+  
+
+
+
+
+
+
+
+
+
+
 
 
 
