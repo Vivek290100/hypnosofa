@@ -180,31 +180,29 @@
 </script>
 
 
-
 <script>
-    // Assuming you're using jQuery for AJAX
-$('.checkbox-group input[type="checkbox"]').on('change', function() {
-    var selectedImages = [];
-    $('.checkbox-group input[type="checkbox"]:checked').each(function() {
-        selectedImages.push($(this).val());
-    });
+    // Checkbox Change Listener
+    $('.checkbox-group input[type="checkbox"]').on('change', function() {
+        var selectedImages = [];
+        $('.checkbox-group input[type="checkbox"]:checked').each(function() {
+            selectedImages.push($(this).val());
+        });
 
-    $.ajax({
-        url: '/product/deleteproduct/:id', // Replace with your backend endpoint
-        method: 'POST',
-        data: { images: selectedImages },
-        success: function(response) {
-            // Handle success response from the server
-            console.log('Images deleted successfully');
-        },
-        error: function(xhr, status, error) {
-            // Handle error response from the server
-            console.error('Error deleting images:', error);
-        }
+        $.ajax({
+            url: '/product/deleteproduct', // Corrected URL
+            method: 'POST', // Corrected Method
+            data: { images: selectedImages },
+            success: function(response) {
+                console.log('Images deleted successfully');
+                // Optionally, you may want to update UI here after successful deletion
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting images:', error);
+            }
+        });
     });
-});
-
 </script>
+
 
 
 

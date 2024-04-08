@@ -166,27 +166,18 @@ const updateproduct = async function (req, res) {
 
 //delete product in admin side------------------------------------------------------->
 const deleteproduct = async function(req, res) {
-    const productId = req.params.id;
+    const imagesToDelete = req.body.images; // Get image names from request body
     try {
-        const product = await Product.findById(productId);
-        if (!product) {
-            return res.status(404).send('Product not found');
-        }
-        if (product.images && product.images.length > 0) { 
-            for (const image of product.images) { 
-                const imagePath = path.join(__dirname, '../public/assets/product-images', image);
-                try {
-                    await FS.promises.unlink(imagePath);
-                    console.log('Image Deleted Successfully');
-                } catch (error) {
-                    console.error('Error deleting image file:', error.message);
-                }
+        for (const imageName of imagesToDelete) {
+            const imagePath = path.join(__dirname, '../public/assets/product-images', imageName);
+            try {
+                await fs.promises.unlink(imagePath);
+                console.log('Image Deleted Successfully:', imageName);
+            } catch (error) {
+                console.error('Error deleting image file:', error.message);
             }
         }
-       const ProductData =  await Product.findById(productId);
-       ProductData.isDeleted = true;
-       await ProductData.save();
-        res.redirect('/product');
+        res.status(200).send('Images deleted successfully');
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
