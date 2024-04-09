@@ -99,7 +99,7 @@ const updateproduct = async function (req, res) {
     const productId = req.params.id;
     const { name, description, category, price, quantity } = req.body;
     const deleteExistingImages = req.body;
-    const newImages = req.files; // Assuming you're using multer or similar for file uploads
+    const newImages = req.files;
 
     try {
         const currentProduct = await Product.findById(productId);
@@ -114,38 +114,30 @@ const updateproduct = async function (req, res) {
                 const imageFilename = deleteExistingImages[key];
                 const imagePath = path.join(__dirname, '../public/assets/product-images', imageFilename);
                 
-                // Delete image file
                 await FS.promises.unlink(imagePath);
                 console.log('Image Deleted Successfully:', imageFilename);
                 
-                // Remove filename from product's images array
                 currentProduct.images.splice(index, 1);
                 
-                // Delete image from the database (if needed)
                 await Product.deleteOne({ filename: imageFilename });
                 console.log('Image deleted from the database:', imageFilename);
             }
         }
 
-        // Add new images
         if (newImages && newImages.length > 0) {
             newImages.forEach(async (image) => {
-                const imageFilename = image.filename; // Assuming multer saves filename
+                const imageFilename = image.filename;
                 currentProduct.images.push(imageFilename);
-                // You may also need to save image metadata to the database
-                // Example: await Image.create({ filename: imageFilename, productId });
                 console.log('New image added:', imageFilename);
             });
         }
         
-        // Update other fields
         currentProduct.name = name;
         currentProduct.description = description;
         currentProduct.category = category;
         currentProduct.price = price;
         currentProduct.quantity = quantity;
 
-        // Save the updated product
         await currentProduct.save();
 
         res.redirect('/product');

@@ -404,10 +404,10 @@ border-radius: 5px;
 
 .nav {
   width: 579px;
-    position: fixed; /* Keeps the navbar fixed at the top */
-    top: 0; /* Positions the navbar at the top of the page */
-    width: 100%; /* Makes the navbar span the entire width of the viewport */
-    z-index: 1000; /* Ensures the navbar stays on top of other content */
+    position: fixed; 
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
 }
 .main-navbar .top-navbar .nav-link{
   margin-top: 17px;
@@ -415,19 +415,6 @@ border-radius: 5px;
 .amount{
   margin-top: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-  
-
-
 
 
 </style>
@@ -451,8 +438,11 @@ border-radius: 5px;
     <hr>
     <h5> &nbsp; &nbsp; &nbsp; &nbsp; Categories:</h5>
     <% categories.forEach(category => { %>
-      <a href="/user/product?category=<%= category.slug %>&sort=<%= sortCriteria %>&page=<%= currentPage %>" class="category-link"><%= category.name %></a>
+      <a href="/user/product?category=<%= category._id %>" class="category-link"><%= category.name %></a>
     <% }); %>
+    
+    
+    
     
   </div>
 </div>

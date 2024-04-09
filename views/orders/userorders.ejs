@@ -117,8 +117,8 @@
                 </button>
 
                 <% if (order.status === 'Failed') { %>
-                  <button class="btn btn-primary ml-1" onclick="PaymentComplete('<%= order._id %>','<%= order.totals.discountTotal%>')" >
-                  Complete Order
+                  <button class="btn  ml-1" style="background-color: #004c3f; color: #fff;" onclick="PaymentComplete('<%= order._id %>','<%= order.totals.discountTotal%>')" >
+                  Continue Order
                   </button>
                   <% } %>  
                    

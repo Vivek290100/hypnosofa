@@ -133,28 +133,21 @@ const login1 = async (req, res) => {
                                       .skip(skip)
                                       .limit(perPage);
 
-        //product Offer
+        
+                                      
         const productoffer = await ProductOffer.find().select('discountPercentage product').exec();        
-        // console.log('productoffer',productoffer);
 
-       
-
-
-        // Calculate discounted prices
         const discountedProducts = products.map(product => {
             const offer = productoffer.find(offer => offer.product.equals(product._id));
             const discountedPrice = offer ? product.price * (1 - offer.discountPercentage / 100) : product.price;
             return { ...product.toObject(), discountedPrice,offer };
         });
 
-        // console.log('discountedProducts',discountedProducts); 
 
         const cartItemCount = req.session.cartItemCount;
         const categories = await Category.find(); 
 
       
-
-
 
         res.render('./user/products', {
             title: 'Products',
@@ -191,14 +184,11 @@ const mainproduct = async (req,res)=>{
         }
 
         const productOffers = await ProductOffer.find({ product: productId });
-
         // console.log(productOffers);
 
-       
         const user = req.session.user;
         cartItemCount=req.session.cartItemCount
         
-
         res.render('./user/mainproduct',{title: 'Products', product,productOffers,user,categories})  
     } catch (error) {
         console.error('Error fetching product:', error);
@@ -233,10 +223,8 @@ const wishlist = async (req, res) => {
         // console.log('productId',productId);
 
         const product = await Product.findById(productId);
-
         if (!product) {
             // return res.status(404).json({ error: 'Product not found' });
-
             // console.log('Product not found' );
         }
 
@@ -261,10 +249,8 @@ const wishlist = async (req, res) => {
 const wishlistdb = async (req, res) => {
     try {
         const user = req.session.user;
-       
 
-
-                const categories = await Category.find();
+        const categories = await Category.find();
 
         const wishlistItems = await Wishlist.find({ userId: user._id }).populate('productId','category');
         let products = [];
@@ -285,10 +271,7 @@ const wishlistdb = async (req, res) => {
         });
 
         // console.log('discountedProducts',discountedProducts);
-
-
         // console.log(' pc.productId',products );
-
         // console.log("this are ",products) 
 
         res.render('user/wishlist', { user, products: discountedProducts,categories });
