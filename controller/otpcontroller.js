@@ -53,14 +53,14 @@ const otp1 = async function (req, res) {
         const email = req.body.email;
         // const referral = req.body.referralCode;
         const referral = generateReferralCode()
-        console.log('req.body.referralCode',req.body.referralCode);
+        // console.log('req.body.referralCode',req.body.referralCode);
         req.session.user = {
           name: req.body.name,
           email: email,
           password: hashedPassword,
           referralCode: referral,
         };
-        console.log('req.session.user',req.session.user);
+        // console.log('req.session.user',req.session.user);
         const newOTP = generateOTP();
         req.session.otp = newOTP;
         const mailOptions = {
@@ -105,13 +105,13 @@ const verify = async function (req, res) {
               return;
             }
             const referral = generateReferralCode();
-            console.log('generateReferralCode',referral);
+            // console.log('generateReferralCode',referral);
             const hashedPassword = user.password;
       
             const referredCode = req.session.user.referralCode;
-            console.log("referredCode", referredCode);
+            // console.log("referredCode", referredCode);
             const referredUser = await User.findOne({ referralCode: referredCode });
-            console.log("refferedUser", referredUser);
+            // console.log("refferedUser", referredUser);
             let updatedWallet;
             if (referredUser) {
               if (!referredUser.wallet) {

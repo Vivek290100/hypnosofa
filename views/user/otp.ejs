@@ -148,8 +148,11 @@
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <script>
-      let duration = 140; 
+    //   let duration = 140; 
+    let duration = localStorage.getItem('remainingTime') || 140;
       const timerDisplay = $("#timer");
       const resendOtp = $("#resendOtp");
 
@@ -166,10 +169,21 @@
               resendOtp.css("display", "block");
           } else {
               duration--;
+              localStorage.setItem('remainingTime', duration);
           }
       }
       updateTimer();
       const countdown = setInterval(updateTimer, 1000);
+
+  function resendOTP() {
+      duration = 140; // Reset duration to default value
+      localStorage.setItem('remainingTime', duration); // Update local storage with default duration
+  }
+
+  $("#resendOtp a").click(function(e) {
+      e.preventDefault();
+      resendOTP();
+  });
   </script>
 </body>
 </html>
