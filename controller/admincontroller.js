@@ -8,15 +8,6 @@ const Banner = require('../models/bannerModel');
 const Category = require("../models/categoryModel"); 
 
 
-
-
-
-
-
-
-
-
-
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
 
