@@ -64,16 +64,12 @@ const checkout = async (req, res) => {
             res.redirect('/user/cart')
         }
 
-
         const wallet = await Wallet.findOne({ user: user._id });
         const walletBalance = wallet ? wallet.balance : 0;
-        
         const amount =  walletBalance; 
-
         const userCoupons = await Coupon.find();
         const length = cartItems.length
         // console.log('length',length);
-
         // console.log('carttitermsss',cartItems);
 
         res.render('./orders/checkout', { addresses, user, cartItems, totalPrice, amount,coupons: userCoupons, length: length});
@@ -95,26 +91,19 @@ function getCurrentTime() {
 //-----create orderdatabase----------------------------------------
 const createOrder = async (req, res, addresses) => {
     try {
-        // console.log("Request Body:", req.body);
         const orderTime = getCurrentTime();
         const currentDate = moment();
         const orderDate = currentDate.format('DD-MM-YYYY');
         const userId = req.session.user._id;
         const { addressIndex, paymentMethod,couponCode } = req.body;
-        // const couponCode = req.query.code; 
-        // console.log('couponCode',couponCode);
         let totalPrice = 0;
 
-        // console.log(req.body);
         const coupondb = await Coupon.findOne();
 
         
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
 
-        // console.log('appliedCoupon',appliedCoupon);
-        // console.log('coupondb',coupondb);
-        // console.log("productsss",products);
         for (const item of cartItems) {
             try {
                 const product = await Product.findById(item.productId);
@@ -128,8 +117,6 @@ const createOrder = async (req, res, addresses) => {
                 console.error('Error fetching product:', error);
             }
         }
-
-
         totalPrice = cart.totals.totalprice;
 
         const products = cart.products.map(cartItem => ({
@@ -150,9 +137,7 @@ const createOrder = async (req, res, addresses) => {
           couponCodeApplied = appliedCoupon.couponCode;
         } 
         }
-        // console.log('appliedCoupon',appliedCoupon);
         const TotalPriceAfterDiscount = totalPrice - discountAmount;
-        // console.log('TotalPriceAfterDiscount',TotalPriceAfterDiscount);
 
         const newOrderId = new ObjectId().toString(); 
             const newOrderData = {
@@ -172,10 +157,7 @@ const createOrder = async (req, res, addresses) => {
             paymentMethod: paymentMethod,
 
         };
-        // console.log('discountTotal',discountTotal);
-        // console.log('couponCode',couponCode);
-        // console.log('discountAmount',discountAmount);
-
+        
         if (paymentMethod === 'Cash On Delivery') {
             const newOrder = new orderModels(newOrderData);
             console.log('cod order', newOrder);
@@ -194,8 +176,6 @@ const createOrder = async (req, res, addresses) => {
         }
         else if(paymentMethod=='Wallet'){
             const userWallet = await Wallet.findOne({ user: userId });
-            
-            // console.log("User Wallet:", userWallet); 
 
             if (!userWallet) {
                 return res.status(400).json({ success: false, message: 'Wallet not found for user' });
@@ -203,15 +183,10 @@ const createOrder = async (req, res, addresses) => {
             if (userWallet.balance < TotalPriceAfterDiscount) {
                 return res.status(400).json({ success: false, message: 'Insufficient funds in wallet' });
             }
-            // console.log("Total Price of Order:", totalPrice); 
-
 
             userWallet.balance -= TotalPriceAfterDiscount;
             await userWallet.save();
-            // console.log("Updated Wallet Balance:", userWallet.balance);
 
-
-            // Creating wallet history record for the transaction (debit)
             const walletHistory = new WalletHistory({
                 wallet: userWallet._id,
                 transactionType: 'debit',
@@ -219,13 +194,10 @@ const createOrder = async (req, res, addresses) => {
                 description: 'Amount debited for order purchase',
             });
             await walletHistory.save();
-
             const newOrder = new orderModels(newOrderData);
-            console.log('wallet order',newOrder);
             await cartModels.findOneAndDelete({ userId: userId });
             await newOrder.save();
             res.status(200).json({ success: true, message: 'Order created successfully' });
-            
         }
         else {
             res.status(400).json({ success: false, message: 'Invalid payment method' });
@@ -248,15 +220,12 @@ const faildPaymentHandler = async (req, res, addresses) => {
         let totalPrice = 0;
 
         const coupondb = await Coupon.findOne();
-
-        
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
 
         for (const item of cartItems) {
             try {
                 const product = await Product.findById(item.productId);
-
                 if (product && product.price) {
                     totalPrice += product.price * item.quantity;
                 } else {
@@ -306,18 +275,17 @@ const faildPaymentHandler = async (req, res, addresses) => {
             orderDate: orderDate,
             orderTime: orderTime,
             paymentMethod: 'RazorPay',
-            status : 'Failed'
+            status : 'PaymentFailed'
 
         };
             const razorpay_signature = 'rzp_test_Dc1MSlNThSEKkf';
                 const newOrder = new orderModels(newOrderData);
-                console.log('razorpay order', newOrder); 
                 await cartModels.findOneAndDelete({ userId: userId });
                 try {
                     const saveStatus = await newOrder.save();
                     if (!saveStatus) {
                         res.status(400).json({ success: false, message: 'Failed to save order' });
-                        return; // Exit the function
+                        return;
                     }
                     res.status(200).json({ success: true, message: 'Order created successfully' });
                 } catch (error) {
@@ -328,7 +296,7 @@ const faildPaymentHandler = async (req, res, addresses) => {
 };
 
 
-
+//paymentVerify----------------------------------------------->
 const paymentVerify = async (req, res) => {
     const { amount } = req.body;
 
@@ -376,7 +344,7 @@ const userorders = async (req,res)=>{
     }
 }
 
-
+//viewProduct----------------------------------------------------->
 const viewproduct = async (req,res)=>{
     try{ 
         const user = req.session.user;
@@ -388,7 +356,7 @@ const viewproduct = async (req,res)=>{
 }
 
 
-
+//cancelorder----------------------------------------------------->
 const cancelorder = async (req, res) => {
     try {
         const id = req.body.orderId;
@@ -399,36 +367,25 @@ const cancelorder = async (req, res) => {
         if (!orderData) {
             return res.status(404).json({ error: 'Order not found' });
         }
-
         if (orderData.status !== 'Delivered') {
             orderData.status = 'Cancelled';
         }
-
         const orderpayment = orderData.paymentMethod;
-        // console.log("orderpayment",orderpayment);
-
 
         let TotalPrice = 0;
 
         if (orderpayment === 'RazorPay' || orderpayment === 'Wallet') {
              TotalPrice = orderData.totals.subtotal;
-            // console.log('TotalPrice',TotalPrice);
-
             const userWallet = await Wallet.findOne({ user: userId });
             if (!userWallet) {
-                // Create new wallet if it doesn't exist
                 const newWallet = new Wallet({ user: userId, balance: 0 });
                 newWallet.balance = TotalPrice;
                 await newWallet.save();
-                console.log('Wallet created and saved successfully.');
             } else {
-                // Update existing wallet balance
                 userWallet.balance += TotalPrice;
                 await userWallet.save();
-                console.log('Wallet updated successfully.');
             }
 
-            // Creating wallet history record for the transaction
             const walletHistory = new WalletHistory({
                 wallet: userWallet._id,
                 transactionType: 'credit',
@@ -436,8 +393,6 @@ const cancelorder = async (req, res) => {
                 description: 'Amount credited to wallet due to order cancellation',
             });
             await walletHistory.save();
-
-            
         } 
 
         await orderData.save();
@@ -451,16 +406,15 @@ const cancelorder = async (req, res) => {
 }
 
 
+
+
+//addaddresscheckout----------------------------------------------------->
 const addaddresscheckout = async (req, res) => {
     try {
         const user = req.session.user;
-
         const userId = req.session.user._id;
-        // console.log('User ID:', userId);
-
         const addresses = await Address.find();
         const addressIds = addresses.map(address => address._id);
-        // console.log('Address IDs:', addressIds);
 
         res.render('./orders/addaddress', { userId: userId, addressId: addressIds , user:user});
     } catch (error) {
@@ -469,15 +423,12 @@ const addaddresscheckout = async (req, res) => {
     }
 };
 
+
+//addaddresscheckoutt----------------------------------------------------->
 const addaddresscheckoutt = async (req, res) => {
     try {
-        
-        // console.log('Request Body:', req.body);
         const userId = req.session.user._id;
-        // console.log('User ID:', userId);
-
         const { mobile, pincode, houseName, locality, city, district, state } = req.body;
-
         const newAddress = new Address({
             mobile,
             pincode,
@@ -497,30 +448,17 @@ const addaddresscheckoutt = async (req, res) => {
 };
 
 
-
+//downloadinvoice----------------------------------------------------->
 const downloadinvoice = async (req, res) => {
     try {
-
         const orderId = req.query.orderId; 
-        console.log('orderiddd',orderId);
-
-         // Fetch details from MongoDB using Mongoose's findById function
          const orderDetails = await orderModels.findById(orderId);
-
-         console.log('orderDetails',orderDetails);
         
-        //  if (!orderDetails) {
-        //      return res.status(404).json({ success: false, message: 'Order not found' });
-        //  }
-
-        // Fetch product details
+         if (!orderDetails) {
+             return res.status(404).json({ success: false, message: 'Order not found' });
+         }
         const productDetails = await Product.findById(orderDetails.products[0].product);
-        console.log('productDetails',productDetails);
-        // Fetch user details
         const userDetails = await User.findById(orderDetails.customer);
-        console.log('userDetails',userDetails);
-
-        
         const templatePath = "views/orders/invoice.ejs";
         const templateContent = fs.readFileSync(templatePath, "utf-8");
         const renderedHTML = ejs.render(templateContent, { 
@@ -531,12 +469,8 @@ const downloadinvoice = async (req, res) => {
         const browser = await puppeteer.launch({ headless: "new" });
         const page = await browser.newPage();
         await page.setContent(renderedHTML);
-    
         const pdfBuffer = await page.pdf({ format: "Letter" });
-    
         await browser.close();
-    
-        
         res.setHeader("Content-Type", "application/pdf");
         res.send(pdfBuffer);
       } catch (error) {

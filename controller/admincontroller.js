@@ -11,13 +11,14 @@ const Category = require("../models/categoryModel");
 //admin login------------------------------------------------------->
 const admin = (req, res) => {
 
-  
-    
     res.render('./admin/adlog', { title: 'user login', err: false });
   };
 
-  //admin home------------------------------------------------------->
-  const adhome = async (req, res) => {
+
+
+
+//admin home------------------------------------------------------->
+const adhome = async (req, res) => {
     try {
       const totalOrders = await orderModels.countDocuments();
       const totalProductQuantity = await orderModels
@@ -34,20 +35,11 @@ const admin = (req, res) => {
         ])
         .exec();
 
-        // console.log('totalProductQuantity',totalProductQuantity);
-
-      const productQuantity =
-        totalProductQuantity.length > 0
-          ? totalProductQuantity[0].totalProductQuantity
-          : 0;
-
-        // console.log('productQuantity',productQuantity);
-
+      const productQuantity = totalProductQuantity.length > 0 ? totalProductQuantity[0].totalProductQuantity : 0;
       const totalUsers = await User.countDocuments();
       const deliveredOrders = await orderModels.find({ status: "Delivered" });
-      // console.log('orderswswswsws',deliveredOrders); 
       const selectedTimeInterval = req.query.interval || "daily";
-      // console.log('selectedTimeInterval',selectedTimeInterval);
+
       let timeFormat, timeUnit, dateFormat;
       if (selectedTimeInterval === "monthly") {
         timeFormat = "%Y-%m";
@@ -62,7 +54,7 @@ const admin = (req, res) => {
         timeUnit = "$dayOfMonth";
         dateFormat = "MMMM DD, YYYY";
       }
-     // Aggregate delivered orders based on time interval
+
     const ordersWithDate = await orderModels
     .aggregate([
       { $match: { _id: { $in: deliveredOrders.map(order => order._id) }, orderDate: { $exists: true } } },
@@ -78,17 +70,11 @@ const admin = (req, res) => {
     ])
     .exec();
 
-        // console.log('ordersWithDate',ordersWithDate);
       const validOrdersWithDate = ordersWithDate.filter(
         (order) => order.date && order.date !== "null"
       );
-      // console.log('validOrdersWithDate',validOrdersWithDate);
       const xValues = validOrdersWithDate.map((order) => order.date);
       const yValues = validOrdersWithDate.map((order) => order.count);
-      // console.log('xValues',xValues);
-      // console.log('yValues',yValues);
-
-
         
       const recentlyPlacedOrders = await orderModels
     .find()
@@ -116,8 +102,6 @@ const admin = (req, res) => {
     })
     .exec();
       
-    // console.log('topSellingProduct',topSellingProduct);
-
     const topSellingCategories = await orderModels.aggregate([
       { $unwind: "$products" },
       {
@@ -134,9 +118,7 @@ const admin = (req, res) => {
       { $limit: 5 }
     ]).exec();
     const categoryIds = topSellingCategories.map(category => category._id);
-
     const categoryNames = await Category.find({ _id: { $in: categoryIds } });
-    
     const categoriesWithNames = topSellingCategories.map(category => {
       const categoryName = categoryNames.find(name => name._id.equals(category._id));
       return {
@@ -145,7 +127,6 @@ const admin = (req, res) => {
         count: category.count
       };
     });
-
 
       res.render("./admin/adhome", {
         title: "Admin Home",
@@ -180,8 +161,7 @@ const dashboard = (req, res) => {
       email: req.body.email,
       password: parseInt(req.body.password),
     };
-    // console.log(userInput)
-    // console.log(credential)
+
     if (userInput.email === credential.email && userInput.password === credential.password) {
       req.session.admin = userInput.email;
       req.session.adLogged = true;
@@ -192,6 +172,9 @@ const dashboard = (req, res) => {
     }
   };
 
+
+
+  //Users List------------------------------------------------------>
 
   const users = async (req, res) => {
     try {
@@ -225,6 +208,8 @@ const block=async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
+
+
 //unblocking user------------------------------------------------>
 const unblock=async (req, res) => {
   const { userId } = req.body;
@@ -255,18 +240,15 @@ const logout = (req, res) => {
 };
 
 
-//order list -------------------------------------------
+//order list ------------------------------------------->
 const userOrder = async(req,res)=>{
   try{
 
-    const page = req.query.page || 1; // Get page number from query parameters
-    const pageSize = 5; // Number of orders per page
+    const page = req.query.page || 1;
+    const pageSize = 5; 
     const skip = (page - 1) * pageSize;
-
     const totalOrders = await orderModels.countDocuments();
     const totalPages = Math.ceil(totalOrders / pageSize);
-
-
 
     const Orders = await orderModels.find().sort({ "orderDate": -1, "orderTime": -1}).skip(skip).limit(pageSize).populate({
       path: 'products.product',
@@ -276,8 +258,6 @@ const userOrder = async(req,res)=>{
     })
     .exec();
 
-    // console.log('Orders', Orders);
-
     res.render('./admin/orderlist',{title: 'Orders',Orders,totalPages, currentPage: page})
   }catch (error){
     console.error('Error fetching user orders:', error);
@@ -286,12 +266,12 @@ const userOrder = async(req,res)=>{
 }
 
 
+
+//updateOrderStatus----------------------------------------------------->
 const updateOrderStatus = async (req, res) => {
     try {
         const { orderId, newStatus } = req.body;
-        // Update the status of the order
         await orderModels.findOneAndUpdate({ _id: orderId }, { $set: { status: newStatus } });
-        // res.json({ success: true });
     } catch (error) {
         console.error('Error updating order status:', error);
         res.status(500).send('Internal Server Error');
@@ -299,7 +279,7 @@ const updateOrderStatus = async (req, res) => {
 }
 
 
-
+//salesReport----------------------------------------------------->
 const salesReport = async (req, res) => {
   try {
     const startDate = req.query.startDate
@@ -326,18 +306,8 @@ const salesReport = async (req, res) => {
       })
       .populate("customer products.product");
       
-
-        
-
-      // console.log('orders',orders);
-      // console.log('orderDate',orderDate);
-      // console.log('orderModels schema:', orderModels.schema.obj);
-
     const formattedStartDate1 = startDate.format("DD-MM-YYYY ");
     const formattedEndDate1 = endDate.format("DD-MM-YYYY ");
-
-    // console.log('formattedStartDate',formattedStartDate);
-    // console.log('formattedEndDate',formattedEndDate);
 
     const templatePath = "views/admin/salesreport.ejs";
     const templateContent = fs.readFileSync(templatePath, "utf-8");
@@ -346,16 +316,11 @@ const salesReport = async (req, res) => {
       endDate: formattedEndDate1,
       orders,
     });
-    // console.log('templatePath',templatePath);
-    // console.log('templateContent',templateContent);
-    // console.log('renderedHTML',renderedHTML);
 
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.setContent(renderedHTML);
-
     const pdfBuffer = await page.pdf({ format: "Letter" });
-
     await browser.close();
 
     res.setHeader(
@@ -387,7 +352,6 @@ const createBanner = async (req, res) => {
   }
 };
 
-// Controller to update a banner
 const updateBanner = async (req, res) => {
   try {
       const { id } = req.params;
@@ -399,7 +363,6 @@ const updateBanner = async (req, res) => {
   }
 };
 
-// Controller to delete a banner
 const deleteBanner = async (req, res) => {
   try {
       const { id } = req.params;

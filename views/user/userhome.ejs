@@ -128,75 +128,62 @@ html {
 
 
 
-
-<!-- carousel html -->
 <div class="background">
-<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
-    <div class="carousel-inner">  
-        
-        <!-- <footer class="new_footer_area bg_color">
-            <div class="new_footer_top">
-            <div class="footer_bg">
-            <div class="footer_bg_one"></div>
-            <div class="footer_bg_two"></div>
-            </div>
-            </div>
-            </footer> -->
-        
-            <div class="carousel-item active">
-                <img src="/assets/homeimg/soa4.jpeg" class="d-block w-100 hmimg" alt="...">
-                <div class="carousel-caption">
-                    <div class="custom-carousel-content caption">
-                        <h1 class="display-4">
-                            Transform Your Space With Comfort And Style                        
-                        </h1>
-                        <p>Relax In Timeless Elegance. Transform Your Home, One Seat At A Time.</p>
-                        <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
-                    </div>
-                </div>
-            </div>
-
-
-        <div class="carousel-item">
-            <img src="/assets/homeimg/sofa5.jpeg" class="d-block w-100 hmimg" alt="...">
-            <div class="carousel-caption  ">
-                <div class="custom-carousel-content caption">
-                    <h1  class="display-4 ">
-                        <span>"Transform your space with comfort and style" </span>
-                    </h1>
-                   
-                    <div>
-                        <a href="/user/product" class="btn btn-slider btn-lg getnow">
-                            Get Now
-                        </a>
-                    </div>
-                </div>
-            </div>
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+    <div class="carousel-inner">
+      
+      <div class="carousel-item active">
+        <img src="/assets/homeimg/soa4.jpeg" class="d-block w-100 hmimg" alt="...">
+        <div class="carousel-caption">
+          <div class="custom-carousel-content caption">
+            <h1 class="display-4">
+              Transform Your Space With Comfort And Style
+            </h1>
+            <p>Relax In Timeless Elegance. Transform Your Home, One Seat At A Time.</p>
+            <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
+          </div>
         </div>
-        <div class="carousel-item">
-            <img src="/assets/homeimg/sofa77.jpeg" class="d-block w-100 hmimg" alt="...">
-            <div class="carousel-caption  ">
-                <div class="custom-carousel-content caption">
-                    <div>
-                        <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
-                    </div>
-                </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="/assets/homeimg/sofa5.jpeg" class="d-block w-100 hmimg" alt="...">
+        <div class="carousel-caption">
+          <div class="custom-carousel-content caption">
+            <h1 class="display-4">
+              <span>"Transform your space with comfort and style"</span>
+            </h1>
+            <div>
+              <a href="/user/product" class="btn btn-slider btn-lg getnow">
+                Get Now
+              </a>
             </div>
+          </div>
         </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="/assets/homeimg/sofa77.jpeg" class="d-block w-100 hmimg" alt="...">
+        <div class="carousel-caption">
+          <div class="custom-carousel-content caption">
+            <div>
+              <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-        data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-        data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
     </button>
-    <!-- end-->
+  </div>
 </div>
-</div>
+
 
 
 
@@ -274,7 +261,7 @@ html {
     .row {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-around;
+        /* justify-content: space-around; */
         /* margin-bottom: 70px; */
         /* margin-top: 30px; */
         margin-left: 45px;
@@ -518,6 +505,14 @@ html {
     left: 100%;
     }
     }
+    @media (max-width: 1450px) {
+  .btn {
+    width: 155px;
+    height: 45px;
+    border-radius: 7px;
+  }
+}
+
     </style>
 
 
@@ -762,18 +757,6 @@ img {
   transform: scale(1.1);
 }
 
-/* ===== CONTACT =====*/
-/* .contact__input {
-  width: 100%;
-  font-size: var(--normal-font-size);
-  font-weight: var(--font-semi);
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1.5px solid var(--second-color);
-  outline: none;
-  margin-bottom: var(--mb-4);
-} */
-
 
 /* ===== MEDIA QUERIES=====*/
 @media screen and (max-width: 320px) {
@@ -830,7 +813,7 @@ img {
     margin: 0;
   }
   .section {
-    padding-top: 4rem;
+    padding-top: 1rem;
     padding-bottom: 3rem;
   }
   .section-title {
@@ -883,7 +866,7 @@ img {
 }
 @media screen and (min-width: 992px) {
   .bd-grid {
-    margin-left: auto;
+    margin-left: 97px;
     margin-right: auto;
   }
   .home {
@@ -893,70 +876,35 @@ img {
     width: 450px;
   }
 }
+.img11{
+  width: 85%;
+}
 
 
 </style>
 
-
-
+<br><br><br>
 <!-- about -->
 <section class="about section " id="about">
-    <h2 class="section-title">About</h2>
+    <!-- <h2 class="section-title">About</h2> -->
 
     <div class="about__container bd-grid">
         <div class="about__img d-flex">
-            <img src="/assets/homeimg/sofa1.webp" alt="">
+            <img class="img11" src="/assets/homeimg/sofa1.webp" alt="">
             
         </div>
-        
-        <div>
-            <h2 class="about__subtitle">I'am Vivek</h2>
-            <p class="about__text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate cum expedita quo culpa tempora, assumenda, quis fugiat ut voluptates soluta, aut earum nemo recusandae cumque perferendis! Recusandae alias accusamus atque.</p>           
-        </div>                                   
-    </div>
-
-    <div class="about__container bd-grid">
-        <div>
-            <h2 class="about__subtitle">I'am Vivek</h2>
-            <p class="about__text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate cum expedita quo culpa tempora, assumenda, quis fugiat ut voluptates soluta, aut earum nemo recusandae cumque perferendis! Recusandae alias accusamus atque.</p>           
-        </div>                                   
         <div class="about__img d-flex">
-            <img src="/assets/homeimg/sofa1.webp" alt="">
+            <img class="img11" src="/assets/homeimg/sofa1.webp" alt="">
             
         </div>
         
+        <!-- <div>
+            <h2 class="about__subtitle">I'am Vivek</h2>
+            <p class="about__text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptate cum expedita quo culpa tempora, assumenda, quis fugiat ut voluptates soluta, aut earum nemo recusandae cumque perferendis! Recusandae alias accusamus atque.</p>           
+        </div>                                    -->
     </div>
-</section><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-  <!--===== WORK =====-->
-  <section class="work section" id="work">
-    <h2 class="section-title" >Work</h2>
-
-    <div class="work__container bd-grid">
-        <a href="" class="work__img">
-            <img src="/assets/homeimg/category1.jpg" alt="">
-        </a>
-        <a href="" class="work__img">
-          <img src="/assets/homeimg/category1.jpg" alt="">
-        </a>
-        <a href="" class="work__img">
-          <img src="/assets/homeimg/category1.jpg" alt="">
-        </a>
-       
-        
-    </div>
 </section>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -975,6 +923,11 @@ img {
 #container, #works, #page, #about {
   height: 100vh;
   width: 100%;
+  position: relative;
+}
+#about {
+  height: 61vh;
+  width: 117%;
   position: relative;
 }
 
@@ -1027,126 +980,130 @@ img {
 </style>
 
 
-<br><br><br><br><br><br>
-
+<!-- <br><br><br><br><br><br> -->
 <style>
-    /* Updated styles with flexbox for horizontal layout */
-    .testimonial-cards {
-      padding-top: 3rem;
-      padding-bottom: 3.875rem;
-    }
-
-    .testimonial-cards .heading {
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-
-    .testimonial-cards .testimonial-cards-container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    .testimonial-cards .testimonial-card {
-      width: calc(33.33% - 2rem); /* Adjust width based on the number of cards per row */
-      margin-bottom: 4rem;
-      border: none;
-    }
-
-    .testimonial-cards .card-body {
+  /* Reset CSS */
+  * {
+      margin: 0;
       padding: 0;
+      box-sizing: border-box;
+  }
+
+  /* Testimonial Cards Styling */
+  .testimonial-cards {
+      padding: 5rem 1rem;
+      background-color: #f7f7f7;
       text-align: center;
-    }
+  }
 
-    .testimonial-cards .testimonial-text {
-      margin-bottom: 1.625rem;
-      margin-left: 54px;
-      text-align: left;
+  .testimonial-cards .heading {
+      margin-bottom: 3rem;
+      font-size: 2rem;
+  }
 
-    }
+  .testimonial-cards .testimonial-cards-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7rem;
+      margin-top: 2rem;
+  }
 
-    .testimonial-cards img {
-      display: inline-block;
+  .testimonial-card {
+      width: calc(100% / 1 - 1rem);
+      max-width: 300px; /* Adjust based on your design */
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+      transform: translateY(-5px);
+  }
+
+  .testimonial-card .card-body {
+      padding: 2rem;
+  }
+
+  .testimonial-card .testimonial-text {
+      margin-bottom: 1.5rem;
+      font-size: 1.125rem;
+      color: #333;
+  }
+
+  .testimonial-card .details {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .testimonial-card img {
       width: 60px;
-      margin-bottom: 0.875rem;
+      height: 60px;
       border-radius: 50%;
-    }
+      margin-right: 1rem;
+  }
 
-    .testimonial-cards .text {
-      margin-top: 0.375rem;
-    }
-
-    .testimonial-cards .author-name {
-      color: #24262a;
-    }
-
-    .testimonial-cards .author-name,
-    .testimonial-cards .occupation {
-      font-size: 1.5rem;
-      line-height: 1.375rem;
-    }
-    
-  </style>
+  .testimonial-card .author-name,
+  .testimonial-card .occupation {
+      font-size: 1rem;
+      color: #666;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Testimonials Section -->
-  <div class="testimonial-cards">
-      <div class="row">
-        <div class="col-lg-12">
-          <h2 class="heading">Feedback from our Clients</h2>
-        </div>
+  <br><br><br><br><br><br>
+
+
+<!-- Testimonials Section -->
+<section class="testimonial-cards">
+  <div class="heading">Feedback from our Clients</div>
+  <div class="testimonial-cards-container">
+      <!-- Testimonial Card 1 -->
+      <div class="testimonial-card">
+          <div class="card-body">
+              <p class="testimonial-text">“Vivek is a skilled developer which will do everything possible to deliver the project on time and I really appreciate that”</p>
+              <div class="details">
+                  <img  src="/assets/homeimg/user-person-profile-block-account-circle.svg" alt="client1">
+                  <div class="text">
+                      <div class="author-name">John Doe</div>
+                      <div class="occupation">Project Manager</div>
+                  </div>
+              </div>
+          </div>
       </div>
-      <div class="testimonial-cards-container">
-        <!-- Testimonial Card 1 -->
-        <div class="testimonial-card">
+      <!-- Testimonial Card 2 -->
+      <div class="testimonial-card">
           <div class="card-body">
-            <p class="testimonial-text">“Vivek is a skilled developer which will do everything possible to deliver the project on time and I really appreciate that”</p>
-            <div class="details">
-              <img src="/assets/homeimg/user-person-profile-block-account-circle.svg" alt="client1">
-              <div class="text">
-                <div class="author-name">John Doe</div>
-                <div class="occupation">Project Manager</div>
+              <p class="testimonial-text">“Loved to work with Vivek he's such an awesome developer with great attention to details. He also has a great eye for design”</p>
+              <div class="details">
+                  <img src="/assets/homeimg/user-person-profile-block-account-circle.svg" alt="client1">
+                  <div class="text">
+                      <div class="author-name">Jane Smith</div>
+                      <div class="occupation">Creative Director</div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
-        <!-- End of Testimonial Card 1 -->
-
-        <!-- Testimonial Card 2 -->
-        <div class="testimonial-card">
+      </div>
+      <!-- Testimonial Card 3 -->
+      <div class="testimonial-card">
           <div class="card-body">
-            <p class="testimonial-text">“Loved to work with Vivek he's such an awesome developer with great attention to details. He also has a great eye for design”</p>
-            <div class="details">
-              <img src="/assets/homeimg/user-person-profile-block-account-circle.svg" alt="client1">
-              <div class="text">
-                <div class="author-name">Jane Smith</div>
-                <div class="occupation">Creative Director</div>
+              <p class="testimonial-text">“So glad we started working with Vivek. We've used many times his design and development skills for our in-house online projects”</p>
+              <div class="details">
+                  <img src="/assets/homeimg/user-person-profile-block-account-circle.svg" alt="client1">
+                  <div class="text">
+                      <div class="author-name">Michael Johnson</div>
+                      <div class="occupation">CEO</div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
-        <!-- End of Testimonial Card 2 -->
-
-        <!-- Testimonial Card 3 -->
-        <div class="testimonial-card">
-          <div class="card-body">
-            <p class="testimonial-text">“So glad we started working with Vivek. We've used many times his design and development skills for our in-house online projects”</p>
-            <div class="details">
-              <img src="/assets/homeimg/user-person-profile-block-account-circle.svg" alt="client1">
-              <div class="text">
-                <div class="author-name">Michael Johnson</div>
-                <div class="occupation">CEO</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End of Testimonial Card 3 -->
       </div>
   </div>
-  <!-- End of Testimonials Section -->
-
-
+</section>
+<!-- End of Testimonials Section -->
 
   <section id="container">
     <div class="back-img">
@@ -1230,6 +1187,139 @@ img {
 
 
 
+<footer class="custom-footer">
+  <div class="containerr">
+      <div class="row">
+          <div class="col-md-3 col-sm-6 custom-col">
+              <h3 class="footer-heading">About Us</h3>
+              <ul class="footer-nav">
+                  <li><a href="#">About [Your Company Name]</a></li>
+                  <li><a href="#">Careers</a></li>
+                  <li><a href="#">Press Releases</a></li>
+                  <li><a href="#">Contact Us</a></li>
+              </ul>
+          </div>
+          <div class="col-md-3 col-sm-6 custom-col">
+              <h3 class="footer-heading">Customer Service</h3>
+              <ul class="footer-nav">
+                  <li><a href="#">Shipping & Returns</a></li>
+                  <li><a href="#">Assembly Instructions</a></li>
+                  <li><a href="#">Warranty Information</a></li>
+                  <li><a href="#">FAQs</a></li>
+              </ul>
+          </div>
+          <div class="col-md-4 col-sm-6 custom-col">
+              <h3 class="footer-heading">Our Branches</h3>
+              <ul class="footer-nav">
+                  <li><a href="#">Branch 1</a></li>
+                  <li><a href="#">Branch 2</a></li>
+                  <li><a href="#">Branch 3</a></li>
+                  <li><a href="#">Branch 4</a></li>
+              </ul>
+          </div>
+          <div class="col-md-2 col-sm-6 custom-col">
+              <h3 class="footer-heading">Follow Us</h3>
+              <ul class="social-icons">
+                  <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                  <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  <div class="copyright">
+      <p>&copy; [Year] [Your Company Name]. All Rights Reserved.</p>
+  </div>
+</footer>
+
+
+
+<style>
+  .custom-footer {
+  background-color: #f2f2f2;
+  padding: 30px 0;
+}
+
+.custom-footer .containerr {
+  max-width: 1900px;
+  margin: 0 auto;
+}
+
+.custom-footer .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.custom-col {
+  padding-right: 25px;
+  padding-left: 69px;
+}
+
+/* .custom-follow {
+  padding-left: 171px; 
+  padding-right: 180px; 
+} */
+
+.custom-footer .footer-heading {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.custom-footer .footer-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.custom-footer .footer-nav li {
+  margin-bottom: 10px;
+}
+
+.custom-footer .footer-nav a {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.custom-footer .footer-nav a:hover {
+  color: #999;
+}
+
+.custom-footer .social-icons {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-footer .social-icons li {
+  margin-right: 10px;
+  list-style-type: none;
+}
+
+.custom-footer .social-icons a {
+  color: #333;
+  font-size: 18px;
+}
+
+.custom-footer .social-icons a:hover {
+  color: #000;
+}
+
+.custom-footer .copyright {
+  text-align: center;
+  padding-top: 15px;
+  color: #333;
+}
+
+.custom-footer .copyright p {
+  margin: 0;
+}
+
+</style>
 
 
 
@@ -1241,6 +1331,8 @@ img {
 
 
 
+
+<!-- 
 
 <style>
 
@@ -1327,6 +1419,24 @@ img {
                 <a href="#"> linkedin</a>
             </div>
         </div>
-    </section>
+    </section> -->
 
 
+    <script>
+      var currentYear = new Date().getFullYear();
+      document.getElementById("currentYear").innerText = currentYear;
+  </script>
+
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+      var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+      (function(){
+          var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/65e619ff8d261e1b5f6891bd/1ho5db4aq';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+      })();
+  </script>
+  <span id="currentYear"></span>

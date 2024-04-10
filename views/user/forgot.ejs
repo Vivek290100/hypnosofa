@@ -1,91 +1,97 @@
 <%- include('header') -%>
 <style>
+  body {
+    margin: 0;
+    background-image: url(/assets/homeimg/login-bg.jpg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #156161;
+    font-family: 'Arial', sans-serif;
+    background-size: cover;
+    background-position: center;
+  }
 
-body {
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color:#156161;; 
-  font-family: 'Arial', sans-serif; 
-}
+  .form-container {
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    padding: 20px;
+  }
 
-.form-container {
-  text-align: center;
-}
+  form {
+    background: rgba(240, 240, 240, 0.7);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease-out;
+  }
 
-form {
-  display: inline-block;
-  text-align: left;
-  background: rgba(240, 240, 240, 0.7);
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2); 
-  animation: fadeInUp 0.8s ease-out; 
-}
+  label {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #333;
+  }
 
-label {
-  display: block;
-  margin-bottom: 20px;
-  font-size: 22px;
-  color: #333;
-}
+  input {
+    padding: 15px;
+    margin-bottom: 25px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+  }
 
-input {
-  padding: 15px;
-  margin-bottom: 25px;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 18px;
-  border: 2px solid #ccc; 
-  border-radius: 8px;
-}
+  button {
+    padding: 15px;
+    background-color: #014122;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  }
 
-button {
-  padding: 15px;
-  background-color: #014122; 
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease-in-out; 
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15); 
-}
+  button:hover {
+    background-color: #2ca27d;
+  }
 
-button:hover {
-  background-color: #2ca27d; 
-}
-.error-message {
+  .error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
-}
-
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  @media only screen and (max-width: 499px) {
+    .form-container {
+      padding: 10px;
+    }
   }
-}
 
-
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
 
-<div>
-    <form action="/user/forgot-password" method="post">
-        <% if (error) { %>
-            <p class="error-message"><%= error %></p>
-        <% } %>
-      <label  for="email">Email</label>
-      <input type="email" id="email" name="email" required>
-      <button type="submit">Reset Password</button>
-    </form>
-  </div>
-
+<div class="form-container">
+  <form action="/user/forgot-password" method="post">
+    <% if (error) { %>
+    <p class="error-message"><%= error %></p>
+    <% } %>
+    <label for="email">Enter Your Email</label>
+    <input type="email" id="email" name="email" required>
+    <button type="submit">Reset Password</button>
+  </form>
+</div>

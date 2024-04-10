@@ -3,136 +3,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wallet</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet</title>
 
-<!-- External Libraries -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.6.0/css/searchBuilder.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.6.0/css/searchBuilder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color:rgb(255, 255, 255);
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(255, 255, 255);
+        }
 
-    header {
-        background-color: #333;
-        color: #fff;
-        padding: 10px;
-        text-align: center;
-    }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
 
-    .wallet-container {
-        max-width: 1000px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-    }
+        .wallet-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
 
-    .balance {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    .history {
-        border-top: 1px solid #ccc;
-        margin-top: 20px;
-        padding-top: 20px;
-    }
+        .history {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
 
-    .transaction {
-        margin-bottom: 10px;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
+        .transaction {
+            margin-bottom: 10px;
+        }
 
-    th, td {
-        padding: 8px;
-        text-align: left;
-        width: 33.33%;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-    table#wallet {
-        border-collapse: collapse;
-        width: 100%;
-    }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            width: 25%; /* Adjust as needed */
+            height: 40px; /* Adjust as needed */
+        }
 
-    table#wallet th, table#wallet td {
-        border: 1px solid #808080;
-        padding: 8px; 
-        text-align: center; 
-    }
-    
-</style>
+        table#wallet {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table#wallet th, table#wallet td {
+            border: 1px solid #808080;
+            padding: 8px;
+            text-align: start;
+        }
+
+        /* Responsive Styles */
+        @media only screen and (max-width: 768px) {
+            .wallet-container {
+                padding: 10px;
+            }
+            th, td {
+                width: auto;
+            }
+        }
+
+        @media only screen and (max-width: 576px) {
+            .balance {
+                font-size: 18px;
+            }
+        }
+
+    </style>
 </head>
 <body>
-    <div class="container-fluid" style="background-color: #ffffff;">
-        <div class="wallet-container">
-            <div>
-                <h2>&nbsp;Wallet History</h2>
-            </div>
-                <!-- <div class="error-message">
-                    <p style="margin: 40px;">&nbsp;&nbsp;<%= errorMessage %></p>
-                </div> -->
-                <div class="balance">
-                    <!-- <p>Available Balance: ₹ %= balance  %>/-</p> -->
-                </div>
-                <% if(transactions.length === 0) { %>
-                    <div class="error-message">
-                        <p style="margin: 40px;">&nbsp;&nbsp;No credit or debit transactions found.</p>
-                    </div>
-                <% } else { %>
-            <table id="wallet">
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% transactions.reverse().forEach(transaction => { %>
-                        <tr class="transaction">
-                            <td><%= transaction.type %></td>
-                            <td>₹<%= transaction.amount %>/-</td>
-                            <td><%= transaction.description %></td>
-                            <td><%= transaction.date %></td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-            <% } %>
+<div class="container-fluid" style="background-color: #ffffff;">
+    <div class="wallet-container">
+        <div>
+            <h2>Wallet History</h2>
         </div>
+        <div class="balance">
+            <!-- <p>Available Balance: ₹ %= balance  %>/-</p> -->
+        </div>
+        <% if(transactions.length === 0) { %>
+        <div class="error-message">
+            <p style="margin: 40px;">No credit or debit transactions found.</p>
+        </div>
+        <% } else { %>
+        <table id="wallet">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% transactions.reverse().forEach(transaction => { %>
+            <tr class="transaction">
+                <td><%= transaction.type %></td>
+                <td>₹<%= transaction.amount %>/-</td>
+                <td><%= transaction.description %></td>
+                <td><%= transaction.date %></td>
+            </tr>
+            <% }) %>
+            </tbody>
+        </table>
+        <% } %>
     </div>
+</div>
 
-    <script>
-        $(document).ready(function() {
-            $('#wallet').DataTable({
-                "paging": true,
-                "searching": true,
-                "pageLength": 5, // Set the number of rows per page
-                "order": [], // Disable default sorting
-                "pagingType": "simple" // or "simple_numbers"
-            });
+<script>
+    $(document).ready(function() {
+        $('#wallet').DataTable({
+            "paging": true,
+            "searching": true,
+            "pageLength": 5, // Set the number of rows per page
+            "order": [], // Disable default sorting
+            "pagingType": "simple" // or "simple_numbers"
         });
-    </script>
-    
+    });
+</script>
+
 
 </body>
 </html>

@@ -1,7 +1,6 @@
 <%- include('header') -%>
 <%- include('nav',{user:user}) -%>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,11 +17,8 @@
         }
 
         .container {
-            width: 100%;
-            height: 27vh;
-            background: #ffffff;
-            /* display: flex; */
-            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             margin-top: 30px;
         }
@@ -30,137 +26,105 @@
         .coupon-card {
             background: linear-gradient(135deg, #ffffff, #adc0b8);
             color: #000000;
-            width: 444px;
-            /* margin-left: 460px; */
-            margin-top: 8px;
-            text-align: center;
-            padding: 2px 49px;
-            border: 1px solid #b9b9b9;
+            width: calc(100% - 20px);
+            max-width: 400px;
+            margin: 10px;
+            padding: 20px;
             border-radius: 15px;
-            box-shadow: 12px 12px 15px rgba(0, 0, 0, 0.3);            position: relative;
-            display: flex;
-            align-items: center; /* Align items vertically */
-        }
-
-        .logo {
-            width: 100px;
-            height: auto; 
-            border-radius: 8px;
-            margin-right: 20px; 
-        }
-
-        .coupon-content {
-            flex: 1;
-            text-align: left; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .coupon-card h3 {
-            font-size: 28px;
-            font-weight: 400;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
-        .coupon-card p {
-            font-size: 15px;
+        .logo {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .coupon-content {
+            text-align: left;
+        }
+
+        .coupon-content hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 10px 0;
+        }
+
+        .offer {
+            color: brown;
+            font-weight: 900;
+            margin-bottom: 10px;
+            display: block;
         }
 
         .coupon-row {
             display: flex;
             align-items: center;
-            justify-content: center; /* Center buttons horizontally */
-            margin: 25px auto;
-            width: fit-content;
+            justify-content: center;
         }
 
         .cpnCode {
             border: 1px dashed #1f1f1f;
-            padding: 10px 12px;
-            border-right: 0;
-            margin-right: 10px;
+            padding: 6px 12px;
             background-color: #a1a1a1;
-
+            border-radius: 4px;
+            margin-right: 10px;
         }
 
         .cpnBtn {
-            border: 1px solid #a3a3a3;
-            border-left: none;
             background: #004c3f;
-            padding: 6px 4px;
-            color: #ffffff;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            margin-left: 10px;
-            border-radius: 4px; 
         }
-
-        .circle1, .circle2 {
-            background: #ffffff;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .circle1 {
-    left: -27px;
-    box-shadow: 10px 0px 4px -5px rgba(83, 83, 83, 0.5);
-    border-radius: 50%;
-    border-right: 2px solid rgb(126, 126, 126); /* Adjust thickness and color as needed */
-}
-.offer{
-    color: brown;
-    font-weight: 900;
-}
-
-      
     </style>
 </head>
 <body>
 
-
-
-    
-    <div class="container">
-        <% coupons.forEach((couponItem, index) => { %>
-            <div class="coupon-card">
-                <img src="/assets/homeimg/brand-logo2.png" class="logo"> <!-- Assuming productId contains logo path -->
-                <div class="coupon-content">
-                    <h3>Hypnosofa</h3> 
-                    <HR></HR>
-                    <span class="offer">Offer: ₹<%=couponItem.discountAmount%></span>
-                    <div class="coupon-row">
-                        <span class="cpnCode"><%= couponItem.couponCode %></span>
-                        <span class="cpnBtn">Copy Code</span>
-                    </div>
-                    <p class="offer">expires in: <%= couponItem.expiryDate.toISOString().split('T')[0] %></p>
-                </div>
-                <div class="circle1"></div>
+<div class="container">
+    <% coupons.forEach((couponItem, index) => { %>
+        <div class="coupon-card">
+            <div class="d-flex align-items-center">
+                <img src="/assets/homeimg/brand-logo2.png" class="logo">
+                <h3>Hypnosofa</h3>
             </div>
-            <!-- <div class="circle2"></div> -->
-        <% }) %>
-    </div>
-    
+            <div class="coupon-content">
+                <hr>
+                <span class="offer">Offer: ₹<%= couponItem.discountAmount %></span>
+                <div class="coupon-row">
+                    <span class="cpnCode"><%= couponItem.couponCode %></span>
+                    <button class="cpnBtn">Copy Code</button>
+                </div>
+                <p class="offer">Expires in: <%= couponItem.expiryDate.toISOString().split('T')[0] %></p>
+            </div>
+        </div>
+    <% }) %>
+</div>
 
+<script>
+    // JavaScript code
+    var cpnBtns = document.querySelectorAll(".cpnBtn");
+    var cpnCodes = document.querySelectorAll(".cpnCode");
 
-
-    
-
-    <script>
-        // JavaScript code
-        var cpnBtns = document.querySelectorAll(".cpnBtn");
-        var cpnCodes = document.querySelectorAll(".cpnCode");
-    
-        cpnBtns.forEach((btn, index) => {
-            btn.addEventListener("click", function() {
-                navigator.clipboard.writeText(cpnCodes[index].innerHTML);
-                btn.innerHTML ="COPIED";
-                setTimeout(function(){
-                    btn.innerHTML="COPY CODE";
-                }, 3000);
-            });
+    cpnBtns.forEach((btn, index) => {
+        btn.addEventListener("click", function() {
+            navigator.clipboard.writeText(cpnCodes[index].innerHTML);
+            btn.textContent = "COPIED";
+            setTimeout(function() {
+                btn.textContent = "Copy Code";
+            }, 3000);
         });
-    </script>
-    
-    
+    });
+</script>
+
 </body>
 </html>

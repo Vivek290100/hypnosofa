@@ -1,117 +1,148 @@
 
 
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   
 
 
-
-
-<style>
-
-    .footer .box-container {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        width: 85%;
-        margin: 0 auto;
-        margin-top: 50px;
-        font-family: sans-serif;
-    }
-    
-    .footer .box {
-        flex: 1;
-        max-width: 20rem;
-        margin: 1rem;
-    }
-    
-    .footer .box h3 {
-        margin-left: 0;
-        color: #000000; 
-    }
-    
-    .footer .box a {
-        font-size: 1rem;
-        padding: 0.5rem 0;
-        color:#000000;
-        display: flex;
-        align-items: center;
-    }
- 
-    
-    .footer .box a i {
-        padding-right: 0.5rem;
-    }
-    
-    /* .footer .box a:hover i {
-        padding-right: 2rem;
-    } */
-    
-    @media only screen and (max-width: 768px) {
-        .footer .box {
-            max-width: 100%;
-        }
-    }
-    .box a{
-        text-decoration: none;
-    }
-    p {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    text-align: center;
-    font-size: 0px;
-    color: #676767;
-}
-    
-    </style>
-
-
-    <section class="footer"  ">
-        <div class="box-container">
-
-            <div class="box">
-                <p>-----------------------------------------</p>
-
-                <h3>our branches</h3>
-                <a href="#"> Palakkad</a>
-                <a href="#"> Wayanad</a>
-                <a href="#"> Kollam</a>
-                <a href="#"> Kozhikode</a>
-            </div>
-    
-            <div class="box">
-                <p>-----------------------------------------</p>
-
-                <h3>quick links</h3>
-                <a href="#home"> home</a>
-                <a href="#about"> about</a>
-                <a href="#menu">menu</a>
-                <a href="#review"> review</a>
-            </div>
-    
-            <div class="box">
-                <p>-----------------------------------------</p>
-
-                <h3>contact info</h3>
-                <a href="#"> +91-9360854754</a>
-                <a href="#"> vivek@gmail.com</a>
-                <a href="#"> Kozhikode,Kerala</a>
-                <a href="#"> Location</a>
-            </div>
-    
-            <div class="box">
-                <p>-----------------------------------------</p>
-
-                <h3>social media</h3>
-                <a href="#"> facebook</a>
-                <a href="#"> twitter</a>
-                <a href="#"> instagram</a>
-                <a href="#"> linkedin</a>
+    <footer class="custom-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 custom-col">
+                    <h3 class="footer-heading">About Us</h3>
+                    <ul class="footer-nav">
+                        <li><a href="#">About [Your Company Name]</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Releases</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 custom-col">
+                    <h3 class="footer-heading">Customer Service</h3>
+                    <ul class="footer-nav">
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Assembly Instructions</a></li>
+                        <li><a href="#">Warranty Information</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-6 custom-col">
+                    <h3 class="footer-heading">Our Branches</h3>
+                    <ul class="footer-nav">
+                        <li><a href="#">Branch 1</a></li>
+                        <li><a href="#">Branch 2</a></li>
+                        <li><a href="#">Branch 3</a></li>
+                        <li><a href="#">Branch 4</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 col-sm-6 custom-follow">
+                    <h3 class="footer-heading">Follow Us</h3>
+                    <ul class="social-icons">
+                        <li><a href="[Social Media Link 1]">
+     
+                            <i class="fa-brands fa-facebook"></i></a></li>
+                        <li><a href="[Social Media Link 2]"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="[Social Media Link 3]"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="[Social Media Link 4]"><i class="fab fa-pinterest"></i></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </section>
+        <div class="copyright">
+            <p>&copy; [Year] [Your Company Name]. All Rights Reserved.</p>
+        </div>
+    </footer>
     
     
     
-    </body>
-    </html>
-
+    <style>
+        .custom-footer {
+        background-color: #f2f2f2;
+        padding: 30px 0;
+    }
+    
+    .custom-footer .container {
+        max-width: 1900px;
+        margin: 0 auto;
+    }
+    
+    .custom-footer .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+    
+    .custom-col {
+        padding-right: 25px;
+        padding-left: 150px;
+    }
+    
+    .custom-follow {
+        padding-left: 171px; /* Adjust as necessary */
+        padding-right: 180px; /* Adjust as necessary */
+    }
+    
+    .custom-footer .footer-heading {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    
+    .custom-footer .footer-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .custom-footer .footer-nav li {
+        margin-bottom: 10px;
+    }
+    
+    .custom-footer .footer-nav a {
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    
+    .custom-footer .footer-nav a:hover {
+        color: #999;
+    }
+    
+    .custom-footer .social-icons {
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .custom-footer .social-icons li {
+        margin-right: 10px;
+    }
+    
+    .custom-footer .social-icons a {
+        color: #333;
+        font-size: 18px;
+    }
+    
+    .custom-footer .social-icons a:hover {
+        color: #000;
+    }
+    
+    .custom-footer .copyright {
+        text-align: center;
+        padding-top: 15px;
+        color: #333;
+    }
+    
+    .custom-footer .copyright p {
+        margin: 0;
+    }
+    
+    </style>

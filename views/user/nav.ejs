@@ -1,252 +1,106 @@
-<!-- //nav.ejs -->
 <%- include('header') -%>
 
-<div class="main-navbar sticky-top ">
-    <div class="top-navbar sticky-top">
-        <div class="container-fluid sticky-top">
-            <div class="row ">
-                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
-
-                    <a href="/" style="text-decoration: none;">
-                        <h3 class="brand-name space" style="margin-left: -51px; padding-top: 10px; font-size: 30px; display: flex;">
-                            <img src="/assets/homeimg/brand-logo2.png" alt="Logo" class="brand-logo">
-                            Hypnosofa
-                        </h3>
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex" href="/">
+            <img src="/assets/homeimg/brand-logo2.png" alt="Logo" class="brand-logo">
+            <span class="brand-name">Hypnosofa</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/about">
+                        About
                     </a>
-                                                            
-                </div>
-                <div class="col-md-5 my-auto other-elements-container ">
-                    <!-- <form role="search">
-                        <div class="input-group">
-                            <input type="search" placeholder="Search your product" class="form-control" />
-                            <button class="btn bg-dark sbtn" type="submit">
-                                <i class="fa fa-search" style="color:white;"></i>
-                            </button>
-                        </div>
-                    </form> -->
-                </div>
-                <div class="col-md-5 my-auto">
-                    <ul class="nav d-flex">
-                    
-                       
-                        <li class="nav-item">
-
-                            <a class="nav-link" href="/user/about">
-                            
-                                <i class="fa-solid fa-circle-info"></i> About
-
-                                
-
-                            </a>
-                        </li>
-
-
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/cart">
-                                <% if (user) { %>
-                                    <% if (cartCount >= 0) { %>
-                                        <i class="fa fa-shopping-cart"></i> <%= cartCount %>
-                                    <% } else { %>
-                                        <h1>Nothing has happened</h1>
-                                    <% } %>
-                                <% } %>
-                                
-
-                            </a>
-                        </li>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/cart">
                         <% if (user) { %>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/wishlist">
-                                        <i class="fa-solid fa-heart"></i>
-                                        <% } %>
-                                
-
-                            </a>
-                        </li>
-
-
-
-
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/product">
-                                <% if (user) { %>
-                                <i class="fa-solid fa-store"></i> Products 
-                                <% } %>
-                            </a>
-                
-                        </li>
-                        
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <% if (user) { %>
-                                    <%= user.name %> 
-                                  <% } else { %>
-                                <i class="fa fa-user"></i> Account
-                                <% } %>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <% if (!user) { %>
-                                <li><a class="dropdown-item" href="/user/signup"><i class="fa fa-user"></i> Signup</a></li>
-                                <li><a class="dropdown-item" href="/user/login"><i class="fa fa-user"></i> Login</a></li>
-                                <% } %>
-
-                                <% if (user) { %>
-
-                                <li><a class="dropdown-item" href="/user/profile"><i class="fa fa-user"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="/user/userOrder"><i class="fa fa-list"></i> My Orders</a></li>
-
-
-                                <li><a class="dropdown-item" href="/user/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
-                                <li><a class="dropdown-item" href="/coupon"><i class="fa-solid fa-ticket"></i> Coupons</a></li>
-                                
-                                <li><a class="dropdown-item" href="/walletHistory"><i class="fa-solid fa-wallet"></i> Wallet History</a></li>
-
-                                <li><a class="dropdown-item" href="/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
-                                <% } %>
-
-                            </ul>
-                        </li>
-                       
+                        <% if (cartCount >= 0) { %>
+                        Cart<i class="fa fa-shopping-cart"></i> <%= cartCount %>
+                        <% } else { %>
+                        <span>Nothing has happened</span>
+                        <% } %>
+                        <% } %>
+                    </a>
+                </li>
+                <% if (user) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/wishlist">
+                        Wishlist
+                        <!-- <i class="fa-solid fa-heart"></i> -->
+                    </a>
+                </li>
+                <% } %>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <% if (user) { %>
+                        <%= user.name %>
+                        <% } else { %>
+                        Account
+                        <% } %>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <% if (!user) { %>
+                        <li><a class="dropdown-item" href="/user/signup">Signup</a></li>
+                        <li><a class="dropdown-item" href="/user/login">Login</a></li>
+                        <% } %>
+                        <% if (user) { %>
+                        <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/user/userOrder">My Orders</a></li>
+                        <li><a class="dropdown-item" href="/user/cart">My Cart</a></li>
+                        <li><a class="dropdown-item" href="/coupon">Coupons</a></li>
+                        <li><a class="dropdown-item" href="/walletHistory">Wallet History</a></li>
+                        <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+                        <% } %>
                     </ul>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
     </div>
-    <!-- ============================================================= -->
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand d-block d-sm-block d-md-none d-lg-none" href="#">
-                sooofaaa
-            </a>
-            <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">All Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">New Arrivals</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Featured Products</a>
-                    </li>
-                    
-                </ul>
-            </div>
+</nav>
 
-        </div>
-    </nav> -->
-
-    <!-- ===================================================================== -->
-</div>
-   
-   
 <style>
-    
-
-.container-fluid{
-background-color: #fff;
-padding-left: 40px;
-
-}
-
     .brand-logo {
         width: 40px;
         box-shadow: none;
     }
 
-
- 
-
-
-
-
-    .main-navbar .top-navbar .brand-name {
-        color: #000000;
-        white-space: nowrap;
+    .brand-name {
+        margin-left: 10px;
+        font-size: 20px;
+    }
+    .navbar-brand{
+        margin-left: 30px;
     }
 
-    .main-navbar .top-navbar .nav-link {
-        color: #000000;
+    .navbar {
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .navbar-nav .nav-link {
+        color: #333;
         font-size: 16px;
         font-weight: 500;
+        padding: 10px 40px 9px; /* Adjust spacing for navbar links */
     }
 
-    .main-navbar .top-navbar .dropdown-menu {
-        padding: 0px 0px;
-    }
-
-    .main-navbar .top-navbar .dropdown-menu .dropdown-item {
-        padding: 8px 16px;
+    .navbar .navbar-nav .dropdown-menu .dropdown-item {
         font-size: 14px;
     }
 
-    .main-navbar .top-navbar .dropdown-menu .dropdown-item i {
-        width: 20px;
-        text-align: center;
-        color: #000000;
-        font-size: 14px;
+    .navbar .navbar-nav .dropdown-menu .dropdown-item i {
+        margin-right: 10px;
     }
 
-    .main-navbar .navbar {
-        padding: 0px;
-        background-color: #ffffff;
-    }
-
-    .main-navbar .navbar .nav-item .nav-link {
-        padding: 17px 20px;
-        color: #000000;
-        font-size: 15px;
-        padding-left: 11px;
-    }
-
-    .space {
-        padding-left: 50px;
-        margin-left: 10px;
-    }
-
-    @media only screen and (max-width: 1200px) {
-        .main-navbar .top-navbar .nav-link {
-            font-size: 12px;
-            padding: 8px 10px;
-        }
-    }
-    .nav {
-    --bs-nav-link-padding-x: 2rem;
-    --bs-nav-link-padding-y: 0.5rem;
-    --bs-nav-link-font-weight: ;
-    --bs-nav-link-color: var(--bs-link-color);
-    --bs-nav-link-hover-color: var(--bs-link-hover-color);
-    --bs-nav-link-disabled-color: var(--bs-secondary-color);
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style
-    .container-fluid {
-    background-color: #fff;
-    padding-left: 40px;
-}
-/* .sticky-top {
-    position: sticky;
-    top: 0;
-    z-index: 1020;
-} */
+    .navbar .navbar-nav .dropdown-menu .dropdown-item:hover {
+        background-color: #f8f9fa;
     }
 </style>
 
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Ln538hAM1a6P+Lb5U8Xj6OfszFNSP6l9Ej3y6kqjLEqChDZzcf0R8HRTt8+pR6L4" crossorigin="anonymous"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-

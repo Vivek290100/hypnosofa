@@ -45,7 +45,7 @@ const forgotPassword = async (req, res) => {
         const email = req.body.email;
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
-            req.flash('error', 'No user found with the provided email');
+            req.flash('error', 'No user found with this email');
             return res.render('./user/forgot', { error: req.flash('error') });
         }
         req.session.user = {
