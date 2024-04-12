@@ -1,5 +1,5 @@
 const Product = require("../models/productModel");
-const ProductOffer = require("../models/productofferModel");
+const ProductOffer = require("../models/productOfferModel");
 const flash = require('connect-flash');
 
 
