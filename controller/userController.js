@@ -7,7 +7,7 @@ const Wishlist = require('../models/wishlistModel')
 const Coupon = require('../models/couponModel')
 const cartModels = require('../models/cartModel');
 const orderModel = require('../models/orderModel')
-const ProductOffer = require("../models/productofferModel");
+const ProductOffer = require("../models/productOfferModel");
 
  
 const bcrypt = require('bcrypt');
