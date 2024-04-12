@@ -8,7 +8,7 @@
         height: 100vh;
         margin: 0;
         background-color: #ffffff;
-        max-width: 100%;
+        width: 100%;
         overflow-x: hidden;
         font-family: serif;
     }
@@ -18,8 +18,8 @@
         flex-wrap: wrap;
         justify-content: space-around;
         margin-bottom: 30px;
-        margin-left: 45px;
-        margin-right: 45px;
+        /* margin-left: 45px;
+        margin-right: 45px; */
     }
 
     /* .container {
@@ -159,13 +159,16 @@
 
     }
 
+    #searchForm{
+      width: 50px;
+    }
+
   
 
     .fill {
     background: transparent;
     color: rgba(255, 255, 255, 0.9);
     transition: all 0.3s ease;
-    /* background: linear-gradient(45deg, #fff7f7, #dbdbdb, #dcdcdc, #ececec); */
     background-color: #004c3f;
     font-family: serif;
     border: 1px solid #ddfff2;
@@ -183,7 +186,7 @@
     background-color: #005b4b;
 }
 
-    @media screen and (min-width: 769px) {
+    /* @media screen and (min-width: 769px) {
         .container {
             width: 23%;
         }
@@ -191,7 +194,7 @@
         .banner-image {
             height: 220px;
         }
-    }
+    } */
 
     @media screen and (max-width: 768px) {
         .container {
@@ -205,11 +208,14 @@
 
     @media screen and (max-width: 480px) {
         .container {
-            width: 100%;
+            width: 150%;
         }
 
         .banner-image {
             height: 100px;
+        }
+        .row{
+          width: 100%;
         }
     }
 
@@ -218,7 +224,6 @@
     /* Dropdown Button */
 .dropbtn {
   background-color: #ffffff;
-;
   color: rgb(0, 0, 0);
   padding: 3px;
   font-size: 16px;
@@ -227,23 +232,19 @@
 
 }
 
-/* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
   background-color: #ffffff;
   color: #000000;
-  /* border: 1px solid black; */
   
 }
 
 
 
-/* The container <div> - needed to position the dropdown content */
 .dropdown {
   position: relative;
   display: inline-block;
 }
 
-/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
   position: absolute;
@@ -253,7 +254,6 @@
   z-index: 1;
 }
 
-/* Links inside the dropdown */
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -261,59 +261,73 @@
   display: block;
 }
 
-/* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #f1f1f1}
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
 
 .dropmargin{
-    margin-left: 60px;
+    margin-left: 10px;
 }
 
 .input-group {
     display: flex;
     align-items: center;
-    margin-left: 54px;
 }
 
 .input-group input[type="search"] {
     flex: 1;
-    border-radius: 5px 0 0 5px;
+    border-radius: 5px;
     outline: 1px solid #e0e0e0;
-
     height: 35px;
 }
 
 .sbtn {
     background-color: #004c3f;
     width: 31px;
-    border-radius: 0 9px 9px 0;
     height: 36px;
     border: 1px solid #ffffff;
+    border-radius: 0 5px 5px 0;
 }
+
+/* Add media query for responsiveness */
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group input[type="search"] {
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .sbtn {
+        border-radius: 5px;
+    }
+}
+
+
 /* 
 .sbtn:hover {
     background-color: #004c3f;
 } */
 
 /* Responsive adjustments */
-@media only screen and (max-width: 768px){
+/* @media only screen and (max-width: 768px){
 .input-group {
     margin-left: 44px;
     margin-right: 57px;
 }
 
     .input-group input[type="search"] {
-        height: 30px; /* Adjust height for smaller screens */
+        height: 30px; 
     }
 
     .sbtn {
-        width: 28px; /* Adjust button width for smaller screens */
-        height: 30px; /* Adjust button height for smaller screens */
+        width: 28px; 
+        height: 30px; 
     }
-}
+} */
 
 
 
@@ -341,7 +355,7 @@ border-radius: 5px;
 }
 
 
-
+/* 
 .custom-btn {
   width: 130px;
   height: 40px;
@@ -359,7 +373,7 @@ border-radius: 5px;
    7px 7px 20px 0px rgba(0,0,0,.1),
    4px 4px 5px 0px rgba(0,0,0,.1);
   outline: none;
-}
+} */
 
 
 /* 16 */
@@ -425,7 +439,7 @@ border-radius: 5px;
 
 
 
-
+<br>
 <div class="dropdown dropmargin">
   <div class="frame">
     <button onclick="myFunction()" class="custom-btn btn-16 dropbtn">Filter By</button>
@@ -455,10 +469,13 @@ border-radius: 5px;
   <div class="dropdown">
     <div class="input-group">
         <form id="searchForm"  action="/user/product" method="GET"> <!-- Update action and method -->
+          <div class="d-flex">
+
             <input type="search" name="q" placeholder="Search your product">
             <button class="sbtn" type="submit">
-                <i class="fa fa-search" style="color:white;"></i>
+              <i class="fa fa-search" style="color:white;"></i>
             </button>
+          </div>
         </form>
     </div>
 </div>
@@ -714,7 +731,112 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     
-<%- include('footer') -%>
+
+
+
+
+
+    <footer class="custom-footer">
+      <br>
+        <div class="container1">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 custom-col">
+                    <h3 class="footer-heading" style="color: #ffffff;" >About Us</h3>
+                    <ul class="footer-nav">
+                        <li><a href="#">About [Your Company Name]</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Releases</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 col-sm-6 custom-col">
+                    <h3 class="footer-heading" style="color: #ffffff;">Customer Service</h3>
+                    <ul class="footer-nav">
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Assembly Instructions</a></li>
+                        <li><a href="#">Warranty Information</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-6 custom-col">
+                    <h3 class="footer-heading" style="color: #ffffff;">Our Branches</h3>
+                    <ul class="footer-nav">
+                        <li><a href="#">Branch 1</a></li>
+                        <li><a href="#">Branch 2</a></li>
+                        <li><a href="#">Branch 3</a></li>
+                        <li><a href="#">Branch 4</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 col-sm-6 custom-follow">
+                    <h3 class="footer-heading" style="color: #ffffff;">Follow Us</h3>
+                    <ul class="social-icons">
+                        <li><a href="[Social Media Link 1]">
+     
+                            <i class="fa-brands fa-facebook"></i></a></li>
+                        <li><a href="[Social Media Link 2]"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="[Social Media Link 3]"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="[Social Media Link 4]"><i class="fab fa-pinterest"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024, HYPNOSOFA. All Rights Reserved.</p>
+        </div>
+    </footer>
     
+    
+    
+    <style>
+      .custom-footer{
+        background-color: #004c3f;
+      }
+
+    .custom-footer .footer-nav a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    
+    .custom-footer .footer-nav a:hover {
+        color: #999;
+    }
+    
+    .custom-footer .social-icons {
+        display: flex;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .custom-footer .social-icons li {
+        margin-right: 10px;
+    }
+    
+    .custom-footer .social-icons a {
+        color: #ffffff;
+        font-size: 18px;
+    }
+    
+    .custom-footer .social-icons a:hover {
+        color: #000;
+    }
+    
+    .custom-footer .copyright {
+        text-align: center;
+        padding-top: 15px;
+        color: #ffffff;
+    }
+    
+    .custom-footer .copyright p {
+        margin: 0;
+        color: #fff;
+        font-size: medium;
+    }
+    li{
+      list-style-type: none;
+    }
+    
+    
+    </style>
   
 
