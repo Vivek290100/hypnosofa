@@ -20,6 +20,7 @@ const userprofile = async (req, res) => {
         // console.log(user,'userrrrrrrrrrrrrrrrrrrrrrr');
         const userId = user._id;
         const addresses = await Address.find({ userId });
+        
 
         // const amount = await Wallet.findOne(userId, {balance:balance});
         // console.log('amount',amount);
@@ -84,9 +85,9 @@ const saveAddress = async (req, res) => {
     try {
         if (req.session.user) {
             const userId = req.session.user._id;
-            console.log("userid", userId);
+            // console.log("userid", userId);
             const user = await User.findById(userId);
-            console.log("user n", user);
+            // console.log("user n", user);
             if (!user) {
                 return res.status(404).send('User not found');
             }
@@ -150,7 +151,6 @@ const deleteAddress = async (req, res) => {
 
 const saveUser = async (req, res) => {
     try {
-        // Check if req.user is defined and has the id property
         if (!req.session.user._id) {
             throw new Error('User ID not found in request');
         }
@@ -160,12 +160,10 @@ const saveUser = async (req, res) => {
         const newName = req.body.name;
         console.log('newname',newName);
 
-        // Update the user's name in the database
         await User.findByIdAndUpdate(userId, { name: newName });
         req.session.user.name=newName
         res.redirect('user/profile')
 
-        // res.status(200).json({ success: true, message: 'User name updated successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: 'An error occurred while updating the user name' });
@@ -173,9 +171,7 @@ const saveUser = async (req, res) => {
 };
 
 
-// Route to handle AJAX request for fetching address details
 
-// router.get('/edit-address/:id',
 const editaddress= async(req, res) => {
     try {
         const user = req.session.user
@@ -196,14 +192,10 @@ const editaddress= async(req, res) => {
 const updateAddress = async (req, res) => {
     try {
         const { mobile, pincode, houseName, locality, city, district, state } = req.body;
-        // Assuming addressId is available in req.params or req.body, depending on your route configuration
         const addressId = req.params.addressId;
-        // console.log("update",addressId);
 
-        // Find the address by ID
         let address = await Address.findById(addressId);
 
-        // Update the address fields
         address.mobile = mobile;
         address.pincode = pincode;
         address.houseName = houseName;
@@ -228,7 +220,6 @@ const walletHistory = async (req, res) => {
         const userId = user._id;
 
         const walletId = await Wallet.findOne({ user: userId });
-        console.log('walletId', walletId);    
 
         if (!walletId) {
             const errorMessage = "No wallet found for this user.";
@@ -236,7 +227,6 @@ const walletHistory = async (req, res) => {
         }
 
         const walletHistory = await WalletHistory.find({ wallet: walletId });
-        console.log('walletHistory', walletHistory);
 
         let balance = walletId.balance || 0;
 
@@ -255,8 +245,6 @@ const walletHistory = async (req, res) => {
             }
         });
 
-        console.log('transactions', transactions);
-        console.log('balance', balance);
 
         res.render('./user/walletHistory', { user, transactions, balance, errorMessage: '' });
     } catch (error) {

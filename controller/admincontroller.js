@@ -85,39 +85,40 @@ const adhome = async (req, res) => {
 
     const topSellingProduct = await orderModels
     .aggregate([
-      { $unwind: "$products" },
-      {
-        $group: {
-          _id: "$products.product",
-          totalQuantity: { $sum: "$products.quantity" }
-        }
-      },
-      { $sort: { totalQuantity: -1 } }, 
-      { $limit: 5 } 
+        { $unwind: "$products" },
+        {
+            $group: {
+                _id: "$products.product",
+                totalOrders: { $sum: 1 } // Counting orders instead of summing quantity
+            }
+        },
+        { $sort: { totalOrders: -1 } },
+        { $limit: 5 }
     ])
     .lookup({
-      from: "products", 
-      localField: "_id",
-      foreignField: "_id",
-      as: "product"
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "product"
     })
     .exec();
-      
-    const topSellingCategories = await orderModels.aggregate([
-      { $unwind: "$products" },
-      {
+
+const topSellingCategories = await orderModels.aggregate([
+    { $unwind: "$products" },
+    {
         $lookup: {
-          from: "products",
-          localField: "products.product",
-          foreignField: "_id",
-          as: "productInfo"
+            from: "products",
+            localField: "products.product",
+            foreignField: "_id",
+            as: "productInfo"
         }
-      },
-      { $unwind: "$productInfo" },
-      { $group: { _id: "$productInfo.category", count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 5 }
-    ]).exec();
+    },
+    { $unwind: "$productInfo" },
+    { $group: { _id: "$productInfo.category", count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: 5 }
+]).exec();
+
     const categoryIds = topSellingCategories.map(category => category._id);
     const categoryNames = await Category.find({ _id: { $in: categoryIds } });
     const categoriesWithNames = topSellingCategories.map(category => {

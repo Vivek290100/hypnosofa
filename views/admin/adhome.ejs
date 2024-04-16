@@ -385,7 +385,7 @@
 
 				 
 				  
-				  <div style="width: 100%;"> 
+				  <div style="width: 100%; text-align: center;"> 
 					<h2>Recently Placed Orders</h2>
 					<table class="recent-orders-table">
 					  <thead>
@@ -422,15 +422,15 @@
 				</div>
 
 
-
-				<div style="width: 100%;"> 
+				<br><br>
+				<div style="width: 100%; text-align: center;"> 
 					<h2>Top Selling Products</h2>
 					<table class="top-selling">
 						<thead>
 							<tr>
 								<th>Order ID</th>
 								<th>Product</th>
-								<th>Total Quantity</th>
+								<th>Total Orders</th> <!-- Modified from Total Quantity to Total Orders -->
 							</tr>
 						</thead>
 						<tbody>
@@ -442,36 +442,37 @@
 											<%= product.name %> <!-- Assuming 'name' is the property that holds the product name -->
 										<% } %>
 									</td>
-									<td><%= item.totalQuantity %></td>
+									<td><%= item.totalOrders %></td> <!-- Modified from totalQuantity to totalOrders -->
 								</tr>
 							<% } %>
 						</tbody>
 					</table>
 				</div>
-
-
-				<div style="width: 100%;"> 
-    <h2>Top Selling Categories</h2>
-    <table class="top-selling">
-        <thead>
-            <tr>
-                <th>Category ID</th>
-                <th>Category Name</th>
-                <th>count</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for (const category of topSellingCategories) { %>
-                <tr>
-                    <td><%= category._id %></td>
-                    <td><%= category.name %></td>
-                    <td><%= category.count %></td>
-                </tr>
-            <% } %>
-        </tbody>
-    </table>
-</div>
-
+				
+				
+				<br><br>
+				<div style="width: 100%; text-align: center;"> 
+					<h2>Top Selling Categories</h2>
+					<table class="top-selling">
+						<thead>
+							<tr>
+								<th>Category ID</th>
+								<th>Category Name</th>
+								<th>Count</th> <!-- Changed from count to Count for consistency -->
+							</tr>
+						</thead>
+						<tbody>
+							<% for (const category of topSellingCategories) { %>
+								<tr>
+									<td><%= category._id %></td>
+									<td><%= category.name %></td>
+									<td><%= category.count %></td>
+								</tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+				
 				
 				
 				

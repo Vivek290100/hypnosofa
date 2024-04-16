@@ -42,7 +42,8 @@ var instance = new Razorpay({
 const checkout = async (req, res) => {
     try {
         const user = req.session.user;
-        const addresses = await Address.find();
+        // const addresses = await Address.find();
+        const addresses = await Address.find({ userId: user._id });
         const cart = await cartModels.findOne({ userId: user._id });
         const cartItems = cart ? cart.products : [];
 
@@ -102,6 +103,31 @@ const createOrder = async (req, res, addresses) => {
         
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
+
+
+
+
+
+          // Deducting stock quantities
+        for (const item of cartItems) {
+            try {
+                const product = await Product.findById(item.productId);
+
+                if (product && product.quantity >= item.quantity) {
+                    product.quantity -= item.quantity; 
+                    await product.save();
+                } else {
+                    return res.status(400).json({ success: false, message: 'Insufficient stock for one or more items' });
+                }
+            } catch (error) {
+                console.error('Error updating product stock:', error);
+                return res.status(500).json({ success: false, message: 'Failed to create order' });
+            }
+        }
+
+
+
+
 
         for (const item of cartItems) {
             try {
@@ -256,6 +282,8 @@ const faildPaymentHandler = async (req, res, addresses) => {
         } 
         }
         const TotalPriceAfterDiscount = totalPrice - discountAmount;
+
+        const userAddress = await Address.findOne({ user: userId });
 
         const newOrderId = new ObjectId().toString(); 
             const newOrderData = {

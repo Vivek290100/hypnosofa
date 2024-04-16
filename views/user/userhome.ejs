@@ -1,149 +1,6 @@
 <%- include('header') -%>
 <%- include('nav',{user:user,cartCount:cartCount}) -%>
 
-<!-- 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
-
-:root {
-    --main-color: rgb(255, 255, 255);
-    --border-radius: 95% 4% 97% 5% / 4% 94% 3% 95%;
-    --border-radius-hover: 4% 95% 6% 95% / 95% 4% 92% 5%;
-    --border: .2rem solid var(--main-color);
-    --border-hover: .2rem dashed var(--main-color);
-}
-* {
-
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    outline: none;
-    border: none;
-    text-decoration: none;
-    text-transform: capitalize;
-}
-html {
-    font-size: 65%;
-    overflow-x: hidden;
-    scroll-padding-top: 7rem;
-    scroll-behavior: smooth;
-}
-.body{
-    background-color: #ffffff;
-    overflow-y: hidden;  
-}
-.active{
-    border-radius: 30px;
-    background-color: rgb(255, 255, 255);
-}
-.caption{
-    padding-bottom: 250px;
-    padding-left: 40px;
-}
-.carousel-item .custom-carousel-content{
-    width: 109%;
-}
-.custom-carousel-content{
-    text-align: start;
-}
-.custom-carousel-content h1{
-    font-size: 40px;
-    font-weight: 700;
-    color: #000000;
-    margin-bottom: 30px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.custom-carousel-content h1 span{
-    color: #000000;
-}
-
-.custom-carousel-content p{
-    font-size: 18px;
-    font-weight: 400;
-    color: #000000;
-    margin-bottom: 30px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.custom-carousel-content .btn-slider{
-    border: 1px solid #fff;
-    border-radius: 0px;
-    padding: 8px 26px;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-    #carouselExampleCaptions {
-        width: calc(100vw - rem); 
-        height: 85vh;
-    margin: -40 auto;
-    padding: 4rem;
-    background-color: #ffffff;
-    }
-    .carousel-inner,
-    .carousel-item {
-        width: 100%;
-        height: 100%;
-    }
-    .carousel-item img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.5);
-        /* border-radius: 29px; */
-    }
-    .carousel-control-prev,
-    .carousel-control-next {
-        font-size: 1.5em;
-        animation: blink 1s infinite;
-    }
-
-    .getnow{
-        backdrop-filter: blur(8px);
-
-    }
-
-    @keyframes blink {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
-    }
-
-    @media (max-width: 767px) {
-    .carousel-item .custom-carousel-content {
-        width: 90%;
-    }
-}
-</style> -->
-
-
-
-
-
-
-
-
-
-<!-- 
-<div class="background">
-  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
-    <div class="carousel-inner"> -->
-      
-      <!-- <div class="carousel-item active">
-        <img src="/assets/homeimg/soa4.jpeg" class="d-block w-100 hmimg" alt="...">
-        <div class="carousel-caption">
-          <div class="custom-carousel-content caption">
-            <h1 class="display-4">
-              Transform Your Space With Comfort And Style
-            </h1>
-            <p>Relax In Timeless Elegance. Transform Your Home, One Seat At A Time.</p>
-            <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
-          </div>
-        </div>
-      </div> -->
 
       <style>
         .hmvideo::-webkit-media-controls {
@@ -176,59 +33,7 @@ html {
         <video class="d-block w-100 hmvideo" controls autoplay loop muted>
           <source src="/assets/homeimg/vid-1.mp4_1712898094892 (1).mp4" type="video/mp4">
         </video>
-        <!-- <div class="carousel-caption">
-          <div class="custom-carousel-content caption">
-            <h1 class="display-4">
-              Transform Your Space With Comfort And Style
-            </h1>
-            <p>Relax In Timeless Elegance. Transform Your Home, One Seat At A Time.</p>
-            <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
-          </div>
-        </div> -->
-      <!-- </div>
-      
-
-      <div class="carousel-item">
-        <img src="/assets/homeimg/sofa5.jpeg" class="d-block w-100 hmimg" alt="...">
-        <div class="carousel-caption">
-          <div class="custom-carousel-content caption">
-            <h1 class="display-4">
-              <span>"Transform your space with comfort and style"</span>
-            </h1>
-            <div>
-              <a href="/user/product" class="btn btn-slider btn-lg getnow">
-                Get Now
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <img src="/assets/homeimg/sofa77.jpeg" class="d-block w-100 hmimg" alt="...">
-        <div class="carousel-caption">
-          <div class="custom-carousel-content caption">
-            <div>
-              <a href="/user/product" class="btn btn-slider btn-lg getnow">Get Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-</div> -->
-
-
-
+       
 
 <!-- <footer class="new_footer_area bg_color">
     <div class="new_footer_top">
@@ -241,53 +46,6 @@ html {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
 <style>
     body {
@@ -304,9 +62,6 @@ html {
     .row {
         display: flex;
         flex-wrap: wrap;
-        /* justify-content: space-around; */
-        /* margin-bottom: 70px; */
-        /* margin-top: 30px; */
         margin-left: 2.5px;
         margin-right: 20px;
     }
@@ -314,17 +69,13 @@ html {
     .container {
         width: 23%;
         margin: 10px;
-        /* backdrop-filter: blur(16px) saturate(180%); */
-        /* -webkit-backdrop-filter: blur(16px) saturate(180%); */
         background-color: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.1);
         padding: 10px;
         display: flex;
         flex-direction: column;
-        /* align-items: center; */
         text-align: center;
         transition: transform 0.3s ease;
-        /* border-radius: 9px 9px 9px 9px; */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         filter: drop-shadow(5 5px 10px rgba(0, 0, 0, 0.5));
     }
@@ -342,13 +93,9 @@ html {
     h3:hover{
         transform: scale(1.2); 
         transition: transform 0.3s ease;
-
     }
     h5 {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        /* color: rgba(0, 0, 0, 0.98); */
-        /* text-transform: uppercase; */
-        /* font-size: 0.5cm; */
         margin-top: 10px;
     }
     h5.card-title {
@@ -366,22 +113,18 @@ html {
                     "Segoe UI Symbol";
     }
     .about__subtitle {
-    margin-bottom: var(--mb-2);
-    margin-left: 54px;
-}
-.about__text{
-    margin-left: 54px;
+       margin-bottom: var(--mb-2);
+       margin-left: 54px;
+   }
+   .about__text{
+       margin-left: 54px;
 
-}
+   }
     p {
         color: #000000;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        /* margin: 50px; */
-        /* text-align: center; */
         font-size: 1.8rem;
         line-height: 150%;
-        /* letter-spacing: 2px; */
-        /* text-transform: uppercase; */
     }
     .button-wrapper {
         margin-top: 20px;
@@ -389,17 +132,13 @@ html {
 
     .btn {
         border: none;
-        /* padding: 8px 16px; */
         width: 250px;
         height: 45px;
         border-radius: 7px;
         font-size: 0.8rem;
         letter-spacing: 1px;
         cursor: pointer;
-        
     }
-
-    
     .wishlist {
     margin-left: 10px;
     font-size: 20px;
@@ -418,7 +157,6 @@ html {
     .btn {
         border: none;
         padding: 8px 16px;
-        /* border-radius: 10px; */
         font-size: 1.2rem;
         letter-spacing: 2px;
         cursor: pointer;
@@ -427,7 +165,6 @@ html {
         margin-left: 10px;
     }
     .outline {
-        /* background: transparent; */
         color: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(0, 212, 255, 0.6);
         transition: all 0.3s ease;
@@ -443,7 +180,6 @@ html {
 
     }
     .fill {
-        /* background: transparent; */
         color: rgba(255, 255, 255, 0.9);
         border: 1px solid rgba(33, 87, 65, 0.6);
         transition: all 0.3s ease;
@@ -455,14 +191,7 @@ html {
         transition: all 0.3s ease;
         background-color: rgb(15, 55, 38);
     }
-    /* @media screen and (min-width: 769px) {
-        .container {
-            width: 23%;
-        }
-        .banner-image {
-            height: 220px;
-        }
-    } */
+
     @media screen and (max-width: 768px) {
         .container {
             width: 48%;
@@ -488,11 +217,9 @@ html {
     body {
     background: #fff;
     }
-    
     .new_footer_area {
     background: #fbfbfd;
     }
-    
     .new_footer_top {
     padding: 0px 0px 60px;
     position: relative;
@@ -559,11 +286,11 @@ html {
     border-radius: 7px;
   }
 }
-
     </style>
 
-<div id="productss">
 
+
+  <div id="productss">
   <% let count = 0; %>
   <% for (let index = 0; index < products.length; index++) { %>
     <% if (count >= 8) { break; } %>
@@ -595,13 +322,11 @@ html {
           <% } %>
         </div>
           
-          <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script> -->
           
           
           
           
           
-          <!-- <br><br><br><br><br><br> -->
           <style>
   /* Reset CSS */
   * {
@@ -610,7 +335,6 @@ html {
       box-sizing: border-box;
   }
 
-  /* Testimonial Cards Styling */
   .testimonial-cards {
       padding: 5rem 1rem;
       background-color: #f7f7f7;
@@ -632,7 +356,7 @@ html {
 
   .testimonial-card {
       width: calc(100% / 1 - 1rem);
-      max-width: 381px; /* Adjust based on your design */
+      max-width: 381px;
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -819,45 +543,6 @@ html {
     </section>
   </div>
 
-<!-- 
-<style>
-
-  #page {
-      background-color: #f7f7f7; /* Set background color */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh; /* Set full viewport height */
-  }
-
-  .about-container {
-      text-align: center;
-      max-width: 800px;
-      padding: 20px;
-  }
-
-  .about-container h2 {
-      font-size: 2em;
-      margin-bottom: 20px;
-  }
-
-  .about-container p {
-      font-size: 1.1em;
-      margin-bottom: 15px;
-      line-height: 1.6;
-  }
-</style>
-</head>
-<body>
-<section id="page">
-  <div class="about-container">
-      <h2>About Us</h2>
-      <p>Welcome to our world of comfort and style. At [Your Company Name], we believe that your home should be a reflection of your unique personality and lifestyle. That's why we're dedicated to providing you with the finest selection of sofas that seamlessly blend luxury, functionality, and aesthetics.</p>
-      <p>Our journey began [Year Established], and since then, we've been committed to delivering exceptional quality and unparalleled customer service. Each sofa in our collection is meticulously crafted with premium materials and attention to detail, ensuring both durability and timeless elegance.</p>
-      <p>Whether you're lounging with loved ones, entertaining guests, or simply unwinding after a long day, our sofas are designed to enhance your living space and elevate your comfort to new heights. With a range of styles, colors, and configurations to choose from, you're sure to find the perfect piece to suit your taste and preferences.</p>
-      <p>Thank you for choosing [Your Company Name]. We look forward to helping you create the home of your dreams.</p>
-  </div>
-</section> -->
 
 
   <script>
@@ -875,7 +560,6 @@ html {
       800)
     }
   })
-  // $('.fade').addClass('active')
 })
 
   </script>
@@ -899,11 +583,9 @@ html {
           .then(response => response.json())
           .then(data => {
             console.log(data);
-            // Optionally, you can provide feedback to the user here
           })
           .catch(error => {
             console.error('Error:', error);
-            // Optionally, handle the error here
           });
         });
       });
@@ -979,22 +661,14 @@ html {
   margin: 0 auto;
 }
 
-/* .custom-footer .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-} */
+
 
 .custom-col {
   padding-right: 25px;
   padding-left: 69px;
 }
 
-/* .custom-follow {
-  padding-left: 171px; 
-  padding-right: 180px; 
-} */
+
 
 .custom-footer .footer-heading {
   font-size: 18px;

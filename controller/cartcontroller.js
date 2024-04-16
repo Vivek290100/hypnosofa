@@ -129,7 +129,7 @@ const updateQuantity = async (req, res) => {
 
         
         if (quantity > 0 && quantity<=10) {
-          console.log('Updating quantity for product:', product);
+          // console.log('Updating quantity for product:', product);
 
           product.quantity = quantity;
           
