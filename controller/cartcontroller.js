@@ -1,7 +1,7 @@
 const cartModels = require('../models/cartModel');
 const mongoose = require('mongoose');
 const Product = require('../models/productModel');
-const ProductOffer = require("../models/productofferModel");
+const ProductOffer = require("../models/productOfferModel");
 
 
 //addToCart function
