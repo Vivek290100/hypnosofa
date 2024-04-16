@@ -2,21 +2,17 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 // const Address = require('../models/addressModel');
 
-mongoose.connect(process.env.MONGODB_URI || " mongodb://127.0.0.1:27017/hypno")
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log("MongoDB connected successfully");
+}).catch(err => {
+    console.error("Error connecting to MongoDB:", err.message);
+});
 
 
-// , {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-
-
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((err) => {
-        console.error("MongoDB connection failed:", err);
-    });
+   
 
     const userSchema = new mongoose.Schema({
         name: {

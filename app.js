@@ -34,7 +34,7 @@ app.use('/assets',express.static(path.join(__dirname, 'public/assets/homeimg')))
 
 
 app.use(session({
-    secret: 'your-secret-key',
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60 * 60 * 1000 }, 

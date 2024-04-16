@@ -6,6 +6,8 @@ const fs = require("fs");
 const puppeteer = require("puppeteer");
 const Banner = require('../models/bannerModel');
 const Category = require("../models/categoryModel"); 
+require('dotenv').config();
+
 
 
 //admin login------------------------------------------------------->
@@ -153,24 +155,24 @@ const adhome = async (req, res) => {
 
 //checking email and password------------------------------------------------------>
 const dashboard = (req, res) => {
-    const credential = {
-      email: 'admin@gmail.com',
-      password: 1,
-    };
-    const userInput = {
-      email: req.body.email,
-      password: parseInt(req.body.password),
-    };
-
-    if (userInput.email === credential.email && userInput.password === credential.password) {
-      req.session.admin = userInput.email;
-      req.session.adLogged = true;
-      res.redirect('/adhome');
-    } else {
-      const err = 'Invalid Username or Password';
-      res.render('./admin/adlog', { err: err });
-    }
+  const credential = {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD, 
   };
+  const userInput = {
+    email: req.body.email,
+    password: req.body.password,
+  };
+
+  if (userInput.email === credential.email && userInput.password === credential.password) {
+    req.session.admin = userInput.email;
+    req.session.adLogged = true;
+    res.redirect('/adhome');
+  } else {
+    const err = 'Invalid Username or Password';
+    res.render('./admin/adlog', { err: err });
+  }
+};
 
 
 
