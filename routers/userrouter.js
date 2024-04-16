@@ -19,7 +19,7 @@ router.get("/user/product",checkUserStatus,verifyUser,controller.product);
 router.get("/user/mainproduct/:productId",checkUserStatus,verifyUser, controller.mainproduct);
 router.get('/user/signup',checkUserStatus,userExist,controller.signup)
 router.all('/user/login',checkUserStatus,userExist,controller.login)
-router.all('/login1',checkUserStatus,userExist,controller.login1)
+router.all('/home',checkUserStatus,userExist,controller.userhome)
 router.get('/user/logout',verifyUser,controller.logout)
 router.get('/user/about',verifyUser,controller.about)
 router.post('/wishlist/add',verifyUser,controller.wishlist); 

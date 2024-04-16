@@ -222,50 +222,30 @@ const updateAddress = async (req, res) => {
     }
 };
 
-
-
 const walletHistory = async (req, res) => {
     try {
         const user = req.session.user;
         const userId = user._id;
 
         const walletId = await Wallet.findOne({ user: userId });
-        console.log('walletId',walletId);    
-
-        let transactions = [];
-        let errorMessage = '';
+        console.log('walletId', walletId);    
 
         if (!walletId) {
-            // If wallet is not found, set an error message
-            const errorMessage = "No credit or debit transactions found.";
-            return res.render('./user/walletHistory', { user, errorMessage, transactions, balance });
+            const errorMessage = "No wallet found for this user.";
+            return res.render('./user/walletHistory', { user, errorMessage, transactions: [], balance: 0 });
         }
-        
-        
 
-        // Assuming walletHistory is an array of transactions
         const walletHistory = await WalletHistory.find({ wallet: walletId });
-        console.log('walletHistory',walletHistory);
+        console.log('walletHistory', walletHistory);
 
-        
-         // Calculate the total balance from wallet history
-         let balance = walletId.balance;
-        const creditTransactions = walletHistory.filter(transaction => transaction.transactionType === 'credit');
-        const debitTransactions = walletHistory.filter(transaction => transaction.transactionType === 'debit');
+        let balance = walletId.balance || 0;
 
-        if (creditTransactions.length === 0 && debitTransactions.length === 0) {
-            errorMessage = "No credit or debit transactions found.";
-            return res.render('./user/walletHistory', { user, errorMessage, transactions, balance });
-        }
-         
-         transactions = walletHistory.map(transaction => ({
+        const transactions = walletHistory.map(transaction => ({
             type: transaction.transactionType,
             amount: transaction.amount,
             description: transaction.description,
-            date: moment(transaction.timestamp).format("DD-MM-YYYY, HH:mm A")}));
-
-        console.log('transactions', transactions);
-
+            date: moment(transaction.timestamp).format("DD-MM-YYYY, HH:mm A")
+        }));
 
         transactions.forEach(transaction => {
             if (transaction.type === 'credit') {
@@ -275,15 +255,16 @@ const walletHistory = async (req, res) => {
             }
         });
 
+        console.log('transactions', transactions);
         console.log('balance', balance);
 
-
-        res.render('./user/walletHistory', { user, transactions, balance, errorMessage });
+        res.render('./user/walletHistory', { user, transactions, balance, errorMessage: '' });
     } catch (error) {
         console.error('Error fetching wallet history:', error);
         res.status(500).send('Internal Server Error');
     }
 }
+
 
 
 

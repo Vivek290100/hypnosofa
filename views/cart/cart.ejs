@@ -168,10 +168,14 @@
 
        .price{
        color: #004c3f; }
-        .back{
-            background-color: #004c3f;
-            color: #fff;
-        }
+       .back {
+    background-color: #004c3f;
+    color: #fff;
+    border: none;
+    width: 138px;
+    height: 50px;
+    border-radius: 3px;
+}
         /* .img-fluid{
             width: 100px;
             height: 100px;
@@ -198,9 +202,14 @@
     margin: 0 5px;
     font-size: 1rem;
 }
-.checkoup{
+.checkoup {
     background-color: #004c3f;
     color: #fff;
+    width: 153px;
+    height: 39px;
+    border: none;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 3px;
 }
 .alert {
             background-color: #ffffff;
@@ -264,7 +273,7 @@
                 <p class="dbquantity" style="color: #fff;"> <%= item.productId.quantity %></p>
                 
             <div class="col-2">
-                <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt="<%= item.productId.name %>"></a>
+                <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt=""></a>
             </div>
             <% } else { %>
                 <p>No images available</p>
@@ -517,12 +526,6 @@
     
 
 
-    
-
-
-
-</body>
-</html>
 
 
 

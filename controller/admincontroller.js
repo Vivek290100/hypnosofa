@@ -4,7 +4,6 @@ const orderModels = require('../models/orderModel');
 const moment = require("moment");
 const fs = require("fs");
 const puppeteer = require("puppeteer");
-const Banner = require('../models/bannerModel');
 const Category = require("../models/categoryModel"); 
 require('dotenv').config();
 
@@ -290,8 +289,7 @@ const salesReport = async (req, res) => {
     const endDate = req.query.endDate
       ? moment(req.query.endDate).endOf("day")
       : moment().endOf("day");
-      console.log('startDate',startDate);
-      console.log('endDate',endDate);
+     
       const formattedStartDate = moment(startDate).format('DD-MM-YYYY');
       const formattedEndDate = moment(endDate).format('DD-MM-YYYY');
     
@@ -339,42 +337,6 @@ const salesReport = async (req, res) => {
 
 
 
-const banner = async(req,res)=>{
-  res.render('./admin/banner')
-}
-
-const createBanner = async (req, res) => {
-  try {
-      const { imageUrl, caption, link } = req.body;
-      const banner = new Banner({ imageUrl, caption, link });
-      await banner.save();
-      res.status(201).json({ message: 'Banner created successfully' });
-  } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-const updateBanner = async (req, res) => {
-  try {
-      const { id } = req.params;
-      const { imageUrl, caption, link } = req.body;
-      await Banner.findByIdAndUpdate(id, { imageUrl, caption, link });
-      res.status(200).json({ message: 'Banner updated successfully' });
-  } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-const deleteBanner = async (req, res) => {
-  try {
-      const { id } = req.params;
-      await Banner.findByIdAndDelete(id);
-      res.status(200).json({ message: 'Banner deleted successfully' });
-  } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
 
 
 
@@ -389,8 +351,5 @@ const deleteBanner = async (req, res) => {
     updateOrderStatus,
     logout,
     salesReport,
-    banner,
-    createBanner,
-    updateBanner,
-    deleteBanner
+ 
   }

@@ -69,8 +69,7 @@ const checkout = async (req, res) => {
         const amount =  walletBalance; 
         const userCoupons = await Coupon.find();
         const length = cartItems.length
-        // console.log('length',length);
-        // console.log('carttitermsss',cartItems);
+
 
         res.render('./orders/checkout', { addresses, user, cartItems, totalPrice, amount,coupons: userCoupons, length: length});
     } catch (error) {
@@ -160,7 +159,6 @@ const createOrder = async (req, res, addresses) => {
         
         if (paymentMethod === 'Cash On Delivery') {
             const newOrder = new orderModels(newOrderData);
-            console.log('cod order', newOrder);
             await cartModels.findOneAndDelete({ userId: userId });
             await newOrder.save();
             res.status(200).json({ success: true, message: 'Order created successfully' });

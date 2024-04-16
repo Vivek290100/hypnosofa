@@ -58,7 +58,6 @@ const addproduct = async function (req, res) {
         }
 
     }
-    console.log('images', images)
 
         const newProduct = new Product({
             name,

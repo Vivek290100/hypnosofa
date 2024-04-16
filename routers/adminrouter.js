@@ -22,11 +22,6 @@ router.post("/block",verifyAdmin,controller2.block)
 router.post('/unblock',verifyAdmin,controller2.unblock)
 router.get('/adlogout',verifyAdmin,controller2.logout)
 
-// Banner management routes
-router.get('/banner', verifyAdmin, controller2.banner);
-router.post('/createBanner', verifyAdmin, controller2.createBanner);
-router.put('/banner/:id', verifyAdmin, controller2.updateBanner);
-router.delete('/banner/:id', verifyAdmin, controller2.deleteBanner);
 
 
 

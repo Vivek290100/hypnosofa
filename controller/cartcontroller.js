@@ -120,7 +120,6 @@ const updateQuantity = async (req, res) => {
 
     const productOffers = await ProductOffer.find({ product: { $in: productIds } });
 
-    // console.log('productOffers', productOffers);
 
     let updatePrice = 0;
 
@@ -129,7 +128,6 @@ const updateQuantity = async (req, res) => {
         const originalQuantity = product.quantity;
 
         
-        console.log('quantityquantity',quantity);
         if (quantity > 0 && quantity<=10) {
           console.log('Updating quantity for product:', product);
 
@@ -155,36 +153,20 @@ const updateQuantity = async (req, res) => {
           }
           
           product.updateprice = updatePrice;
-          // console.log('Updated product:', product);
-
-
         }
-        //else if(quantity==10){
-        //   console.log('Max quantity reached .' );
-        //   return res.status(400).json({ success: false, message: 'Max quantity reached .' });
-
-        // }
+        
       }
     }
-
-            console.log('quantityquantity',quantity);
             const product = await Product.findOne({ _id: productId });
             const dbquantity = product.quantity
-            console.log('Quantitydb:', dbquantity);
-
-
 
     let subtotal = 0;
     cart.products.forEach(item => {
       subtotal += item.updateprice || (item.productId.price * item.quantity);
     });
     cart.totals.subtotal = subtotal;
-    // console.log('Updated cart:', cart);
-
-
 
     await cart.save();
-    // console.log('Cart saved successfully.');
 
     res.json({ success: true, message: 'Quantity updated successfully.', updatePrice: updatePrice });
   } catch (error) {
@@ -217,7 +199,6 @@ const totalprice = async (req, res) => {
       const product = await Product.findById(item.productId);
       if (product && product.price) {
         let productPrice = product.price;
-        // Check if there's an active offer for this product
         const activeOffer = await ProductOffer.findOne({ product: item.productId });
         if (activeOffer && isActiveOffer(activeOffer)) {
           const discountPercentage = activeOffer.discountPercentage;

@@ -44,7 +44,7 @@ const login = (req, res) => {
 
 
 //checking the user valid or invalid------------------------------------------------------->
-const login1 = async (req, res) => {
+const userhome = async (req, res) => {
     const { email, password } = req.body;
     const products = await Product.find({isDeleted : false}).exec();
     try {
@@ -421,7 +421,7 @@ module.exports = {
     home,
     signup,
     login,
-    login1,
+    userhome,
     logout,
     product,
     mainproduct,
@@ -430,6 +430,4 @@ module.exports = {
     wishlistdb,
     removeFromWishlist,
     coupon,
-    // validcoupon,
-    // removeCoupon
 };
