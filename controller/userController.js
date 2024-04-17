@@ -121,10 +121,8 @@ const userhome = async (req, res) => {
                 break;
         }
 
-        // Count total number of products
         const totalProducts = await Product.countDocuments({ ...query, isDeleted: false });
 
-        // Calculate total number of pages
         const totalPages = Math.ceil(totalProducts / perPage);
 
         const products = await Product.find({ ...query, isDeleted: false })

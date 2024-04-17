@@ -61,7 +61,7 @@ const checkout = async (req, res) => {
             }
         }
 
-        if(totalPrice<1){
+        if(totalPrice<101){
             res.redirect('/user/cart')
         }
 

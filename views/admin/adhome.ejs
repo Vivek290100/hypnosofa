@@ -430,7 +430,7 @@
 							<tr>
 								<th>Order ID</th>
 								<th>Product</th>
-								<th>Total Orders</th> <!-- Modified from Total Quantity to Total Orders -->
+								<th>Total Orders</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -439,10 +439,10 @@
 									<td><%= item._id %></td>
 									<td>
 										<% for (const product of item.product) { %>
-											<%= product.name %> <!-- Assuming 'name' is the property that holds the product name -->
+											<%= product.name %> 
 										<% } %>
 									</td>
-									<td><%= item.totalOrders %></td> <!-- Modified from totalQuantity to totalOrders -->
+									<td><%= item.totalOrders %></td> 
 								</tr>
 							<% } %>
 						</tbody>
@@ -458,7 +458,7 @@
 							<tr>
 								<th>Category ID</th>
 								<th>Category Name</th>
-								<th>Count</th> <!-- Changed from count to Count for consistency -->
+								<th>Count</th> 
 							</tr>
 						</thead>
 						<tbody>
