@@ -11,17 +11,12 @@ const addToCart = async (req, res) => {
     const productId = req.params.productId;
     const product = await Product.findById(productId);
 
-    // if (!product || product.quantity <= 0) {
-    //   return res.status(400).json({ success: false, message: 'Product not available for purchase.' });
-    // }
-
     let cart = await cartModels.findOneAndUpdate(
       { userId },
       { $setOnInsert: { userId, products: [] } },
       { upsert: true, new: true }
     );
 
-    // Calculate the discounted price if there's an active offer
     let discountedPrice = product.price;
     const activeOffer = await ProductOffer.findOne({ product: productId });
     if (activeOffer && isActiveOffer(activeOffer)) {
@@ -34,7 +29,7 @@ const addToCart = async (req, res) => {
     if (existingProductIndex !== -1) {
       cart.products[existingProductIndex].quantity++;
     } else {
-      cart.products.push({ productId, quantity: 1, price: discountedPrice }); // Store the discounted price in the cart
+      cart.products.push({ productId, quantity: 1, price: discountedPrice }); 
     }
 
     await cart.save();
@@ -46,7 +41,6 @@ const addToCart = async (req, res) => {
 };
 
 
-//usercart function
 const usercart = async (req, res) => {
   try {
     const user = req.session.user || {};
@@ -63,9 +57,6 @@ const usercart = async (req, res) => {
     cartItems.forEach(item => {
       totalPrice += item.productId.price * item.quantity;
     });
-
-
-
     res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice,updatePrice });
   } catch (error) {
     console.error('Error fetching cart items:', error);
@@ -75,7 +66,6 @@ const usercart = async (req, res) => {
 
 
 
-//remove from the cart------------------------------------------------------->
 const removeFromCart = async (req, res) => {
   const userId = req.session.user._id; 
   const productId = req.params.productId;
@@ -89,7 +79,6 @@ const removeFromCart = async (req, res) => {
     );
     await cart.save();
     const updatedCart = await cartModels.findOne({ userId });
-    // const cartItemCount = updatedCart ? updatedCart.products.length : 0;
     res.redirect('/user/cart');
   } catch (error) {
     console.error('Error removing product from cart:', error);
@@ -99,46 +88,33 @@ const removeFromCart = async (req, res) => {
 
 
 
-//updateQuantity function
 const updateQuantity = async (req, res) => {
   try {
     const productId = req.params.productId;
     const quantity = req.body.quantity;
 
     if (quantity==10) {
-      console.log('limit reached',);//====================
-      // return res.status(400).json({ success: false, message: 'Quantity must be greater than 0.' });
+      console.log('limit reached',);
     }
 
     const cart = await cartModels.findOne({ 'products.productId': productId });
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart item not found.' });
     }
-
-    
     const productIds = cart.products.map(item => item.productId._id);
-
     const productOffers = await ProductOffer.find({ product: { $in: productIds } });
 
-
     let updatePrice = 0;
-
     for (const product of cart.products) {
       if (product.productId.toString() === productId) {
         const originalQuantity = product.quantity;
 
         
         if (quantity > 0 && quantity<=10) {
-          // console.log('Updating quantity for product:', product);
-
           product.quantity = quantity;
-          
-
-          
           const productDetails = await Product.findById(product.productId);
           if (productDetails) {
             let discountedPrice = productDetails.price;
-            // Check if there's an active offer for this product
             const activeOffer = productOffers.find(offer => offer.product.toString() === product.productId.toString());
             if (activeOffer && isActiveOffer(activeOffer)) {
               const discountPercentage = activeOffer.discountPercentage;
@@ -146,15 +122,11 @@ const updateQuantity = async (req, res) => {
               discountedPrice = productDetails.price - discountAmount;
             }
             updatePrice += discountedPrice * product.quantity;
-
             const quantityDifference = quantity - originalQuantity;
-
             await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
           }
-          
           product.updateprice = updatePrice;
         }
-        
       }
     }
             const product = await Product.findOne({ _id: productId });
@@ -165,9 +137,7 @@ const updateQuantity = async (req, res) => {
       subtotal += item.updateprice || (item.productId.price * item.quantity);
     });
     cart.totals.subtotal = subtotal;
-
     await cart.save();
-
     res.json({ success: true, message: 'Quantity updated successfully.', updatePrice: updatePrice });
   } catch (error) {
     console.error(error);
@@ -176,18 +146,13 @@ const updateQuantity = async (req, res) => {
 };
 
 
-
-
-// ------------------------------------------------
 function isActiveOffer(offer) {
   const today = new Date();
   return today >= offer.startDate && today <= offer.expiryDate;
 }
 
 
-
     
-// total price----------------------------------------
 const totalprice = async (req, res) => {
   try {
     const user = req.session.user;
@@ -208,10 +173,8 @@ const totalprice = async (req, res) => {
         totalPrice += productPrice * item.quantity;
       }
     }
-
     cart.totals.totalprice = totalPrice;
     await cart.save();
-
     res.json({ success: true, totalPrice: totalPrice });
   } catch (error) {
     console.error('Error fetching total price:', error);
@@ -219,7 +182,6 @@ const totalprice = async (req, res) => {
   }
 };
 
-// Function to check if offer is active
 function isActiveOffer(offer) {
   const today = new Date();
   return today >= offer.startDate && today <= offer.expiryDate;
@@ -227,47 +189,31 @@ function isActiveOffer(offer) {
 
 
 
-
-
-
-
-// ---------------------------------------------------
 const getUpdatedPrice = async (req, res) => {
   const productId = req.query.productId;
-
   try {
       const product = await Product.findById(productId);
-
       if (!product || !product.price) {
           return res.status(400).json({ success: false, message: 'Invalid product or price unavailable.' });
       }
-
       const cart = await cartModels.findOne({ userId: req.session.user._id });
       if (!cart) {
           return res.status(404).json({ success: false, message: 'Cart not found' });
       }
-
       let updatePrice = 0;
       for (const item of cart.products) {
           if (item.productId.toString() === productId) {
               updatePrice = item.price*item.quantity
           }
       }
-
       cart.totals.subtotal = updatePrice 
       await cart.save();
-
-
       res.render('./cart/cart.ejs', { pageTitle: 'usercart', user, cartItems, messages: req.flash(), totalPrice, updatePrice });
   } catch (error) {
       console.error('Error updating price based on quantity:', error);
       res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
-
-
-
-
 
 
 
@@ -278,6 +224,4 @@ module.exports = {
     updateQuantity,
     totalprice,
     getUpdatedPrice
-
-
   };

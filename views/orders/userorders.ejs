@@ -1,39 +1,26 @@
 <%- include('nav') -%>
 
 <title>User Orders</title>
-<!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-
-<!-- Custom CSS -->
 <style>
   .row-border {
     border: 1px solid #dee2e6;
-    /* Add border to row */
     border-radius: 5px;
-    /* Optional: Add border radius */
     padding: 15px;
-    /* Optional: Add padding */
-    /* margin-bottom: 20px; */
-    /* Optional: Add margin to separate rows */
   }
 
   .row-border {
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-
   .field-name {
-    font-weight: bold; /* Making field names bold */
+    font-weight: bold; 
   }
-
 </style>
 </head>
-
 <body style="background-color: #fff;">
-
 <div class="container mt-5">
   <% if (Orders.length === 0) { %>
     <div class="alert alert-info" role="alert">
@@ -47,14 +34,7 @@
           <div class="button-container ml-md-auto " style="text-align: end;">
             <button class="btn  download" style="background-color: #ffffff; color: #000000;" onclick="downloadinvoice('<%= order._id %>')"><i class="fa fa-download" style="font-size:24px"></i></button> 
           </div>
-
-
-          <!-- <button class="btn download" style="background-color: #ffffff; color: #000000;" onclick="downloadinvoice('<%= order._id %>')">
-            <i class="fa fa-download" style="font-size:24px"></i>
-          </button>  -->
-          
         </div>
-
         <div class="col-md-6 flex"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
           <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
             <div class="border p-3" >
@@ -79,7 +59,7 @@
             </table>
           </div>
         </div>
-        <div class="col-md-6"> <!-- Changed col-md-4 to col-md-6 for wider columns -->
+        <div class="col-md-6"> 
           <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
             <div class="border p-3"  >
               <h5 class="field-name" >ORDER SUMMARY</h5>
@@ -115,13 +95,11 @@
                     Cancel Order
                   <% } %>
                 </button>
-
                 <% if (order.status === 'Failed') { %>
                   <button class="btn  ml-1" style="background-color: #004c3f; color: #fff;" onclick="PaymentComplete('<%= order._id %>','<%= order.totals.discountTotal%>')" >
                   Continue Order
                   </button>
                   <% } %>  
-                   
             </div>
           </div>
         </div>
@@ -129,16 +107,11 @@
     <% }); %>
   <% } %>
 </div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery library -->
-
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-
 <script>
   function cancelOrder(orderId) {
     $.ajax({
@@ -158,7 +131,6 @@
 <script>
   document.querySelectorAll('.cancel-order-btn').forEach(button => {
     button.addEventListener('click', function() {
-      // Check if the order is already cancelled
       if (!this.classList.contains('cancelled')) {
         Swal.fire({
           position: "center",
@@ -183,7 +155,6 @@
 </script>
 
 
-
 <script>
   function downloadinvoice(orderId) {
     var downloadURL = '/downloadinvoice?orderId=' + orderId;
@@ -194,7 +165,6 @@
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        // Set the filename of the downloaded file
         a.download = `invoice_${orderId}.pdf`;
         document.body.appendChild(a);
         a.click();
@@ -204,13 +174,8 @@
   }
 </script>
 
-
 <script>
-
   function PaymentComplete(objectId,TotalAmount) {
-
-
-    
       $.ajax({
           url: '/GenerateOrderForFailedPayments',
           type: 'GET',
@@ -222,11 +187,9 @@
               alert('An error occurred while processing your request. Please try again later.');
           }
       });
-  
       const paymentData = {
           amount: TotalAmount,
       };
-  
       var options = {
           key: 'rzp_test_Dc1MSlNThSEKkf',
           currency: 'INR',
@@ -253,34 +216,9 @@
       });
   
       console.log('completing .............')
-  
-      // $.ajax({
-      //     url: '/FailedPaymentComplete',
-      //     type: 'POST',
-      //     contentType: 'application/json',
-      //     data: JSON.stringify(orderId),
-      //     success: function (response) {
-      //         if (response.ok) {
-      //             setTimeout(function () {
-      //                 window.location.href = '/user/Orders';
-      //             }, 500);
-      //         } else {
-      //             alert('Failed to inform your order error, contact us.');
-      //         }
-      //     },
-      //     error: function (xhr, status, error) {
-      //         console.error(xhr.responseText);
-      //         alert('An error occurred while processing your request. Please try again later.');
-      //     }
-      // });
-  
   }
   
   </script>
-  
-
-
-  
 <br><br><br><br><br>
 <footer class="custom-footer">
   <div class="containerr">
@@ -328,8 +266,6 @@
   </div>
 </footer>
 
-
-
 <style>
   .custom-footer {
   background-color: #004c3f;
@@ -341,22 +277,11 @@
   margin: 0 auto;
 }
 
-/* .custom-footer .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-} */
-
 .custom-col {
   padding-right: 25px;
   padding-left: 69px;
 }
 
-/* .custom-follow {
-  padding-left: 171px; 
-  padding-right: 180px; 
-} */
 
 .custom-footer .footer-heading {
   font-size: 18px;

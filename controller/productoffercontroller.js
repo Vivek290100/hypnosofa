@@ -84,14 +84,12 @@ const editProductOffer = async (req, res) => {
 
     const parsedPercentage = parseFloat(percentage);
 
-    // Assuming you have a ProductOffer model with a reference to the product
     const updatedProductOffer = await ProductOffer.findOneAndUpdate(
       { product: existingProduct._id },
       { $set: { discountPercentage: parsedPercentage, startDate, expiryDate } },
       { new: true, upsert: true }
     );
 
-    // Assuming you have a field named 'offerPrice' in your product model
     const offerPrice =
       existingProduct.price - (existingProduct.price * parsedPercentage) / 100;
     existingProduct.productOfferprice = offerPrice;
@@ -120,15 +118,10 @@ const deleteProductOffer = async (req, res) => {
       product: productId,
     });
     console.log('deletedProductOffer',deletedProductOffer);
-
     if (deletedProductOffer) {
       const product = await Product.findById(productId);
-
-      // Assuming you have a field named 'Offerprice' in your product model
       product.productOfferprice = null;
-
       await product.save();
-
       return res.json({
         success: true,
         message: "Product offer deleted successfully",
@@ -143,6 +136,8 @@ const deleteProductOffer = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+
 
 module.exports = {
   ProductOffers,

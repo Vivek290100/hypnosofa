@@ -33,8 +33,6 @@ const CategoryOffers = async (req, res) => {
       const expiryDate = offer ? formatDated(offer.expiryDate) : null;
       const startDate = offer ? formatDated(offer.startDate) : null;
       
-      
-
       if (
         searchQuery &&
         category.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -66,18 +64,17 @@ const CategoryOffers = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-//Edit offers------------------------------------------------------->
+
+
 const editOffer = async (req, res) => {
   try {
       const { categoryId, offerPercentage, startDate, expiryDate } = req.body;
 
-      // Find the existing category
       const existingCategory = await Category.findById(categoryId);
       if (!existingCategory) {
           return res.status(404).json({ success: false, message: "Category not found" });
       }
 
-      // Create or update the offer
       let offer = await Offer.findOne({ category: categoryId });
       if (!offer) {
           offer = new Offer({ category: categoryId });
@@ -88,8 +85,6 @@ const editOffer = async (req, res) => {
       offer.expiryDate = expiryDate;
       await offer.save();
 
-
-
       res.status(200).json({ success: true, message: "Category offer updated successfully" });
   } catch (error) {
       console.error("Error updating category offer:", error);
@@ -99,7 +94,6 @@ const editOffer = async (req, res) => {
 
 
 
-//Delete offer------------------------------------------------------->
 const deleteOffer = async (req, res) => {
   try {
     const { categoryId } = req.params;
@@ -121,7 +115,8 @@ const deleteOffer = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-//module exports------------------------------------------------------->
+
+
 module.exports = {
   CategoryOffers,
   editOffer,

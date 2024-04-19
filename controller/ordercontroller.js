@@ -42,7 +42,6 @@ var instance = new Razorpay({
 const checkout = async (req, res) => {
     try {
         const user = req.session.user;
-        // const addresses = await Address.find();
         const addresses = await Address.find({ userId: user._id });
         const cart = await cartModels.findOne({ userId: user._id });
         const cartItems = cart ? cart.products : [];
@@ -82,13 +81,12 @@ const checkout = async (req, res) => {
 
 
 
-//order time------------------------------------------------------->
+//order time--------------------------
 function getCurrentTime() {
     return moment().format('hh:mm A');
 }
 
 
-//-----create orderdatabase----------------------------------------
 const createOrder = async (req, res, addresses) => {
     try {
         const orderTime = getCurrentTime();
@@ -97,18 +95,10 @@ const createOrder = async (req, res, addresses) => {
         const userId = req.session.user._id;
         const { addressIndex, paymentMethod,couponCode } = req.body;
         let totalPrice = 0;
-
         const coupondb = await Coupon.findOne();
-
-        
         const cart = await cartModels.findOne({ userId: userId });
         const cartItems = cart ? cart.products : [];
 
-
-
-
-
-          // Deducting stock quantities
         for (const item of cartItems) {
             try {
                 const product = await Product.findById(item.productId);
@@ -124,10 +114,6 @@ const createOrder = async (req, res, addresses) => {
                 return res.status(500).json({ success: false, message: 'Failed to create order' });
             }
         }
-
-
-
-
 
         for (const item of cartItems) {
             try {
@@ -260,7 +246,6 @@ const faildPaymentHandler = async (req, res, addresses) => {
             }
         }
 
-
         totalPrice = cart.totals.totalprice;
 
         const products = cart.products.map(cartItem => ({
@@ -282,9 +267,7 @@ const faildPaymentHandler = async (req, res, addresses) => {
         } 
         }
         const TotalPriceAfterDiscount = totalPrice - discountAmount;
-
         const userAddress = await Address.findOne({ user: userId });
-
         const newOrderId = new ObjectId().toString(); 
             const newOrderData = {
             orderID: newOrderId,
@@ -322,10 +305,9 @@ const faildPaymentHandler = async (req, res, addresses) => {
 };
 
 
-//paymentVerify----------------------------------------------->
+
 const paymentVerify = async (req, res) => {
     const { amount } = req.body;
-
     const razorpaySecretKey = 'rzp_test_Dc1MSlNThSEKkf';
     let amountParsed = parseInt(amount);
     const amountInPaise = Math.round(amountParsed * 100);
@@ -342,9 +324,6 @@ const paymentVerify = async (req, res) => {
 
 
 
-
-
-//successorder---------------------------------------------------->
 const successorder = async (req, res) => {
     try {
         const user = req.session.user;
@@ -355,8 +334,9 @@ const successorder = async (req, res) => {
     }
   };
 
-//user orders-------------------------------------------->  
-const userorders = async (req,res)=>{
+
+
+  const userorders = async (req,res)=>{
     try{
         const user = req.session.user;
         const userId = req.session.user._id;
@@ -370,7 +350,8 @@ const userorders = async (req,res)=>{
     }
 }
 
-//viewProduct----------------------------------------------------->
+
+
 const viewproduct = async (req,res)=>{
     try{ 
         const user = req.session.user;
@@ -382,7 +363,7 @@ const viewproduct = async (req,res)=>{
 }
 
 
-//cancelorder----------------------------------------------------->
+
 const cancelorder = async (req, res) => {
     try {
         const id = req.body.orderId;
@@ -397,9 +378,7 @@ const cancelorder = async (req, res) => {
             orderData.status = 'Cancelled';
         }
         const orderpayment = orderData.paymentMethod;
-
         let TotalPrice = 0;
-
         if (orderpayment === 'RazorPay' || orderpayment === 'Wallet') {
              TotalPrice = orderData.totals.subtotal;
             const userWallet = await Wallet.findOne({ user: userId });
@@ -420,11 +399,8 @@ const cancelorder = async (req, res) => {
             });
             await walletHistory.save();
         } 
-
         await orderData.save();
         res.redirect('/user/orders');
-        // res.render('./orders/checkout', { user: user, amount: TotalPrice });
-        // res.status(200).json({ success: true, message: 'Order cancelled successfully' });
     } catch (error) {
         console.error('Error cancelling order:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -434,7 +410,6 @@ const cancelorder = async (req, res) => {
 
 
 
-//addaddresscheckout----------------------------------------------------->
 const addaddresscheckout = async (req, res) => {
     try {
         const user = req.session.user;
@@ -450,7 +425,6 @@ const addaddresscheckout = async (req, res) => {
 };
 
 
-//addaddresscheckoutt----------------------------------------------------->
 const addaddresscheckoutt = async (req, res) => {
     try {
         const userId = req.session.user._id;
@@ -474,7 +448,7 @@ const addaddresscheckoutt = async (req, res) => {
 };
 
 
-//downloadinvoice----------------------------------------------------->
+
 const downloadinvoice = async (req, res) => {
     try {
         const orderId = req.query.orderId; 
@@ -515,7 +489,6 @@ const downloadinvoice = async (req, res) => {
 
 
 
-//modules------------------------------------------------------->
 module.exports={
     checkout,
     createOrder,

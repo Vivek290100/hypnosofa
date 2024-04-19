@@ -27,7 +27,7 @@ router.get('/adlogout',verifyAdmin,controller2.logout)
 
 //order list-------------------------------------------->
 router.get("/userorder",verifyAdmin,controller2.userOrder);
-router.post('/updateOrderStatus', controller2.updateOrderStatus);
+router.post('/updateOrderStatus',verifyAdmin, controller2.updateOrderStatus);
 router.get('/download-sales-report', verifyAdmin, controller2.salesReport);
 
 

@@ -1,7 +1,7 @@
 const Category = require('../models/categoryModel');
 
 
-//categorylist in admin side------------------------------------------------------->
+//categorylist in admin side
 const categoryList = async (req, res) => {
    try{
         let query = {};
@@ -10,7 +10,6 @@ const categoryList = async (req, res) => {
             title: 'categories',
             categories,
             error: '',
-
         })
    }catch(error){
     console.error('Error fetching categories:', error);
@@ -20,13 +19,12 @@ const categoryList = async (req, res) => {
 
 
 
-// create category in admin side------------------------------------------------------->
 const createcat = function(req, res) {
     const error= req.flash('error');
     res.render('./categories/createcat',{error:error});
 };
 
-//add category in admin side------------------------------------------------------->
+
 const addcat = function(req, res) {
     const categoryName = req.body.categoryName;
     Category.findOne({ name: categoryName })
@@ -55,19 +53,15 @@ const addcat = function(req, res) {
 
 
 
-//Edit category in admin side------------------------------------------------------->
 const editCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;
         const updatedName = req.body.updatedName;
-
         const category = await Category.findByIdAndUpdate(categoryId, { name: updatedName }, { new: true });
-
         if (!category) {
             return res.status(404).send({ error: 'Category not found' });
         }
-
-        res.redirect('/category'); // Redirect to the category list page after successful update
+        res.redirect('/category'); 
     } catch (error) {
         console.error('Error updating category:', error);
         res.status(500).send({ error: 'Internal Server Error' });
@@ -91,10 +85,8 @@ const editCategoryForm = async (req, res) => {
 
 
 
-//find the delete category bu id------------------------------------------------------->
 const confirmdel = function(req, res) {
     const categoryId = req.params.id;
-
     Category.findById(categoryId)
         .then(category => {
             res.render('./categories/delete', { category });
@@ -104,7 +96,7 @@ const confirmdel = function(req, res) {
             res.status(500).send('Internal Server Error');
         });
 };
-//Delete category in admin side------------------------------------------------------->
+
 
 const deleteCategory = async (req, res) => {
     try {

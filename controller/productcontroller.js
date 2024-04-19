@@ -21,7 +21,7 @@ const productList = async (req, res) => {
 };
 
 
-//add product with categories that stored in database------------------------------------------------------->
+//add product with categories that stored in database------
 const addform = function(req, res) {
     Category.find({}).exec()
         .then(categories => {
@@ -34,7 +34,7 @@ const addform = function(req, res) {
 };
 
 
-//add product in admin side-------------------------------------------------------
+//add product in admin side----------------------------------
 const addproduct = async function (req, res) {
     try {
         const { name, description, category, price, quantity } = req.body;
@@ -48,17 +48,12 @@ const addproduct = async function (req, res) {
                 const imagePath = file.path;
                 const imageFilename = file.filename;
                 const resizedImagePath = path.join(__dirname, '../public/assets/product-images/', `resized_${imageFilename}`);
-            
-            // Resize and save the image using sharp
             await sharp(imagePath)
                 .resize(300, 200)
                 .toFile(resizedImagePath);
-            
                 images.push(imageFilename);
         }
-
     }
-
         const newProduct = new Product({
             name,
             description,
@@ -69,7 +64,6 @@ const addproduct = async function (req, res) {
         });
 
         await newProduct.save();
-        
         res.redirect('/product');
     } catch (error) {
         console.error('Error adding product:', error);
@@ -77,7 +71,8 @@ const addproduct = async function (req, res) {
     }
 };
 
-//Edit product------------------------------------------------------->
+
+//Edit product-----------------------
 const editform = function(req, res) {
     const productId = req.params.id;
     Promise.all([
@@ -93,7 +88,7 @@ const editform = function(req, res) {
     });
 };
 
-//Update product------------------------------------------------------->
+//Update product--------------------------------
 const updateproduct = async function (req, res) {
     const productId = req.params.id;
     const { name, description, category, price, quantity } = req.body;
@@ -105,8 +100,6 @@ const updateproduct = async function (req, res) {
         if (!currentProduct) {
             return res.status(404).send('Product not found');
         }
-
-        // Delete existing images
         for (const key in deleteExistingImages) {
             if (key.startsWith('deleteExistingImage')) {
                 const index = parseInt(key.replace('deleteExistingImage', ''));
@@ -130,7 +123,6 @@ const updateproduct = async function (req, res) {
                 console.log('New image added:', imageFilename);
             });
         }
-        
         currentProduct.name = name;
         currentProduct.description = description;
         currentProduct.category = category;
@@ -138,18 +130,12 @@ const updateproduct = async function (req, res) {
         currentProduct.quantity = quantity;
 
         await currentProduct.save();
-
         res.redirect('/product');
     } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
     }
 };
-
-
-
-
-
 
 
 

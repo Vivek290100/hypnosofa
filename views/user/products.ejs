@@ -302,7 +302,6 @@
     border-radius: 0 5px 5px 0;
 }
 
-/* Add media query for responsiveness */
 @media (max-width: 768px) {
     .input-group {
         flex-direction: column;
@@ -319,33 +318,6 @@
 }
 
 
-/* 
-.sbtn:hover {
-    background-color: #004c3f;
-} */
-
-/* Responsive adjustments */
-/* @media only screen and (max-width: 768px){
-.input-group {
-    margin-left: 44px;
-    margin-right: 57px;
-}
-
-    .input-group input[type="search"] {
-        height: 30px; 
-    }
-
-    .sbtn {
-        width: 28px; 
-        height: 30px; 
-    }
-} */
-
-
-
-/* body {
-  background: #e0e5ec;
-} */
 h1 {
   position: relative;
   text-align: center;
@@ -367,28 +339,7 @@ border-radius: 5px;
 }
 
 
-/* 
-.custom-btn {
-  width: 130px;
-  height: 40px;
-  color: #fff;
-  border-radius: 5px;
-  padding: 10px 25px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 500;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-   7px 7px 20px 0px rgba(0,0,0,.1),
-   4px 4px 5px 0px rgba(0,0,0,.1);
-  outline: none;
-} */
 
-
-/* 16 */
 .btn-16 {
   border: none;
   color: #000000;
@@ -523,7 +474,6 @@ border-radius: 5px;
               <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
                   onclick="openModal('<%= product.images[0] %>')"><br>
           <% }  %>
-              <!-- <img src="/assets/default-image.jpg" class="banner-image" id="image-zoom" alt="Default Image"><br> -->
           
           <h5 class="card-title"><%= product.name %></h5>
           <h5>Category: <%=product.category.name %></h5>

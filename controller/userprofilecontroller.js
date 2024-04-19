@@ -16,23 +16,13 @@ const moment = require('moment');
 const userprofile = async (req, res) => { 
     try {
         const user = req.session.user || {};
-    
-        // console.log(user,'userrrrrrrrrrrrrrrrrrrrrrr');
         const userId = user._id;
         const addresses = await Address.find({ userId });
-        
-
-        // const amount = await Wallet.findOne(userId, {balance:balance});
-        // console.log('amount',amount);
         const wallet = await Wallet.findOne({ user: user._id });
         const walletBalance = wallet ? wallet.balance : 0;
-        
         const amount =  walletBalance; 
-
         const userWithReferralCode = await User.findById(userId);
         const referralCode = userWithReferralCode.referralCode;
-        
-
         res.render('./userprofile/profile.ejs', { pageTitle: 'userprofile', user, addresses,amount,referralCode });
     } catch (error) {
         console.error('Error fetching addresses:', error);
@@ -41,10 +31,8 @@ const userprofile = async (req, res) => {
 };
 
 
-// Define the route for changing the password
 const changepassword = async (req, res) => {
     const userId = req.session.user._id;
-    
     try {
         const user = await User.findById(userId);
         if (!user) {
@@ -65,12 +53,9 @@ const changepassword = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-
         user.password = hashedPassword;
         await user.save();
-
         req.session.destroy();
-
         res.status(200).json({ message: 'Password changed successfully' });
     } catch (error) {
         console.error('Error changing password:', error);
@@ -80,14 +65,11 @@ const changepassword = async (req, res) => {
 
 
 
-//Address controll
 const saveAddress = async (req, res) => {
     try {
         if (req.session.user) {
             const userId = req.session.user._id;
-            // console.log("userid", userId);
             const user = await User.findById(userId);
-            // console.log("user n", user);
             if (!user) {
                 return res.status(404).send('User not found');
             }
@@ -111,10 +93,7 @@ const saveAddress = async (req, res) => {
             user.addresses = user.addresses || [];
             user.addresses.push(newAddress._id);
             await user.save();
-
-            // Update the session with the user object
             req.session.user = user;
-
             return res.redirect('/user/address');
         } else {
             return res.status(401).send('Unauthorized');
@@ -127,9 +106,6 @@ const saveAddress = async (req, res) => {
 
 
 
-
-
-//delete address 
 
 const deleteAddress = async (req, res) => {
     try {
@@ -147,14 +123,12 @@ const deleteAddress = async (req, res) => {
 
 
 
-  
 
 const saveUser = async (req, res) => {
     try {
         if (!req.session.user._id) {
             throw new Error('User ID not found in request');
         }
-
         const userId = req.session.user._id;
         console.log('userId......',userId);
         const newName = req.body.name;
@@ -193,9 +167,7 @@ const updateAddress = async (req, res) => {
     try {
         const { mobile, pincode, houseName, locality, city, district, state } = req.body;
         const addressId = req.params.addressId;
-
         let address = await Address.findById(addressId);
-
         address.mobile = mobile;
         address.pincode = pincode;
         address.houseName = houseName;
@@ -204,39 +176,33 @@ const updateAddress = async (req, res) => {
         address.district = district;
         address.state = state;
 
-        // Save the updated address
         await address.save();
         res.redirect('/user/profile')
-        // res.status(200).json({ success: true, message: 'Address updated successfully' });
     } catch (err) {
         console.error('Error updating address:', err);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
+
+
 const walletHistory = async (req, res) => {
     try {
         const user = req.session.user;
         const userId = user._id;
-
         const walletId = await Wallet.findOne({ user: userId });
-
         if (!walletId) {
             const errorMessage = "No wallet found for this user.";
             return res.render('./user/walletHistory', { user, errorMessage, transactions: [], balance: 0 });
         }
-
         const walletHistory = await WalletHistory.find({ wallet: walletId });
-
         let balance = walletId.balance || 0;
-
         const transactions = walletHistory.map(transaction => ({
             type: transaction.transactionType,
             amount: transaction.amount,
             description: transaction.description,
             date: moment(transaction.timestamp).format("DD-MM-YYYY, HH:mm A")
         }));
-
         transactions.forEach(transaction => {
             if (transaction.type === 'credit') {
                 balance += transaction.amount;
@@ -245,17 +211,12 @@ const walletHistory = async (req, res) => {
             }
         });
 
-
         res.render('./user/walletHistory', { user, transactions, balance, errorMessage: '' });
     } catch (error) {
         console.error('Error fetching wallet history:', error);
         res.status(500).send('Internal Server Error');
     }
 }
-
-
-
-
 
 
 

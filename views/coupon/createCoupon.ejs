@@ -113,10 +113,6 @@
     <form id="createCouponForm" action="/admin/create-coupon" method="post">
       <label for="couponCode">Coupon Code:</label>
       <input type="text" id="couponCode" name="couponCode" required />
-
-      <!-- <label for="description">Description:</label>
-      <textarea id="description" name="description" required></textarea> -->
-
       <label for="minPurchaseAmount">Min Amount:</label>
       <input
         type="text"
@@ -126,7 +122,6 @@
         title="Please enter a valid number"
         required
       />
-
       <label for="discountAmount">Discount:</label>
       <input type="text" id="discountAmount" name="discountAmount" required />
 
@@ -148,7 +143,6 @@
       modal.style.display = "block";
     }
 
-    // Function to close the custom modal
     function closeCustomModal() {
       const modal = document.getElementById("customModal");
       modal.style.display = "none";
@@ -172,7 +166,6 @@
         return;
       }
 
-      // Check if expiry date is today or later
       const expiryDate = new Date(formData.get("expiryDate"));
       expiryDate.setHours(0, 0, 0, 0);
 

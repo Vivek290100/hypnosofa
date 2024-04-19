@@ -3,32 +3,20 @@
 	<%- include('../adminlayout/header') -%>
 
     <head>
-      
         <link rel="stylesheet" href="/css/userList.css">
-    
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
     </head>
-
-   
 <body>
-
-
 	<!-- SIDEBAR -->
 	<%- include('../adminlayout/slider') -%>
 	<!-- SIDEBAR -->
-
-
 
 	<!-- CONTENT -->
 	<section id="content">
 		<!-- NAVBAR -->
 		<%- include('../adminlayout/navbar') -%>
 		<!-- NAVBAR -->
-
-
-
-
         <style>
             .unblock-button{
                 background-color: rgb(204, 48, 28);
@@ -64,12 +52,8 @@
             </table>
 		</main>
 		<!-- MAIN -->
-
-
 	</section>
 	<!-- CONTENT -->
-	
-
     <div id="confirmationModal" class="modal">
         <div id="center-modal" class="d-flex justify-content-center align-items-center">
         <div class="modal-content">
@@ -79,8 +63,6 @@
         </div>
     </div>
     </div>
-
-
     <!-- Add Category Modal -->
 <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -92,12 +74,6 @@
           </button>
         </div>
         <div class="modal-body">
-          <!-- Add your form fields for adding a category here -->
-          <!-- Example: -->
-          <!-- <form id="addCategoryForm"> -->
-          <!--   <label for="categoryName">Category Name:</label> -->
-          <!--   <input type="text" id="categoryName" name="categoryName"> -->
-          <!-- </form> -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -106,7 +82,6 @@
       </div>
     </div>
   </div>
-    <!-- /Add Category Modal -->
 
 	<%- include('../adminlayout/footer') -%>
     
@@ -114,17 +89,8 @@
 
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-
-
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
-
-
-    <!-- <script>
-        window.alert = function() {};
-    </script> -->
-
 <script>
     jQuery.noConflict();
     jQuery(document).ready(function($) {
@@ -132,16 +98,9 @@
     });
 </script>
 
-    <script>
-
-
-// console.log(use)
-// console.log(currentUserId);
-
-
+ <script>
 var currentAction;
 var currentUserId;
-
 
 function showConfirmationModal(action, userId) {
 currentAction = action;
@@ -161,13 +120,10 @@ hideConfirmationModal();
 
 if (confirmed) {
 
-      // Hide the row of the category
       var rowToDelete = document.querySelector('tr[data-id="' + currentUserId + '"]');
         if (rowToDelete) {
             rowToDelete.style.display = 'none';
         }
-
-
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/deletecat', true);
@@ -192,8 +148,7 @@ location.reload();
 }, 400);
 }
 }
-
-    </script>
+</script>
 
 
 <style>
@@ -201,9 +156,8 @@ location.reload();
         font-size: small;
     }
     .deleted-category {
-    text-decoration: line-through; /* Apply a strike-through style */
-    color: #999; /* Change the color to gray */
-    /* Add any other styles as desired */
+    text-decoration: line-through;
+    color: #999; 
 }
 </style>
 

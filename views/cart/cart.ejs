@@ -17,7 +17,6 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
             font-size: 1.1rem;
-            /* font-weight: bold; */
         }
         .title {
             margin-bottom: 5vh;
@@ -223,17 +222,12 @@
             left: 0;
             width: 64%;
             z-index: 999;
-            /* background: linear-gradient(to bottom, #1b98e0, #2b00ff); */
             background-color: #ddd;
 
-            /* width: 90%;  */
             text-align: center; 
             margin-left: 200px;
             border-radius: 20px 20px 5 6;
         }
-
-      
-        
     </style>
 </head>
 <body>
@@ -260,8 +254,6 @@
                     <% } %>
                 </div>
             </div>
-            
-           
            
             <div class="row border-top border-bottom">
                 <% if (cartItems && cartItems.length > 0) { %>
@@ -283,15 +275,11 @@
                 <div class="row text-muted">₹<%=item.productId &&  item.productId.price%></div>
 
             </div>
-
-
             <div class="col quantity-control">
                 <button class="decrease" >-</button>
                 <input type="text" class="quantity-input" value="<%=item.quantity%>" max=<%=item.productId.quantity%> readonly>
                 <button class="increase" >+</button>   
             </div>
-            
-            
 
             <% if (item.productId && item.productId.price) { %>
                 <div class="col pricec">
@@ -309,15 +297,6 @@
                     </div>
                 </div>
             <% } %>
-            
-            
-
-            
-           
-            
-
-
-
 
             <!-- Move remove button outside the 'col' div -->
             <div class="col">
@@ -334,9 +313,7 @@
             <p>Add items to it now.</p>
         </div>
     <% } %>
-
             </div>
-            
             
             <div class="back-to-shop"><a href="/user/product"><button class="text-mute back">🢀Back to shop</button></a></div>
         </div>
@@ -352,16 +329,11 @@
                 <div class="col" style="padding-left:0;">TOTAL PRICE (<%= cartItems.length %> items)</div>
                 <div class="col text-right" id="total-price">₹ <%= totalPrice.toFixed(2) %></div>
             </div><br>
-
                 
             
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                <!-- <div class="col">PACKAGING FEE</div>
-                <div class="col text-right">&euro; 137.00</div> -->
             </div>
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
-                <!-- <div class="col">TOTAL PRICE</div>
-                <div class="col text-right" id="total-price">₹ </div> -->
             </div>
             <a class="btn" href="/checkout"><button class="checkoup" >CHECKOUT</button></a>
             
@@ -373,14 +345,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-
-
-
-
-
-
-
 <!-- Updated removeItem function in the script section -->
 <script>
     function removeItem(button) {
@@ -390,11 +354,8 @@
           type: 'DELETE',
           success: function(response) {
             if (response.success) {
-              // Remove the item from the UI without reloading the page
-            //   $(button).closest('.main').remove();
-              // You can also update any summary or total price if needed
+            
             } else {
-              // Handle error response
               console.error(response.message);
             }
           },
@@ -403,8 +364,6 @@
           }
         });
     }
-    
-
     </script>
     
 
@@ -446,7 +405,7 @@
         function updateQuantity(productId, quantity) {
     if (isNaN(quantity)) {
         console.error('Invalid quantity:', quantity);
-        return; // Exit the function if quantity is not a number
+        return;
     }
             $.ajax({
                 url: `/updateQuantity/${productId}`,
@@ -487,11 +446,8 @@
             });
         }
     
-        // Call the updateTotalPrice function when the page loads
         $(document).ready(function() {
-            updateTotalPrice(); // Fetch and update total price on page load
-    
-            // Update the total price every 5 seconds (adjust the interval as needed)
+            updateTotalPrice(); 
             setInterval(updateTotalPrice,100 );
         });
     </script>
@@ -500,28 +456,23 @@
     <script>
        $(document).ready(function() {
     $('.col.price').each(function() {
-        var productId = $(this).data('product-id'); // Get the product ID
-        var priceDiv = $(this); // Store the price div element
-
-        // Check if productId is available
+        var productId = $(this).data('product-id'); 
+        var priceDiv = $(this); 
         if (productId) {
             $.ajax({
-                url: '/getProductPrice', // Your endpoint to fetch product price
+                url: '/getProductPrice', 
                 type: 'GET',
                 data: { productId: productId },
                 success: function(response) {
-                    // Update the price in the HTML
                     priceDiv.html('₹ ' + (response.price * $('.quantityInput[value="' + productId + '"]').val()).toFixed(2));
                 },
                 error: function() {
-                    // Handle error
                     priceDiv.html('Price Unavailable');
                 }
             });
         }
     });
 });
-
     </script>
     
 

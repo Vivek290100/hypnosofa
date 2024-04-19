@@ -1,7 +1,9 @@
 const nodemailer = require("nodemailer");
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
-//nodemailer to send otp------------------------------------------------------->
+
+
+//nodemailer to send otp-----------------------
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -17,12 +19,14 @@ let transporter = nodemailer.createTransport({
     connectionTimeout: 60000, 
     socketTimeout: 60000,
 });
-//generate otp------------------------------------------------------->
+
+
+//generate otp------------
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
 }
 const otp1 = generateOTP();
-//otp for user email------------------------------------------------------->
+//otp for user email-------------------
 const sendOTP = async (email, otp) => {
     const mailOptions = {
         to: email,
@@ -39,7 +43,7 @@ const sendOTP = async (email, otp) => {
         });
     });
 };
-//password for forgot password------------------------------------------------------->
+//password for forgot password--------------
 const forgotPassword = async (req, res) => {
     try {
         const email = req.body.email;
@@ -61,7 +65,7 @@ const forgotPassword = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-//check the otp ------------------------------------------------------->
+//check the otp --------------------------
 const resetPassword = async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
@@ -78,7 +82,7 @@ const resetPassword = async (req, res) => {
             req.flash('error', 'User not found.');
             return res.send("invalid user");
         }
-        const hashedPassword = await bcrypt.hash(newPassword, 10); // 10 is the number of salt rounds
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         user.resetPasswordOTP = null;
         await user.save();
@@ -86,7 +90,6 @@ const resetPassword = async (req, res) => {
             req.session.user=user
             return res.redirect('/user/profile');
         } else {
-            // If the user is not logged in, redirect to the login page
             return res.redirect('/user/login');
         }
     } catch (error) {
@@ -95,12 +98,14 @@ const resetPassword = async (req, res) => {
         return res.status(500).render('error', { error: req.flash('error') });
     }
 };
-//to get the email id of the user for resend------------------------------------------------------->
+
+
+//to get the email id of the user for resend----------------------
 const showForgotPasswordForm = (req, res) => {
     console.log(req.body);
     res.render('./user/forgot', { error: req.flash('error') });
 };
-//otp resend------------------------------------------------------->
+//otp resend-------------------------------------------------------
 const otpresend = function (req, res) {
     const email = req.session.user && req.session.user.email;
     console.log(email);
@@ -108,7 +113,7 @@ const otpresend = function (req, res) {
     const mailOptions = {
         to: email,
         subject: "Otp for registration is: ",
-        html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" +storedOTP + "</h1>" // html body
+        html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" +storedOTP + "</h1>" 
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -119,7 +124,8 @@ const otpresend = function (req, res) {
         res.render('./user/resetpassword', { email: email, errorMessage1: "OTP has been sent" });
     });
 };
-//modules exports------------------------------------------------------->
+
+
 module.exports = {
     forgotPassword,
     resetPassword,

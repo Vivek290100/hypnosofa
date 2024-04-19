@@ -18,9 +18,7 @@ const cartItemCountMiddleware = require('../middlewares/cartCountMiddleware');
 const home = async (req, res) => {
     try {
         const user = req.session.user;
-
         const products = await Product.find({isDeleted : false}).exec();
-
     res.render("./user/userhome", { pageTitle: "userhome", user,  products});
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -43,7 +41,7 @@ const login = (req, res) => {
 }
 
 
-//checking the user valid or invalid------------------------------------------------------->
+//checking the user valid or invalid---------------------------------
 const userhome = async (req, res) => {
     const { email, password } = req.body;
     const products = await Product.find({isDeleted : false}).exec();
@@ -59,13 +57,13 @@ const userhome = async (req, res) => {
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (passwordMatch) {
-           
             req.session.logged = true;
             req.session.user = {
             name: user.name,
             email: user.email,
            _id: user._id,
    };
+
    await cartItemCountMiddleware(req, res, () => {});
    const products = await Product.find({isDeleted : false}).exec();
                return res.render('./user/userhome', { user ,products});
@@ -81,6 +79,7 @@ const userhome = async (req, res) => {
    };
 
 
+
    const product = async (req, res) => {
     try {
         const user = req.session.user;
@@ -89,7 +88,6 @@ const userhome = async (req, res) => {
         let sortCriteria = req.query.sort; 
         let categoryFilter = req.query.category;
         
-        // Pagination
         const currentPage = parseInt(req.query.page) || 1; 
         const perPage = 8;
         const skip = (currentPage - 1) * perPage;
@@ -182,7 +180,6 @@ const mainproduct = async (req,res)=>{
         }
 
         const productOffers = await ProductOffer.find({ product: productId });
-        // console.log(productOffers);
 
         const user = req.session.user;
         cartItemCount=req.session.cartItemCount
@@ -218,22 +215,17 @@ const wishlist = async (req, res) => {
     try {
         const user = req.session.user;
         const  productId  =req.body.productId
-        // console.log('productId',productId);
 
         const product = await Product.findById(productId);
         if (!product) {
-            // return res.status(404).json({ error: 'Product not found' });
-            // console.log('Product not found' );
         }
 
         const wishlistItem = new Wishlist({
             userId: user._id, 
             productId : product
         });
-        // console.log('wishlistItem', wishlistItem);
 
         await wishlistItem.save();
-
         res.status(201).json({ message: 'Wishlist item added successfully' });
     } catch (error) {
         console.error(error);
@@ -247,9 +239,7 @@ const wishlist = async (req, res) => {
 const wishlistdb = async (req, res) => {
     try {
         const user = req.session.user;
-
         const categories = await Category.find();
-
         const wishlistItems = await Wishlist.find({ userId: user._id }).populate('productId','category');
         let products = [];
         for (let i of wishlistItems) {
@@ -260,18 +250,12 @@ const wishlistdb = async (req, res) => {
         }
 
         const productoffer = await ProductOffer.find().select('discountPercentage product').exec();        
-        // console.log('productoffer',productoffer);
 
         const discountedProducts = products.map(product => {
             const offer = productoffer.find(offer => offer.product.equals(product._id));
             const discountedPrice = offer ? product.price * (1 - offer.discountPercentage / 100) : product.price;
             return { ...product.toObject(), discountedPrice,offer };
         });
-
-        // console.log('discountedProducts',discountedProducts);
-        // console.log(' pc.productId',products );
-        // console.log("this are ",products) 
-
         res.render('user/wishlist', { user, products: discountedProducts,categories });
     } catch (error) {
         console.error(error);
@@ -283,11 +267,8 @@ const wishlistdb = async (req, res) => {
 const removeFromWishlist = async (req, res) => {
     try {
         const { productId } = req.params;
-        // console.log('productIdiii',productId); 
         const userId = req.session.user._id;  
-
         await Wishlist.findOneAndDelete({ userId, productId });
-
         res.status(200).json({ message: 'Product removed from wishlist successfully' });
     } catch (error) {
         console.error(error);
@@ -299,7 +280,6 @@ const removeFromWishlist = async (req, res) => {
 const coupon = async (req, res) => {
     try {
         const user = req.session.user;
-
         const userCoupons = await Coupon.find();
         res.render('./user/coupon', { user, coupons: userCoupons });
     } catch (error) {
@@ -310,108 +290,6 @@ const coupon = async (req, res) => {
 
 
 
-
-// const validcoupon = async (req, res) => {
-//     try {
-//         const couponCode = req.query.code;
-//         const userId = req.session.user._id;
-        
-//         const coupon = await Coupon.findOne({ couponCode });
-        
-        
-//         if (!coupon) {
-//             return res.json({
-//                 valid: false,
-//                 message: "Invalid coupon code.",
-//             });
-//         }
-        
-//         const currentDate = new Date();
-//         const startDate = coupon.startDate;
-//         const expiryDate = coupon.expiryDate;
-//         if (currentDate < startDate || currentDate > expiryDate) {
-//             return res.json({
-//                 valid: false,
-//                 message: "Coupon is expired or not yet valid.",
-//             });
-//         }
-        
-//         const isCouponUsed = await orderModel.exists({
-//             customer: userId,
-//             "totals.couponCode": couponCode,
-//             status: { $ne: "Cancelled" },
-//         });
-//         if (isCouponUsed) {
-//             return res.json({
-//                 valid: false,
-//                 message: "Coupon is already used in a previous order.",
-//             });
-//         }
-        
-//         const cart = await cartModels.findOne({ userId });
-//         const originalTotal = cart.totals.totalprice;
-//         const discountAmount = coupon.discountAmount;
-//         const discountedTotal = Math.max(originalTotal - discountAmount, 0);
-        
-//         await cartModels.findOneAndUpdate(
-//             { userId },
-//             {
-//                 $set: {
-//                     "totals.discountAmount": discountAmount,
-//                     "totals.discountedTotal": discountedTotal,
-//                 },
-//             },
-//             { new: true }
-//         );
-        
-//         return res.json({
-//             valid: true,
-//             discountedTotal: discountedTotal.toFixed(2),
-//         });
-        
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// }
-
-
-
-
-// const removeCoupon = async (req, res) => {
-//     const couponCode = req.query.code;
-//     try {
-//       const userId = req.session.user._id;
-//       const coupon = await Coupon.findOne().populate('couponCode')
-//       if (!coupon) {
-//         res.status(404).json({
-//           error: "Coupon not found.",
-//         });
-//         return;
-//       }
-//       const cart = await cartModels
-//         .findOne({ userId })
-//         .populate("products.productId", "name price description image");
-//       const updatedcart = await cartModels.findOneAndUpdate(
-//         { userId },
-//         {
-//           $set: {
-//             "totals.discountAmount": 0,
-//             "totals.discountedTotal": cart.totals.totalprice,
-//           },
-//         },
-//         { new: true }
-//       );
-//       res.status(200).json({
-//         success: true,
-//       });
-//     } catch (error) {
-//       console.error("Error removing discount:", error);
-//       res.status(500).json({
-//         error: "Internal server error",
-//       });
-//     }
-//   };
 
 
 

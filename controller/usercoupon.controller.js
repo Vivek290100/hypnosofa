@@ -1,6 +1,8 @@
 const Coupon = require("../models/couponModel");
 const cartModels = require("../models/cartModel");
 const orderModel = require("../models/orderModel");
+
+
 //coupon validation------------------------------------------------------->
 const validcoupon = async (req, res) => {
   const couponCode = req.query.code;
@@ -51,8 +53,6 @@ const validcoupon = async (req, res) => {
       },
       { new: true }
     );
-    // console.log("apply coupon", discountedTotal);
-
     res.json({
       valid: true,
       discountedTotal: discountedTotal.toFixed(2),
@@ -64,6 +64,8 @@ const validcoupon = async (req, res) => {
     });
   }
 };
+
+
 //remove coupon------------------------------------------------------->
 const removeCoupon = async (req, res) => {
   const couponCode = req.query.code;
@@ -99,7 +101,8 @@ const removeCoupon = async (req, res) => {
     });
   }
 };
-//module------------------------------------------------------->
+
+
 module.exports = {
   validcoupon,
   removeCoupon,

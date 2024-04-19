@@ -9,16 +9,12 @@ require('dotenv').config();
 
 
 
-//admin login------------------------------------------------------->
 const admin = (req, res) => {
-
     res.render('./admin/adlog', { title: 'user login', err: false });
   };
 
 
 
-
-//admin home------------------------------------------------------->
 const adhome = async (req, res) => {
     try {
       const totalOrders = await orderModels.countDocuments();
@@ -89,7 +85,7 @@ const adhome = async (req, res) => {
         {
             $group: {
                 _id: "$products.product",
-                totalOrders: { $sum: 1 } // Counting orders instead of summing quantity
+                totalOrders: { $sum: 1 } 
             }
         },
         { $sort: { totalOrders: -1 } },
@@ -153,7 +149,6 @@ const topSellingCategories = await orderModels.aggregate([
 
 
 
-//checking email and password------------------------------------------------------>
 const dashboard = (req, res) => {
   const credential = {
     email: process.env.ADMIN_EMAIL,
@@ -176,8 +171,6 @@ const dashboard = (req, res) => {
 
 
 
-  //Users List------------------------------------------------------>
-
   const users = async (req, res) => {
     try {
       const users = await User.find()
@@ -193,7 +186,6 @@ const dashboard = (req, res) => {
 
 
 
-//blocking user i------------------------------------------------------->
 const block=async (req, res) => {
   const { userId } = req.body;
   try {
@@ -212,7 +204,7 @@ const block=async (req, res) => {
 };
 
 
-//unblocking user------------------------------------------------>
+
 const unblock=async (req, res) => {
   const { userId } = req.body;
   try {
@@ -231,7 +223,7 @@ const unblock=async (req, res) => {
 };
 
 
-//logout------------------------------------------------->
+
 const logout = (req, res) => {
   req.session.destroy(err => {
     if (err) {
@@ -242,7 +234,7 @@ const logout = (req, res) => {
 };
 
 
-//order list ------------------------------------------->
+
 const userOrder = async(req,res)=>{
   try{
 
@@ -268,8 +260,6 @@ const userOrder = async(req,res)=>{
 }
 
 
-
-//updateOrderStatus----------------------------------------------------->
 const updateOrderStatus = async (req, res) => {
     try {
         const { orderId, newStatus } = req.body;
@@ -281,7 +271,6 @@ const updateOrderStatus = async (req, res) => {
 }
 
 
-//salesReport----------------------------------------------------->
 const salesReport = async (req, res) => {
   try {
     const startDate = req.query.startDate
@@ -339,8 +328,6 @@ const salesReport = async (req, res) => {
 
 
 
-
-
   module.exports = {
     admin,
     dashboard,
@@ -352,5 +339,4 @@ const salesReport = async (req, res) => {
     updateOrderStatus,
     logout,
     salesReport,
- 
   }

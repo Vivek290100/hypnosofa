@@ -13,7 +13,8 @@ function generateReferralCode() {
     return referralCode;
 }
 
-//Transporter for the mail(nodemailer)------------------------------------------------------->
+
+
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -31,7 +32,7 @@ let transporter = nodemailer.createTransport({
 });
 
 
-//generate otp------------------------------------------------------->
+//generate otp--------------------------
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
 }
@@ -39,7 +40,7 @@ const otp = generateOTP();
 console.log(otp);
 
 
-//sending the generated otp to the user------------------------------------------------------->
+//sending the generated otp to the user--
 const otp1 = async function (req, res) {
     try {
         const existingUser = await User.findOne({
@@ -84,7 +85,8 @@ const otp1 = async function (req, res) {
       }
     };
 
-//verifying generated otp and user entered otp------------------------------------------------------->
+
+//verifying generated otp and user entered otp----------
 const verify = async function (req, res) {
         const user = req.session.user;
         const userOTP = req.body.otp;
@@ -140,7 +142,6 @@ const verify = async function (req, res) {
             const savedUser = await newUser.save();
             
             req.session.userId = newUser._id;
-            // console.log("User data inserted successfully:", savedUser);
             const error1 = "Welcome ,you are a member of Hypnosofa!";
             res.render("./user/login", { user, error1 });
           } catch (error) {
@@ -183,7 +184,7 @@ const verifyreferralcode = async (req,res)=>{
 
 
 
-//Resend otp to the user------------------------------------------------------->
+//Resend otp to the user-------------
 const resend = function (req, res) {
     const user=req.session.user
     let email=user.email
