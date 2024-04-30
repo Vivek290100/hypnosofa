@@ -15,6 +15,16 @@
     background-size: cover;
   }
 
+  .i{
+    width: 50px;
+    height: 43px;
+    margin-top: 1px;
+    background-color: rgb(255, 255, 255);
+    padding-top: 8px;
+
+  }
+
+
   .container {
     text-align: center;
     padding-top: 30px;
@@ -39,14 +49,14 @@
   }
 
   .input {
-    width: 169%;
+    width: 153%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
 
   .input1 {
-    width: calc(100% - 100px);
+    width: calc(108% - 100px);
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -57,17 +67,29 @@
     padding: 10px;
     margin-left: 10px;
     border: none;
+    border-radius: 5px;
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
     background-color: #156161;
     color: #fff;
   }
 
-  .btn1 {
+  /* .btn1 {
     width: 50%;
     height: 40px;
     margin-top: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+    border: none;
+  } */
+
+  .btn1 {
+    width: 84%;
+    border-radius: 3px;
+    height: 40px;
+    margin-top: 15px;
+    margin-right: 61px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+}
 
   .alert {
     margin-top: -26px;
@@ -84,13 +106,13 @@
  
   @media only screen and (max-width: 767px) {
  .input{
-  width: 129%;
+  width: 115%;
  }
 }
 
 @media only screen and (max-width: 425px) {
   .container{
-    padding: 71px;
+    /* padding: 71px; */
     /* margin-bottom: 25px; */
     width: 100vw;   
     height: 113vh;
@@ -104,14 +126,14 @@
 
 </style>
 
-<div class="container" id="gradient">
+<div class="container" >
   <div class="login-container">
     <form action="/send" method="POST" onsubmit="return validateForm()">
       <h2>Hypnosofa</h2>
       
       <div class="input-div d-flex">
         <div class="i">
-          <!-- <i class="fas fa-user"></i> -->
+          <i class="fas fa-user"></i>
         </div>
         <div class="shadow">
           <input class="input" type="text" placeholder="Name" name="name" id="name" />
@@ -119,7 +141,7 @@
       </div>
       <div class="input-div d-flex">
         <div class="i">
-          <!-- <i class="fas fa-envelope"></i> -->
+          <i class="fas fa-envelope"></i>
         </div>
         <div>
           <input class="input" type="email" placeholder="Email" name="email" id="email" />
@@ -127,7 +149,7 @@
       </div>
       <div class="input-div d-flex">
         <div class="i">
-          <!-- <i class="fas fa-lock"></i> -->
+          <i class="fas fa-lock"></i>
         </div>
         <div>
           <input class="input" type="password" placeholder="Password" name="password" id="password"
@@ -141,7 +163,7 @@
       </div>
       <div class="input-div d-flex">
         <div class="i">
-          <!-- <i class="fas fa-lock"></i> -->
+          <i class="fas fa-lock"></i>
         </div>
         <div>
           <input class="input" type="password" id="confirmPassword" placeholder="Confirm Password"
@@ -165,7 +187,7 @@
           <i class="fas fa-lock"></i>
         </div> -->
         <div>
-          <input class="input1" id="referralcode" name="referralcode" type="text"placeholder="Referral" />
+          <input class="input1" id="referralcode" name="referralcode" type="text"placeholder="Referral(if any)" />
           <button type="button" class="apply" onclick="sendReferralCodeToBackend()">Apply</button>
           <p class="referr" id="referral-message"></p>
         </div>
@@ -175,7 +197,7 @@
 
       <input type="submit" class="btn1" value="Signup" /><br>
       
-      <a href="/user/login" style="text-decoration: none;color:black;" id="signbtn">
+      <a href="/user/login" style="text-decoration: none;color:black;" id="signbtn"><br>
         <i>Already have an account?</i><strong>Log in</strong>
       </a><br>
 
@@ -261,7 +283,7 @@
 
 
 
-<script>
+<!-- <script>
 
   var colors = new Array(
     [62,35,155],
@@ -324,7 +346,7 @@
   
   setInterval(updateGradient,10);
   
-  </script>
+  </script> -->
 
 
 
