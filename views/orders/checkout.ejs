@@ -640,8 +640,9 @@ input[type="text"] {
                 </div>
 <!-- --------------------------------------------------- -->
 <div id="tab-body-3" class="tab-body" >
-  <a href="/addaddresscheckout"><button class="addaddress">+ Add Address</button></a><br>
   <% if (addresses.length === 0) { %>
+    <!-- <a href="/addaddresscheckout"><button  class="addaddress">+ Add Address</button></a><br> -->
+     <span>No Addresses Found</span>
   <% } else { %>
     <% addresses.forEach(function(address, index) { %>
       <div class="address-row selected">
