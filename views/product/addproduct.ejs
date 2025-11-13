@@ -1,302 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;padding:0;display:flex;flex-direction:column;
+         align-items:center;justify-content:center;min-height:100vh;background:#156161;}
+    h1{color:#fff;margin-bottom:20px;}
+    form{background:rgba(255,255,255,.9);padding:25px;border-radius:10px;
+         box-shadow:0 0 15px rgba(0,0,0,.2);width:100%;max-width:550px;}
+    label{display:block;margin:12px 0 6px;color:#333;}
+    input,textarea,select{width:100%;padding:10px;margin-bottom:15px;
+         border:1px solid #ccc;border-radius:5px;box-sizing:border-box;}
+    button{background:#014122;color:#fff;padding:12px;border:none;border-radius:5px;
+            cursor:pointer;font-size:16px;width:100%;}
+    button:hover{background:#428f66;}
+    .back-btn{margin-top:10px;background:#014122;}
+    .back-btn:hover{background:#428f66;}
 
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 200vh;
-            background-color: #156161;
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
+    .selected-images-container{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+    .selected-image{position:relative;width:100px;height:100px;object-fit:cover;border-radius:5px;}
+    .cancel-icon{position:absolute;top:2px;right:2px;background:rgba(255,255,255,.8);
+                 color:#c00;width:20px;height:20px;border-radius:50%;display:flex;
+                 align-items:center;justify-content:center;cursor:pointer;font-weight:bold;font-size:12px;}
+    .cancel-icon:hover{background:#c00;color:#fff;}
 
-        form {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 500px;
-            margin-bottom: 617px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: black;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #014122;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #428f66;
-        }
-
-        button.back-btn {
-            background-color: #014122;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: -5px;
-        }
-
-        button.back-btn:hover {
-            background-color: #428f66;
-        }
-
-        .selected-images-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start; /* Align images horizontally */
-        }
-
-        .selected-image {
-            margin-right: 10px;
-            margin-bottom: 10px;
-            width: 100px; /* Set the width of each image */
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 4px;
-        }
-
-        .cancel-icon {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 2px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .cancel-icon:hover {
-            background-color: rgba(255, 0, 0, 0.8);
-            color: white;
-        }
-          /* Add this CSS to make the modal smaller */
-    .modal-content {
-        width: 300px; /* Set the width of the modal content */
-        height: auto; /* Allow height to adjust based on content */
-        padding: 20px; /* Add padding for content */
-    }
-
-    #cropperImage {
-        max-width: 100%; /* Ensure the image fits within the modal */
-        height: auto; /* Maintain aspect ratio */
-    }
-
-    #cropButton {
-        margin-top: 10px; /* Add some space between the image and the button */
-    }
-        
-    </style>
+    /* Crop Modal */
+    #imageCropModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+                    background:rgba(0,0,0,.7);z-index:2000;justify-content:center;align-items:center;}
+    .modal-content{background:#fff;padding:20px;border-radius:8px;width:90%;max-width:400px;}
+    #cropperImage{max-width:100%;height:auto;}
+    #cropButton{margin-top:15px;width:100%;}
+  </style>
 </head>
 <body>
 
 <h1>Add Product</h1>
 
 <form id="addProductForm" action="/addproduct" method="post" enctype="multipart/form-data">
-    <label for="name">Product Name:</label>
-    <input type="text" id="name" name="name" required>
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" required></textarea>
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" required min="0">
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" required min="0">
-    <label for="image">Images:</label>
-    <input type="file" id="image" name="image" accept="image/*" multiple onchange="displaySelectedImages(this)">
-    <div class="selected-images-container" id="selectedImagesContainer"></div>
-    <label for="category">Category:</label>
-    <select id="category" name="category" required>
-        <% categories.forEach(category => { %>
-            <option value="<%= category._id %>"><%= category.name %></option>
-        <% }); %>
-    </select>
-    <div id="errorMessages" style="color: red;"></div>
+  <label for="name">Product Name:</label>
+  <input type="text" id="name" name="name" required>
 
-    <button type="submit" onclick="validateForm(event)">Add Product</button>
+  <label for="description">Description:</label>
+  <textarea id="description" name="description" required></textarea>
+
+  <label for="price">Price:</label>
+  <input type="number" id="price" name="price" required min="0">
+
+  <label for="quantity">Quantity:</label>
+  <input type="number" id="quantity" name="quantity" required min="0">
+
+  <label for="image">Images (multiple):</label>
+  <input type="file" id="image" name="image" accept="image/*" multiple onchange="displaySelectedImages(this)">
+  <div class="selected-images-container" id="selectedImagesContainer"></div>
+
+  <!-- ==== CATEGORY SELECT (always rendered) ==== -->
+  <label for="category">Category:</label>
+  <select id="category" name="category" required>
+    <% 
+      // Safety: make sure categories is an array
+      const cats = Array.isArray(categories) ? categories : [];
+      if (cats.length === 0) { 
+    %>
+      <option value="" disabled selected>No categories found – add one first</option>
+    <% } else { 
+         cats.forEach(cat => { %>
+           <option value="<%= cat._id %>"><%= cat.name %></option>
+    <%   });
+       } %>
+  </select>
+
+  <div id="errorMessages" style="color:red;margin-top:10px;"></div>
+
+  <button type="submit">Add Product</button>
 </form>
-
-
 
 <button class="back-btn" onclick="window.location.href='/product'">Back to Products</button>
 
+<!-- Crop Modal -->
+<div id="imageCropModal">
+  <div class="modal-content">
+    <span class="close" style="float:right;cursor:pointer;font-size:24px;">×</span>
+    <img id="cropperImage" src="" alt="Crop">
+    <button id="cropButton">Crop & Use</button>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-
-
 <script>
-    function validateForm(event) {
-        const form = document.getElementById('addProductForm');
-        const name = form.elements['name'].value.trim();
-        const description = form.elements['description'].value.trim();
-        const price = form.elements['price'].value.trim();
-        const quantity = form.elements['quantity'].value.trim();
-        const image = form.elements['image'].value.trim();
-        const category = form.elements['category'].value;
+  /* ---------- Validation ---------- */
+  document.getElementById('addProductForm').onsubmit = function(e){
+    const name = document.getElementById('name').value.trim();
+    const desc = document.getElementById('description').value.trim();
+    const price = +document.getElementById('price').value;
+    const qty   = +document.getElementById('quantity').value;
+    const files = document.getElementById('image').files;
 
-        // Clear previous error messages
-        document.getElementById('errorMessages').innerHTML = '';
+    let err = '';
+    if(!name) err+='• Product name required<br>';
+    if(!desc) err+='• Description required<br>';
+    if(isNaN(price)||price<0) err+='• Valid price required<br>';
+    if(isNaN(qty)||qty<0) err+='• Valid quantity required<br>';
+    if(files.length===0) err+='• At least one image required<br>';
 
-        // Validate Name
-        if (name === '') {
-            displayErrorMessage('Product Name is required');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Description
-        if (description === '') {
-            displayErrorMessage('Product Description is required');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Price
-        if (price === '' || isNaN(price) || parseFloat(price) < 0) {
-            displayErrorMessage('Please enter a valid positive price');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Quantity
-        if (quantity === '' || isNaN(quantity) || parseInt(quantity) < 0) {
-            displayErrorMessage('Please enter a valid positive quantity');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Image
-        if (!image) {
-            displayErrorMessage('Product Image is required');
-            event.preventDefault();
-            return;
-        }
-
-        // Validate Category
-        if (category === '') {
-            displayErrorMessage('Product Category is required');
-            event.preventDefault();
-            return;
-        }
+    if(err){
+      document.getElementById('errorMessages').innerHTML = err;
+      e.preventDefault();
     }
+  };
 
-    function displayErrorMessage(message) {
-        const errorDiv = document.getElementById('errorMessages');
-        errorDiv.innerHTML += `<p>${message}</p>`;
-    }
+  /* ---------- Image Preview + Crop ---------- */
+  let cropper = null, currentImageIndex = null;
 
-    function displaySelectedImages(input) {
-        const selectedImagesContainer = document.getElementById('selectedImagesContainer');
-        selectedImagesContainer.innerHTML = ''; // Clear previous selected images
+  function displaySelectedImages(input){
+    const container = document.getElementById('selectedImagesContainer');
+    container.innerHTML = '';
 
-        for (let i = 0; i < input.files.length; i++) {
-            const image = input.files[i];
-            const imageURL = URL.createObjectURL(image);
-            const imageElement = document.createElement('img');
-            imageElement.src = imageURL;
-            imageElement.classList.add('selected-image');
-            selectedImagesContainer.appendChild(imageElement);
-        }
-    }
-</script>
+    for(let i=0;i<input.files.length;i++){
+      const file = input.files[i];
+      const url  = URL.createObjectURL(file);
 
+      const wrapper = document.createElement('div');
+      wrapper.style.position='relative';
 
-<script>
-function displaySelectedImages(input) {
-    const selectedImagesContainer = document.getElementById('selectedImagesContainer');
-    selectedImagesContainer.innerHTML = ''; // Clear previous selected images
-  
-    for (let i = 0; i < input.files.length; i++) {
-      const image = input.files[i];
-      const imageURL = URL.createObjectURL(image);
-      const imageElement = document.createElement('img');
-      imageElement.src = imageURL;
-      imageElement.classList.add('selected-image');
-  
-      if (i === 0) {
-        imageElement.setAttribute('data-toggle', 'modal');
-        imageElement.setAttribute('data-target', '#imageCropModal');
-        imageElement.setAttribute('data-src', imageURL);
-      }
-  
-      selectedImagesContainer.appendChild(imageElement);
-  
-      // Initialize Cropper.js only on the first image click
-      if (i === 0) {
-        imageElement.addEventListener('click', function() {
-          const src = this.getAttribute('data-src');
-          const modalImage = document.getElementById('cropperImage');
-          modalImage.src = src;
-  
-          const cropper = new Cropper(modalImage, {
-            aspectRatio: 1 / 1, // Set your desired aspect ratio
-            viewMode: 1, // Set your desired view mode
-            zoomable: false, // Set whether the image can be zoomed
-            crop(event) {
-  const croppedImageData = cropper.getCroppedCanvas().toDataURL();
-  const selectedImagesContainer = document.getElementById('selectedImagesContainer');
-  const originalImage = selectedImagesContainer.children[0]; // Assuming first image (index 0)
+      const img = document.createElement('img');
+      img.src = url;
+      img.className='selected-image';
+      img.dataset.index = i;
 
-  originalImage.src = croppedImageData;
-  modal.style.display = 'none'; // Hide the modal after cropping
-},
-          });
-        });
-      }
+      const cancel = document.createElement('div');
+      cancel.className='cancel-icon';
+      cancel.innerHTML='×';
+      cancel.onclick = e=>{
+        e.stopPropagation();
+        wrapper.remove();
+        const dt = new DataTransfer();
+        for(let j=0;j<input.files.length;j++) if(j!==i) dt.items.add(input.files[j]);
+        input.files = dt.files;
+        displaySelectedImages(input);
+      };
+
+      img.onclick = ()=>openCropModal(url,i);
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(cancel);
+      container.appendChild(wrapper);
     }
   }
-</script>
 
+  function openCropModal(src, idx){
+    currentImageIndex = idx;
+    document.getElementById('cropperImage').src = src;
+    document.getElementById('imageCropModal').style.display='flex';
 
-<script>
-    // Add an event listener to close the modal when the "X" icon is clicked
-    document.addEventListener('DOMContentLoaded', function () {
-        const closeButton = document.querySelector('.close');
-        const modal = document.getElementById('imageCropModal');
-
-        closeButton.addEventListener('click', function () {
-            modal.style.display = 'none';
-        });
+    if(cropper) cropper.destroy();
+    cropper = new Cropper(document.getElementById('cropperImage'),{
+      aspectRatio:1, viewMode:1, dragMode:'move', autoCropArea:0.8,
+      restore:false, guides:true, center:true, highlight:false,
+      cropBoxMovable:true, cropBoxResizable:true
     });
+  }
+
+  document.querySelector('#imageCropModal .close').onclick = ()=>{
+    document.getElementById('imageCropModal').style.display='none';
+    if(cropper) cropper.destroy();
+  };
+
+  document.getElementById('cropButton').onclick = ()=>{
+    if(!cropper) return;
+    const canvas = cropper.getCroppedCanvas({width:800,height:800});
+    canvas.toBlob(blob=>{
+      const newFile = new File([blob],`cropped_${Date.now()}.png`,{type:'image/png'});
+
+      const dt = new DataTransfer();
+      const input = document.getElementById('image');
+      for(let i=0;i<input.files.length;i++){
+        if(i===currentImageIndex) dt.items.add(newFile);
+        else dt.items.add(input.files[i]);
+      }
+      input.files = dt.files;
+      displaySelectedImages(input);
+
+      document.getElementById('imageCropModal').style.display='none';
+      cropper.destroy();
+    },'image/png');
+  };
 </script>
-
-
-
-
-
-
-
 </body>
 </html>

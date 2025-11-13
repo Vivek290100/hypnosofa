@@ -1,213 +1,133 @@
-<!-- views/editProduct.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
+    h1 { color:#2c3e50; text-align:center; }
+    form { background:#fff; padding:25px; border-radius:8px; box-shadow:0 0 12px rgba(0,0,0,0.1);
+           max-width:600px; margin:auto; }
+    label { display:block; margin:12px 0 6px; font-weight:600; }
+    input, textarea, select {
+      width:100%; padding:10px; margin-bottom:15px;
+      border:1px solid #ddd; border-radius:5px; box-sizing:border-box;
+    }
+    .image-grid { display:flex; flex-wrap:wrap; gap:15px; margin:15px 0; }
+    .image-item {
+      position:relative; width:80px; height:80px;
+      border:2px solid #ddd; border-radius:6px; overflow:hidden;
+    }
+    .image-item img { width:100%; height:100%; object-fit:cover; }
+    .delete-overlay {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.5); color:#fff; display:flex;
+      align-items:center; justify-content:center; cursor:pointer; font-size:18px;
+      transition: background 0.2s;
+    }
+    .delete-overlay:hover { background:rgba(220, 38, 38, 0.7); }
+    .delete-overlay i { pointer-events:none; }
 
-        h1 {
-            color: #4CAF50;
-            text-transform: uppercase;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+    /* Visual feedback when selected */
+    .delete-overlay.selected {
+      background:rgba(220, 38, 38, 0.9) !important;
+      color:#fff;
+    }
+    .delete-overlay.selected i { color:#fff; }
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            box-sizing: border-box;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin: 10px 0;
-            color: #555;
-        }
-
-        input, textarea, select {
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        #newImageSection {
-            display: none;
-            margin-top: 10px;
-        }
-
-        img {
-            max-width: 50px;
-            max-height: 50px;
-            margin-bottom: -10px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .checkbox-group label {
-            margin: 0;
-            margin-right: 10px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-            display: block;
-            margin-top: 15px;
-            font-size: 14px;
-            text-align: center;
-        }
-    </style>
+    button {
+      background:#27ae60; color:#fff; padding:12px; border:none; border-radius:5px;
+      cursor:pointer; font-size:16px; width:100%; margin-top:10px;
+    }
+    button:hover { background:#219150; }
+    a { display:block; text-align:center; margin-top:15px; color:#27ae60; text-decoration:none; }
+  </style>
 </head>
 <body>
 
 <h1>Edit Product</h1>
 
-<form action="/product/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data">
-    <label for="name">Product Name:</label>
-    <input type="text" id="name" name="name" value="<%= product.name %>" required>
-    
-    <label for="description">Product Description:</label>
-    <textarea id="description" name="description" required><%= product.description %></textarea>
-    
-    <label for="price">Product Price:</label>
-    <input type="number" id="price" name="price" value="<%= product.price %>" required min="0">
-    <label for="quantity">Product Quantity:</label>
-<input type="number" id="quantity" name="quantity" value="<%= product.quantity || 0 %>" required min="0">
+<form id="editForm" action="/product/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data">
+  <label>Product Name:</label>
+  <input type="text" name="name" value="<%= product.name %>" required>
 
+  <label>Description:</label>
+  <textarea name="description" required><%= product.description %></textarea>
 
+  <label>Price:</label>
+  <input type="number" name="price" value="<%= product.price %>" required min="0">
 
-    
+  <label>Quantity:</label>
+  <input type="number" name="quantity" value="<%= product.quantity || 0 %>" required min="0">
 
-    <div class="checkbox-group">
-    <label for="updateImage">Update Image:</label>
-    <input type="checkbox" id="updateImage" name="updateImage">
-</div>
+  <!-- Existing Images -->
+  <label>Current Images (click trash to delete):</label>
+  <div class="image-grid">
+    <% product.images.forEach((url, i) => { %>
+      <div class="image-item">
+        <img src="<%= url %>" alt="Product image">
+        <div class="delete-overlay" data-index="<%= i %>" data-url="<%= url %>">
+          <i class="fas fa-trash"></i>
+        </div>
+      </div>
+    <% }) %>
+  </div>
 
+  <!-- Hidden inputs will be added here dynamically -->
+  <div id="deleteInputs"></div>
 
+  <!-- New Images -->
+  <label>Add New Images:</label>
+  <input type="file" name="image" multiple accept="image/*">
 
+  <label>Category:</label>
+  <select name="category" required>
+    <% categories.forEach(cat => { %>
+      <option value="<%= cat._id %>" <%= product.category && product.category._id.equals(cat._id) ? 'selected' : '' %>>
+        <%= cat.name %>
+      </option>
+    <% }) %>
+  </select>
 
-
-    
-<div class="checkbox-group">
-    <label for="existingImage">Existing Image:</label>
-    <% if (product.images && product.images.length > 0) { %>
-        <% product.images.forEach((image, index) => { %>
-            <div style="border: 1px solid rgb(11, 130, 88); margin-inline: 15px; background-color: #45a049;">
-                <img src="/assets/product-images/<%= image %>" alt="<%= product.name %>">
-                <br>
-                <label><i class="fa fa-trash-o"></i>
-                </label>
-                <input type="checkbox" name="deleteExistingImage<%= index %>" value="<%= image %>">
-            </div>
-        <% }); %>
-    <% } else { %>
-        No image available
-    <% } %>
-</div>
-
-
-
-
-    
-
-    <div id="newImageSection">
-        <label for="newImage">Upload New Image:</label>
-        <input type="file" id="newImage" name="image" multiple>
-    </div>
-    
-
-    <label for="category">Product Category:</label>
-    <select id="category" name="category" required>
-        <% categories.forEach(category => { %>
-            <option value="<%= category._id %>" <% if (product.category && product.category._id.equals(category._id)) { %>selected<% } %>><%= category.name %></option>
-        <% }); %>
-    </select>
-
-    <button type="submit">Update Product</button>
+  <button type="submit">Update Product</button>
 </form>
 
 <a href="/product">Back to Products</a>
 
-
-
-
-
-
 <script>
-    document.getElementById('updateImage').addEventListener('change', function () {
-        var newImageSection = document.getElementById('newImageSection');
-        newImageSection.style.display = this.checked ? 'block' : 'none';
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlays = document.querySelectorAll('.delete-overlay');
+    const deleteInputsContainer = document.getElementById('deleteInputs');
+
+    overlays.forEach(overlay => {
+      overlay.addEventListener('click', function () {
+        const index = this.dataset.index;
+        const url = this.dataset.url;
+
+        // Toggle selected state
+        this.classList.toggle('selected');
+
+        // Find or create hidden input
+        let input = document.querySelector(`input[name="deleteExistingImage${index}"]`);
+        if (this.classList.contains('selected')) {
+          if (!input) {
+            input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `deleteExistingImage${index}`;
+            input.value = url;
+            deleteInputsContainer.appendChild(input);
+          }
+        } else {
+          if (input) {
+            input.remove();
+          }
+        }
+      });
     });
+  });
 </script>
-
-
-<script>
-    // Checkbox Change Listener
-    $('.checkbox-group input[type="checkbox"]').on('change', function() {
-        var selectedImages = [];
-        $('.checkbox-group input[type="checkbox"]:checked').each(function() {
-            selectedImages.push($(this).val());
-        });
-
-        $.ajax({
-            url: '/product/deleteproduct', // Corrected URL
-            method: 'POST', // Corrected Method
-            data: { images: selectedImages },
-            success: function(response) {
-                console.log('Images deleted successfully');
-                // Optionally, you may want to update UI here after successful deletion
-            },
-            error: function(xhr, status, error) {
-                console.error('Error deleting images:', error);
-            }
-        });
-    });
-</script>
-
-
-
-
-
-
 
 </body>
 </html>

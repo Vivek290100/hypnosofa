@@ -38,7 +38,7 @@ router.get('/addform',verifyAdmin,controller3.addform)
 router.post('/addproduct', verifyAdmin, upload.array('image', 5), controller3.addproduct);
 router.get('/product/editform/:id',verifyAdmin,upload.array('image', 5),controller3.editform)
 router.post('/product/updateproduct/:id',verifyAdmin,upload.array('image',5),controller3.updateproduct)
-router.post('/product/deleteproduct', verifyAdmin, controller3.deleteproduct); // Corrected route definition
+router.post('/product/deleteproduct/:id', verifyAdmin, controller3.deleteproduct);
 
 //category side------------------------------------------------------->
 router.get('/category',verifyAdmin,controller4.categoryList)

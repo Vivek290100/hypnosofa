@@ -1,10 +1,8 @@
 const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
-const multer = require('multer');
 const path = require('path');
-const sharp = require('sharp');
-const fs = require('fs/promises').unlink;
-const FS = require('fs');
+const fs = require('fs').promises;
+const { cloudinary } = require('../config/cloudinary');
 
 
 const productList = async (req, res) => {
@@ -35,40 +33,46 @@ const addform = function(req, res) {
 
 
 //add product in admin side----------------------------------
-const addproduct = async function (req, res) {
-    try {
-        const { name, description, category, price, quantity } = req.body;
+const addproduct = async (req, res) => {
+  try {
+    const { name, description, category, price, quantity } = req.body;
 
-        const categoryObject = await Category.findById(category).populate('name');
-        // console.log("category name",categoryObject);
+    // 1. Save the product **without** images first
+    const newProduct = new Product({
+      name,
+      description,
+      images: [],                 // will be filled later
+      category,
+      price,
+      quantity,
+    });
+    await newProduct.save();
 
-        let images=[];
-        if (req.files && req.files.length > 0) {
-            for (const file of req.files) {
-                const imagePath = file.path;
-                const imageFilename = file.filename;
-                const resizedImagePath = path.join(__dirname, '../public/assets/product-images/', `resized_${imageFilename}`);
-            await sharp(imagePath)
-                .resize(300, 200)
-                .toFile(resizedImagePath);
-                images.push(imageFilename);
-        }
-    }
-        const newProduct = new Product({
-            name,
-            description,
-            images,
-            price,
-            category:categoryObject,
-            quantity,
+    // 2. Upload each file to Cloudinary & push secure_url
+    if (req.files && req.files.length) {
+      const uploadPromises = req.files.map(file => {
+        // file.path is the temporary path created by multer-storage-cloudinary
+        return cloudinary.uploader.upload(file.path, {
+          public_id: `${newProduct._id}_${Date.now()}_${file.originalname.split('.')[0]}`,
         });
+      });
 
-        await newProduct.save();
-        res.redirect('/product');
-    } catch (error) {
-        console.error('Error adding product:', error);
-        res.status(500).send('Internal Server Error');
+      const results = await Promise.all(uploadPromises);
+      newProduct.images = results.map(r => r.secure_url);
+      console.log("newProduct",newProduct);
+      
+
+      // clean up temp files (multer-storage-cloudinary already deletes them,
+      // but we keep the safety net)
+      await Promise.all(req.files.map(f => fs.unlink(f.path).catch(() => {})));
     }
+
+    await newProduct.save();
+    res.redirect('/product');
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(500).send('Internal Server Error');
+  }
 };
 
 
@@ -89,79 +93,89 @@ const editform = function(req, res) {
 };
 
 //Update product--------------------------------
-const updateproduct = async function (req, res) {
+const updateproduct = async (req, res) => {
+  const productId = req.params.id;
+  const { name, description, category, price, quantity } = req.body;
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).send('Product not found');
+
+    // ---- 5.1 Delete selected existing images (public_id from URL) ----
+    const deleteKeys = Object.keys(req.body).filter(k =>
+      k.startsWith('deleteExistingImage')
+    );
+
+    for (const key of deleteKeys) {
+      const idx = parseInt(key.replace('deleteExistingImage', ''), 10);
+      const imageUrl = product.images[idx];
+      if (imageUrl) {
+        const publicId = imageUrl.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+        product.images.splice(idx, 1);
+      }
+    }
+
+    // ---- 5.2 Upload new images (if any) ----
+    if (req.files && req.files.length) {
+      const uploadPromises = req.files.map(file =>
+        cloudinary.uploader.upload(file.path, {
+          public_id: `${product._id}_new_${Date.now()}_${file.originalname.split('.')[0]}`,
+        })
+      );
+      const results = await Promise.all(uploadPromises);
+      product.images.push(...results.map(r => r.secure_url));
+
+      // clean temp files
+      await Promise.all(req.files.map(f => fs.unlink(f.path).catch(() => {})));
+    }
+
+    // ---- 5.3 Update the rest of the fields ----
+    product.name = name;
+    product.description = description;
+    product.category = category;
+    product.price = price;
+    product.quantity = quantity;
+
+    await product.save();
+    res.redirect('/product');
+  } catch (err) {
+    console.error('Error updating product:', err);
+    res.status(500).send('Internal Server Error');
+  }
+
+}
+
+
+
+
+// DELETE PRODUCT - FIXED
+const deleteproduct = async (req, res) => {
+  try {
     const productId = req.params.id;
-    const { name, description, category, price, quantity } = req.body;
-    const deleteExistingImages = req.body;
-    const newImages = req.files;
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
 
-    try {
-        const currentProduct = await Product.findById(productId);
-        if (!currentProduct) {
-            return res.status(404).send('Product not found');
-        }
-        for (const key in deleteExistingImages) {
-            if (key.startsWith('deleteExistingImage')) {
-                const index = parseInt(key.replace('deleteExistingImage', ''));
-                const imageFilename = deleteExistingImages[key];
-                const imagePath = path.join(__dirname, '../public/assets/product-images', imageFilename);
-                
-                await FS.promises.unlink(imagePath);
-                console.log('Image Deleted Successfully:', imageFilename);
-                
-                currentProduct.images.splice(index, 1);
-                
-                await Product.deleteOne({ filename: imageFilename });
-                console.log('Image deleted from the database:', imageFilename);
-            }
-        }
+    // MARK AS DELETED IMMEDIATELY
+    product.isDeleted = true;
+    await product.save();
 
-        if (newImages && newImages.length > 0) {
-            newImages.forEach(async (image) => {
-                const imageFilename = image.filename;
-                currentProduct.images.push(imageFilename);
-                console.log('New image added:', imageFilename);
-            });
-        }
-        currentProduct.name = name;
-        currentProduct.description = description;
-        currentProduct.category = category;
-        currentProduct.price = price;
-        currentProduct.quantity = quantity;
+    // RESPOND FAST
+    res.json({ success: true, message: 'Product deleted' });
 
-        await currentProduct.save();
-        res.redirect('/product');
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
+    // DELETE IMAGES IN BACKGROUND (non-blocking)
+    product.images.forEach(url => {
+      const publicId = url.split('/').pop().split('.')[0];
+      cloudinary.uploader.destroy(publicId).catch(err => {
+        console.log('Failed to delete image:', publicId, err.message);
+      });
+    });
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 };
-
-
-
-
-
-//delete product in admin side------------------------------------------------------->
-const deleteproduct = async function(req, res) {
-    const imagesToDelete = req.body.images; // Get image names from request body
-    try {
-        for (const imageName of imagesToDelete) {
-            const imagePath = path.join(__dirname, '../public/assets/product-images', imageName);
-            try {
-                await fs.promises.unlink(imagePath);
-                console.log('Image Deleted Successfully:', imageName);
-            } catch (error) {
-                console.error('Error deleting image file:', error.message);
-            }
-        }
-        res.status(200).send('Images deleted successfully');
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-    }
-};
-
-
 
 
 module.exports = {
