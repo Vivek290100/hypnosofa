@@ -1,22 +1,14 @@
 
 <%- include('nav',{ user: user,cartItemCount: cartItemCount }) -%>
-
-
 <style>
-  
-
 body {
-  /* font-family: 'open sans'; */
   overflow-x: hidden;
   background-color: #ffffff;
 }
-  
-
 img {
   max-width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
  }
-
 .preview {
   display: -webkit-box;
   display: -webkit-flex;
@@ -32,13 +24,11 @@ img {
   @media screen and (max-width: 996px) {
     .preview {
       margin-bottom: 20px; } }
-
 .preview-pic {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1; }
-
 .preview-thumbnail.nav-tabs {
   border: none;
   margin-top: 15px;
@@ -56,32 +46,24 @@ img {
       margin: 0; }
     .preview-thumbnail.nav-tabs li:last-of-type {
       margin-right: 0; }
-
 .tab-content {
   overflow: hidden; }
-
-
   .tab-content img {
     width: 100%;
     height: 100%;
-    
-   
         }
-
 .card {
   margin-top: -30px;
   height: 75vh;
   background: #fff;
   padding: 3em;
   line-height: 3em; }
-
 @media screen and (min-width: 997px) {
   .wrapper {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex; } }
-
 .details {
   padding-top: 100px;
   display: -webkit-box;
@@ -93,20 +75,15 @@ img {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column; }
-
 .colors {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1; }
-
 .product-title, .price, .sizes, .colors {
-  /* text-transform: UPPERCASE; */
   font-weight: bold; }
-
 .checked, .price span {
   color: #ff9f1a; }
-
 .product-title, .rating, .product-description, .price, .vote, .sizes {
   margin-bottom: 15px; }
   .cat{
@@ -116,15 +93,12 @@ img {
     line-height: 1.5em;
     font-family: "Amazon Ember";
   }
-
 .product-title {
   margin-top: 0; }
-
 .size {
   margin-right: 10px; }
   .size:first-of-type {
     margin-left: 40px; }
-
 .color {
   display: inline-block;
   vertical-align: middle;
@@ -134,7 +108,6 @@ img {
   border-radius: 2px; }
   .color:first-of-type {
     margin-left: 20px; }
-
 .add-to-cart, .like {
   background: #004C3F;
   width: 190px;
@@ -148,7 +121,6 @@ img {
   .add-to-cart:hover, .like:hover {
     background: #004C3F;
     color: #fff; }
-
 .not-available {
   text-align: center;
   line-height: 2em; }
@@ -156,19 +128,14 @@ img {
     font-family: fontawesome;
     content: "\f00d";
     color: #fff; }
-
 .orange {
   background: #ff9f1a; }
-
 .green {
   background: #85ad00; }
-
 .blue {
   background: #0076ad; }
-
 .tooltip-inner {
   padding: 1.3em; }
-
 @-webkit-keyframes opacity {
   0% {
     opacity: 0;
@@ -178,7 +145,6 @@ img {
     opacity: 1;
     -webkit-transform: scale(1);
             transform: scale(1); } }
-
 @keyframes opacity {
   0% {
     opacity: 0;
@@ -188,40 +154,28 @@ img {
     opacity: 1;
     -webkit-transform: scale(1);
             transform: scale(1); } }
-
-
-
 #pic-1 img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
 .preview-pic {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
-
-
-
-
  .preview-thumbnail img {
     width: 100px; 
     height: 100px;
     object-fit: cover; 
   }
-
   .tab-content img {
     width: 100%;   
   }
-
   .preview-pic{
     width: 100%;
     height: 100%;
   }
-
   .preview-thumbnail img,
 .tab-content img {
   width: 100%;
@@ -229,30 +183,23 @@ img {
   object-fit: cover;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
-
-
 .preview-pic img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
-
-
 #pic-1 img {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
-
 .tab-pane.active img {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 .quantity input {
     width: 50px;
     padding: 5px;
     height: 30px; 
 }
-
 .preview-thumbnail.nav-tabs {
   display: flex; /* Use flexbox */
   flex-wrap: nowrap; /* Prevent wrapping */
@@ -260,20 +207,16 @@ img {
   border: none;
   margin-top: 15px;
 }
-
 .preview-thumbnail.nav-tabs li {
   flex: 0 0 auto; /* Let items shrink if needed */
   width: 18%; /* Set width for each item */
   margin-right: 2.5%; /* Add some space between items */
 }
-
 .preview-thumbnail.nav-tabs li img {
   max-width: 100%;
   display: block;
   border-radius: 8px;
 }
-
- /* Add or update CSS styles for the slider */
  .preview-thumbnail.nav-tabs {
     display: flex;
     flex-wrap: nowrap;
@@ -283,23 +226,19 @@ img {
     padding-bottom: 10px; /* Adjust as needed */
     margin-bottom: 10px; /* Adjust as needed */
   }
-
   .preview-thumbnail.nav-tabs::-webkit-scrollbar {
     display: none; /* Hide default scrollbar */
   }
-
   .preview-thumbnail.nav-tabs li {
     flex: 0 0 auto;
     width: 18%;
     margin-right: 2.5%;
   }
-
   .preview-thumbnail.nav-tabs li img {
     max-width: 100%;
     display: block;
     border-radius: 8px;
   }
-
   .preview {
     width: 450px;
     height: 450px;
@@ -318,30 +257,13 @@ img {
 .price{
   color: #ff9f1a;
   font-weight: 400;
-
 }
 .offer{
   font-size: 20px;
   margin-top: 6px;
   color: #ff9f1a;
-  /* font-weight: 600; */
-
 }
-
-
- 
-
     </style>
-    
-
-
-
-
-
-
-
-
-	
     <div class="container">
       <div class="card">
         <div class="container-fliud">
@@ -349,20 +271,26 @@ img {
             <div class="preview col-md-6">
               <div class="preview-pic tab-content">
                 <% for (var i = 0; i < Math.min(product.images.length, 45); i++) { %>
-                <!-- Limit the number of images displayed to 45 -->
                 <div class="tab-pane <%= i === 0 ? 'active' : '' %>" id="pic-<%= i + 1 %>">
-                  <!-- <img class="img-fluid1 " src="/assets/product-images/%= product.images[i] %>" /> -->
-                  <img class="img-fluid1 " id="zoom_01"  style="width: 400px; height: auto;" src="/assets/product-images/<%= product.images[i] %>" data-zoom-image="/assets/product-images/<%= product.images[i] %>"/>
-                </div>
+<img 
+          class="img-fluid" 
+          id="zoom_<%= i + 1 %>" 
+          src="<%= product.images[i] %>" 
+          data-zoom-image="<%= product.images[i] %>"
+          style="width: 100%; height: auto; max-height: 500px; object-fit: contain;"
+          alt="<%= product.name %>"
+        />                </div>
                 <% } %>
               </div>
               <ul class="preview-thumbnail nav nav-tabs">
                 <% for (var i = 0; i < Math.min(product.images.length, 45); i++) { %>
-                <!-- Limit the number of images displayed to 45 -->
                 <li class="<%= i === 0 ? 'active' : '' %>">
                   <a data-target="#pic-<%= i + 1 %>" data-toggle="tab">
-                    <img class="img-fluid" src="/assets/product-images/<%= product.images[i] %>" />
-                  </a>
+<img 
+            src="<%= product.images[i] %>" 
+            style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;"
+            alt="Thumb <%= i + 1 %>"
+          />                  </a>
                 </li>
                 <% } %>
               </ul>
@@ -379,18 +307,11 @@ img {
                       <h3 >₹<%=  product.price- ((offer.discountPercentage/100) * product.price).toFixed(0)%></h3> &nbsp;&nbsp;&nbsp;
                       <h3 class="price" style="color: #ff9f1a;font-size: 24px; margin-top: 3px;" ><del><%= product.price.toFixed(0)%></del></h3> &nbsp;&nbsp;&nbsp;
                       <h3 class="offer"><%=offer.discountPercentage%>% Offer</h3>
-
                   <% }); %>
               <% } else { %>
                   <h4 class="price">Price: <span>₹&nbsp;<%= product.price %>/-</span></h4><br>
               <% } %>
-              
               </div>
-              <!-- <div class="quantity">
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1">
-              </div> -->
-              
               <div class="action btn-container d-flex ">
                 <% if (product.quantity > 0) { %>
                   <a href="/user/addtocart/<%= product._id %>" class="add-to-cart btn btn-default " role="button">Add to Cart</a> &nbsp;&nbsp;&nbsp;
@@ -399,7 +320,6 @@ img {
                   <p class="not-available outofstock">Out of Stock</p>
                 <% } %>
               </div>
-              
               <% } %>
             </div>
           </div>
@@ -407,74 +327,36 @@ img {
       </div>
     </div>
     <br><br><br>
-    
- 
-
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/69093/jquery.elevateZoom-3.0.8.min.js"></script>
          <script>
             $("#zoom_01").elevateZoom();
          </script>
-
-
         <script>
   $(document).ready(function() {
     $('.preview-thumbnail a').on('click', function(e) {
       e.preventDefault();
-
       $('.preview-thumbnail li').removeClass('active');
-
       $(this).parent().addClass('active');
-
       var targetImageId = $(this).attr('data-target');
-
       $('.tab-pane').removeClass('active');
-      
       $(targetImageId).addClass('active');
     });
   });
-
- 
 </script>
-
 <script>
   $(document).ready(function() {
-  // Initialize ElevateZoom for the first image
   $("#zoom_01").elevateZoom();
-
-  // Event listener for clicking on thumbnail images
   $('.preview-thumbnail a').on('click', function(e) {
     e.preventDefault();
-
-    // Remove 'active' class from all thumbnails
     $('.preview-thumbnail li').removeClass('active');
-
-    // Add 'active' class to the clicked thumbnail
     $(this).parent().addClass('active');
-
-    // Get the target image ID
     var targetImageId = $(this).attr('data-target');
-
-    // Remove 'active' class from all tab panes
     $('.tab-pane').removeClass('active');
-
-    // Add 'active' class to the target tab pane
     $(targetImageId).addClass('active');
-
-    // Reinitialize ElevateZoom for the target image
     $(targetImageId + ' img').elevateZoom();
   });
 });
-
 </script>
-
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-
-    

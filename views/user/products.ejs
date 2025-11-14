@@ -12,52 +12,27 @@
         overflow-x: hidden;
         font-family: serif;
     }
-
     .row {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
         margin-bottom: 30px;
-        /* margin-left: 45px;
-        margin-right: 45px; */
+
     }
-
-    /* .container {
-        width: 24%;
-        margin: 10px;
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.125);
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.3s ease;
-        box-shadow: 0 10px 5px rgba(2, 4, 8, 0.125);
-        background-color: #faffff;
-    } */
-
     .container {
         width: 23%;
         margin: 10px;
-        /* backdrop-filter: blur(16px) saturate(180%); */
-        /* -webkit-backdrop-filter: blur(16px) saturate(180%); */
         background-color: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.1);
         padding: 10px;
         display: flex;
         flex-direction: column;
-        /* align-items: center; */
         align-items: center;
-
         text-align: center;
         transition: transform 0.3s ease;
-        /* border-radius: 9px 9px 9px 9px; */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         filter: drop-shadow(5 5px 10px rgba(0, 0, 0, 0.5));
     }
-
-
     .banner-image {
         background-position: center;
         background-size: cover;
@@ -67,26 +42,20 @@
         border-radius: 9px 9px 9px 9px;
         object-fit: cover;
     }
-
     .banner-image:hover {
         transform: scale(1.060);
-        /* box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); */
-
     }
-
     h5 {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         color: rgba(0, 0, 0, 0.98);
         font-size: 1rem;
         margin-top: 10px;
     }
-
     h5.card-title {
         margin-left: 10px;
         font-size: 17px;
         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     }
-
     p {
         color: #000000;
         font-family: serif;
@@ -96,15 +65,12 @@
         letter-spacing: 2px;
         text-transform: uppercase;
     }
-
     .button-wrapper {
     margin-top: 20px;
     display: flex;
-    justify-content: space-between; /* Add this to distribute space evenly */
+    justify-content: space-between; 
 }
-
 .btn {
-    /* border: none; */
     width: 154px;
     height: 45px;
     border-radius: 7px;
@@ -112,11 +78,9 @@
     letter-spacing: 1px;
     cursor: pointer;
     margin: 5px;
-    
 }
 @media screen and (min-width: 770px) and (max-width: 1300px) {
       .btn {
-    /* border: none; */
     width: 111px;
     height: 45px;
     border-radius: 7px;
@@ -127,13 +91,13 @@
 }
 }
 .wishlist-btn {
-    margin-left: auto; /* Aligns the button to the right */
+    margin-left: auto;
 }
 .wishlist {
     margin-left: 10px;
     font-size: 20px;
     color: #fff;
-    background-color: transparent; /* Updated */
+    background-color: transparent; 
     width: 40px;
     height: 45px;
     border-radius: 5px; 
@@ -141,42 +105,29 @@
     justify-content: center; 
     align-items: center;
 }
-
 .wishlist:hover {
-    background-color: rgba(206, 206, 206, 0.5); /* Updated */
+    background-color: rgba(206, 206, 206, 0.5);
 }
-
     .btn + .btn {
         margin-left: 10px;
     }
-
     .outline {
         color: rgba(255, 255, 255, 0.9);
         transition: all 0.3s ease;
         text-transform: uppercase;
-        /* background: linear-gradient(45deg, #fff7f7, #dbdbdb, #dcdcdc, #ececec); */
         background-color: #004c3f;
         font-family: serif;
         border: 1px solid #ddfff2;
-
     }
-
     .outline:hover {
         color: rgba(255, 255, 255, 0.9);
-        /* border-color: rgba(255, 255, 255, 0.9); */
         transition: all 0.3s ease;
         box-shadow: 0px 5px 10px rgba(129, 129, 129, 0.5);
         background-color: #005b4b;
-
-
     }
-
     #searchForm{
       width: 50px;
     }
-
-  
-
     .fill {
     background: transparent;
     color: rgba(255, 255, 255, 0.9);
@@ -184,45 +135,25 @@
     background-color: #004c3f;
     font-family: serif;
     border: 1px solid #ddfff2;
-
-
-
 }
-
-
 .fill:hover {
     color: rgba(255, 255, 255, 0.9);
-    /* border-color: rgba(255, 255, 255, 0.9); */
     transition: all 0.3s ease;
     box-shadow: 0px 5px 10px rgba(129, 129, 129, 0.5);
     background-color: #005b4b;
 }
-
-    /* @media screen and (min-width: 769px) {
-        .container {
-            width: 23%;
-        }
-
-        .banner-image {
-            height: 220px;
-        }
-    } */
-
     @media screen and (max-width: 768px) {
         .container {
             width: 47%;
         }
-
         .banner-image {
             height: 120px;
         }
     }
-
     @media screen and (max-width: 480px) {
         .container {
             width: 150%;
         }
-
         .banner-image {
             height: 100px;
         }
@@ -230,10 +161,6 @@
           width: 100%;
         }
     }
-
-
-
-    /* Dropdown Button */
 .dropbtn {
   background-color: #ffffff;
   color: rgb(0, 0, 0);
@@ -241,22 +168,15 @@
   font-size: 16px;
   border: none;
   cursor: pointer;
-
 }
-
 .dropbtn:hover, .dropbtn:focus {
   background-color: #ffffff;
   color: #000000;
-  
 }
-
-
-
 .dropdown {
   position: relative;
   display: inline-block;
 }
-
 .dropdown-content {
   display: none;
   position: absolute;
@@ -265,35 +185,27 @@
   border: 1px solid #ddd;
   z-index: 1;
 }
-
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
-
 .dropdown-content a:hover {background-color: #f1f1f1}
-
 .show {display:block;}
-
-
 .dropmargin{
     margin-left: 10px;
 }
-
 .input-group {
     display: flex;
     align-items: center;
 }
-
 .input-group input[type="search"] {
     flex: 1;
     border-radius: 5px;
     outline: 1px solid #e0e0e0;
     height: 35px;
 }
-
 .sbtn {
     background-color: #004c3f;
     width: 31px;
@@ -301,23 +213,18 @@
     border: 1px solid #ffffff;
     border-radius: 0 5px 5px 0;
 }
-
 @media (max-width: 768px) {
     .input-group {
         flex-direction: column;
     }
-
     .input-group input[type="search"] {
         border-radius: 5px;
         margin-bottom: 10px;
     }
-
     .sbtn {
         border-radius: 5px;
     }
 }
-
-
 h1 {
   position: relative;
   text-align: center;
@@ -325,7 +232,6 @@ h1 {
   font-size: 50px;
   font-family: "Cormorant Garamond", serif;
 }
-
 p {
   font-family: 'Lato', sans-serif;
   font-weight: 300;
@@ -337,8 +243,6 @@ p {
 background-color: #fff;
 border-radius: 5px;
 }
-
-
 
 .btn-16 {
   border: none;
@@ -377,8 +281,6 @@ border-radius: 5px;
   font-weight: 900;
   font-size: xx-large;
 }
-
-
 .nav {
   width: 579px;
     position: fixed; 
@@ -392,16 +294,7 @@ border-radius: 5px;
 .amount{
   margin-top: 5px;
 }
-
-
 </style>
-
-
-
-
-
-
-
 <br>
 <div class="dropdown dropmargin">
   <div class="frame">
@@ -417,21 +310,11 @@ border-radius: 5px;
     <% categories.forEach(category => { %>
       <a href="/user/product?category=<%= category._id %>" class="category-link"><%= category.name %></a>
     <% }); %>
-    
-    
-    
-    
   </div>
 </div>
-
-
-
-
-
-
   <div class="dropdown">
     <div class="input-group">
-        <form id="searchForm"  action="/user/product" method="GET"> <!-- Update action and method -->
+        <form id="searchForm"  action="/user/product" method="GET"> 
           <div class="d-flex">
 
             <input type="search" name="q" placeholder="Search your product">
@@ -442,26 +325,6 @@ border-radius: 5px;
         </form>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-  
-  <!-- <div class="input-group">
-    <input type="search" placeholder="Search your product" class="form-control" />
-    <button class="btn bg-dark sbtn" type="submit">
-        <i class="fa fa-search" style="color:white;"></i>
-    </button>
-</div> -->
-
-
-
-
 <% if (products.length === 0) { %>
   <div class="notfound d-flex justify-content-center align-items-center">  Sorry, No results found  !</div>
   <% } else { %>
@@ -470,11 +333,16 @@ border-radius: 5px;
           <div class="row">
       <% } %>
       <div class="container">
-          <% if (product.images.length > 0) { %>
-              <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
-                  onclick="openModal('<%= product.images[0] %>')"><br>
-          <% }  %>
-          
+          <% if (product.images && product.images.length > 0) { %>
+  <img 
+    src="<%= product.images[0] %>" 
+    class="banner-image" 
+    alt="<%= product.name %>" 
+    onclick="openModal('<%= product.images[0] %>')"
+    style="cursor: zoom-in;">
+<% } else { %>
+  <img src="/assets/placeholder.jpg" class="banner-image" alt="No image">
+<% } %>
           <h5 class="card-title"><%= product.name %></h5>
           <h5>Category: <%=product.category.name %></h5>
          
@@ -488,23 +356,15 @@ border-radius: 5px;
                 <h5 style="color: #ac4e4e;"><%= product.offer.discountPercentage %>% Offer</h5> 
                 <% } %>
         </div>
-        
-
-
           <div class="button-wrapper d-flex">
             <a href="/user/mainproduct/<%= product._id %>">  
               <button class="btn fill" >
                   VIEW DETAILS
               </button>
           </a>
-              
-
-
               <button class="btn wishlist-btn outline" data-product-id="<%= product._id %>" >
                 Add to Wishlist
             </button>
-            
-
           </div>
       </div>
       <% if ((index + 1) % 4 === 0 || (index + 1) === products.length) { %>
@@ -512,25 +372,18 @@ border-radius: 5px;
       <% } %>
   <% }); %>
 <% } %>
-
-
-
-
 <style>
   .pagination-container {
   text-align: center;
 }
-
 .pagination {
   display: inline-block;
   padding: 0;
   margin: 20px 0;
 }
-
 .pagination-item {
   display: inline;
 }
-
 .pagination-link {
   padding: 8px 12px;
   margin: 0 4px;
@@ -539,21 +392,14 @@ border-radius: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
 .pagination-link:hover {
   background-color: #f4f4f4;
 }
-
 .pagination-link.active {
   background-color: #004c3f;
   color: #fff;
 }
-
 </style>
-
-
-
-
 <div class="pagination-container">
   <ul class="pagination">
     <% if (currentPage > 1) { %>
@@ -576,11 +422,6 @@ border-radius: 5px;
   </ul>
 </div>
 
-
-
-
-
-
 <script>
 document.querySelectorAll('.wishlist-btn').forEach(button => {
     button.addEventListener('click', function(event) {
@@ -599,11 +440,9 @@ document.querySelectorAll('.wishlist-btn').forEach(button => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        // Optionally, you can provide feedback to the user here
       })
       .catch(error => {
         console.error('Error:', error);
-        // Optionally, handle the error here
       });
     });
   });
@@ -611,28 +450,10 @@ document.querySelectorAll('.wishlist-btn').forEach(button => {
 
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
-    /* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
 function myFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
-
-
 </script>
 
 <script>
@@ -649,23 +470,19 @@ function myFunction() {
 }
 </script>
 
-
-
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('.input-group form');
   const input = document.querySelector('.input-group input[type="search"]');
-  const searchBar = document.querySelector('.input-group input[type="search"]'); // Reference for result page (optional)
+  const searchBar = document.querySelector('.input-group input[type="search"]'); 
 
   form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); 
 
     const searchQuery = input.value.trim();
     if (searchQuery !== '') {
       const actionUrl = '/user/product?q=' + encodeURIComponent(searchQuery);
 
-      // Store the action URL for later retrieval on the result page
       localStorage.setItem('actionUrl', actionUrl);
 
       form.action = actionUrl;
@@ -673,31 +490,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Access and display search query on result page (optional)
   if (searchBar) {
     const storedUrl = localStorage.getItem('actionUrl');
     if (storedUrl) {
-      // Extract the search query from the URL
       const query = new URLSearchParams(storedUrl.split('?')[1]).get('q');
       if (query) {
         searchBar.value = query;
       }
-      localStorage.removeItem('actionUrl'); // Clear storage
+      localStorage.removeItem('actionUrl'); 
     }
   }
 });
 
 </script>
-
-
-
-
-    
-
-
-
-
-
     <footer class="custom-footer">
       <br>
         <div class="container1">
@@ -744,9 +549,6 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>&copy; 2024, HYPNOSOFA. All Rights Reserved.</p>
         </div>
     </footer>
-    
-    
-    
     <style>
       .custom-footer{
         background-color: #004c3f;
@@ -798,8 +600,3 @@ document.addEventListener('DOMContentLoaded', function() {
     .custom-col{
       padding-left: 69px;
     }
-    
-    
-    </style>
-  
-

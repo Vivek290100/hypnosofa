@@ -257,55 +257,65 @@
            
             <div class="row border-top border-bottom">
                 <% if (cartItems && cartItems.length > 0) { %>
-    <% cartItems.forEach(item => { %>
-        <div class="row main align-items-center" data-product-id="<%= item.productId._id %>" >
-            
-            
-            <% if (item.productId && item.productId.images[0]) { %>
-                <p class="dbquantity" style="color: #fff;"> <%= item.productId.quantity %></p>
-                
-            <div class="col-2">
-                <a href="/user/mainproduct/<%= item.productId._id %>"><img class="img-fluid " src="/assets/product-images/<%= item.productId.images[0] %>" alt=""></a>
-            </div>
-            <% } else { %>
-                <p>No images available</p>
-            <% } %>
-            <div class="col">
-                <div class="row"><%= item.productId && item.productId.name %></div>
-                <div class="row text-muted">₹<%=item.productId &&  item.productId.price%></div>
+   <% cartItems.forEach(item => { %>
+  <div class="row main align-items-center" data-product-id="<%= item.productId._id %>">
+    
+    <!-- CLOUDINARY IMAGE -->
+    <% if (item.productId && item.productId.images && item.productId.images[0]) { %>
+      <p class="dbquantity" style="color: #fff;"><%= item.productId.quantity %></p>
+      <div class="col-2">
+        <a href="/user/mainproduct/<%= item.productId._id %>">
+          <img 
+            class="img-fluid" 
+            src="<%= item.productId.images[0] %>" 
+            alt="<%= item.productId.name %>"
+            style="width: 7rem; height: 7rem; object-fit: cover; border-radius: 8px;"
+          >
+        </a>
+      </div>
+    <% } else { %>
+      <div class="col-2">
+        <img 
+          src="/assets/default-cart.jpg" 
+          class="img-fluid" 
+          alt="No image"
+          style="width: 7rem; height: 7rem; border-radius: 8px;"
+        >
+      </div>
+    <% } %>
 
-            </div>
-            <div class="col quantity-control">
-                <button class="decrease" >-</button>
-                <input type="text" class="quantity-input" value="<%=item.quantity%>" max=<%=item.productId.quantity%> readonly>
-                <button class="increase" >+</button>   
-            </div>
+    <!-- NAME & PRICE -->
+    <div class="col">
+      <div class="row"><%= item.productId?.name || 'Unknown Product' %></div>
+      <div class="row text-muted">₹<%= item.productId?.price || 0 %></div>
+    </div>
 
-            <% if (item.productId && item.productId.price) { %>
-                <div class="col pricec">
-                    <!-- cart.ejs -->
-                    <div class="col text-right" id="update-price-<%= item.productId._id %>">
-                        <!-- Check if there's a discount percentage available -->
-                        <% const originalPrice = item.updateprice || item.productId.price; %>
-                        <% const discountedPrice = item.discountPercentage && item.discountPercentage > 0 ? (originalPrice - (originalPrice * (item.discountPercentage / 100))) : originalPrice; %>
-                        <!-- Show the discounted price -->
-                        ₹ <%= discountedPrice.toFixed(2) %>
-                        <% if (item.discountPercentage && item.discountPercentage > 0) { %>
-                            <!-- Display the discount percentage -->
-                            (<%= item.discountPercentage %> % off)
-                        <% } %>
-                    </div>
-                </div>
-            <% } %>
+    <!-- QUANTITY -->
+    <div class="col quantity-control">
+      <button class="decrease">-</button>
+      <input type="text" class="quantity-input" value="<%= item.quantity %>" max="<%= item.productId?.quantity || 1 %>" readonly>
+      <button class="increase">+</button>
+    </div>
 
-            <!-- Move remove button outside the 'col' div -->
-            <div class="col">
-                <a href="/removeItem/<%= item.productId._id %>" class=" close" onclick="removeItem(this)" data-product-id="<%= item.productId._id %>">&#10005; Remove</a>
-            </div>
-        </div>
-        <hr>
-        
-    <% }); %>
+    <!-- PRICE WITH DISCOUNT -->
+    <div class="col pricec">
+      <div class="col text-right" id="update-price-<%= item.productId._id %>">
+        <% const originalPrice = item.updateprice || item.productId.price; %>
+        <% const discountedPrice = item.discountPercentage > 0 ? (originalPrice - (originalPrice * (item.discountPercentage / 100))) : originalPrice; %>
+        ₹ <%= discountedPrice.toFixed(2) %>
+        <% if (item.discountPercentage > 0) { %>
+          (<%= item.discountPercentage %>% off)
+        <% } %>
+      </div>
+    </div>
+
+    <!-- REMOVE -->
+    <div class="col">
+      <a href="/removeItem/<%= item.productId._id %>" class="close" data-product-id="<%= item.productId._id %>">Remove</a>
+    </div>
+  </div>
+  <hr>
+<% }); %>
     <% } else { %>
         <div class="text-center mt-3">
             <img src="/assets/homeimg/empty cart.webp" alt="">

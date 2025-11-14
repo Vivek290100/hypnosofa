@@ -28,22 +28,17 @@ svg {
     vertical-align: middle;
     margin-top: -11px;
 }
-
-
 .container {
     height: 80vh;
     position: fixed;
-    top: 40px; /* Adjust this value based on your header height */
+    top: 40px; 
     left: 0;
     right: 0;
     bottom: 0;
-    overflow-y: auto; /* Enable vertical scrolling */
-    /* border: 1px solid #ccc;  */
+    overflow-y: auto; 
     border-radius: 5px;
     margin-top: 50px;
-    /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); */
 }
-
 .container::-webkit-scrollbar {
     width: 0; 
     height: 0; 
@@ -87,24 +82,11 @@ svg {
 .single-div-container{
     align-items: center;
 }
-
-
-
-
-
-   
   </style>
-
-
-
-
-
 <head>
     <meta charset="UTF-8">
     <title>Bootstrap Components</title>
 
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
@@ -119,41 +101,72 @@ svg {
 <body>
     <div class="container">
         <% if (products.length > 0) { %>
-        <% products.forEach(product => { %>
-            <div class="border shadow-sm"> <!-- Added border and padding -->
-                <div class="row">
-                    <div class="col-12 col-md-4">
-                        <div class="position-relative">
-                            <a href="/user/mainproduct/<%= product._id %>">
-                                <img src="/assets/product-images/<%= product.images[0] %>" class="img-fluid imgg" alt="<%= product.name %>">
-                            </a>
-                            <div class="position-absolute bottom-0 end-0 mb-5 mr-5 deleteButton" data-product-id="<%= product._id %>" data-toggle="tooltip" data-placement="top" title="Delete">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-8 d-flex flex-column justify-content-center">
-                        <a><h4 class="name"><%= product.name %></h4></a>
-                        <p class="short-desc text-justify"><%= product.description %></p>
-                        <div class="single-div-container d-flex">
-                            <% if (product.discountedPrice === product.price) { %> 
-                                <h3 style=" font-size: 25px;"><%= "₹" + product.price %>/-</h3> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <% } else { %>
-                              <h3 class="amount" style="font-size: 25px; margin-bottom: 11px;"><%= "₹" + product.discountedPrice.toFixed(0)%></h3>&nbsp;&nbsp;&nbsp;
-                                <h5 style="color: rgb(159, 131, 131); "><del><%= "₹" + product.price %> </del></h5> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <h5 style="color: #ac4e4e;"><%= product.offer.discountPercentage %>% Offer</h5>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                <% } %>
-                            <a href="/user/addtocart/<%= product._id %>" class="add-to-cart btn btn-default" role="button">Add to Cart</a>
-                        </div>
-                        
-                      
-                    </div>
-                </div>
-            </div>
-        <% }); %>
+       <% products.forEach(product => { %>
+  <div class="border shadow-sm">
+    <div class="row">
+      <!-- IMAGE -->
+      <div class="col-12 col-md-4">
+        <div class="position-relative">
+          <a href="/user/mainproduct/<%= product._id %>">
+            <% if (product.images && product.images.length > 0) { %>
+              <img 
+                src="<%= product.images[0] %>" 
+                class="img-fluid imgg" 
+                alt="<%= product.name %>"
+                style="height: 200px; width: 200px; object-fit: cover;"
+              >
+            <% } else { %>
+              <img 
+                src="/assets/default-image.jpg" 
+                class="img-fluid imgg" 
+                alt="No image"
+              >
+            <% } %>
+          </a>
+
+          <!-- DELETE BUTTON -->
+          <div 
+            class="position-absolute bottom-0 end-0 mb-5 mr-5 deleteButton" 
+            data-product-id="<%= product._id %>" 
+            data-toggle="tooltip" 
+            data-placement="top" 
+            title="Remove from Wishlist"
+            style="cursor: pointer;"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+              <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAILS -->
+      <div class="col-12 col-md-8 d-flex flex-column justify-content-center">
+        <a href="/user/mainproduct/<%= product._id %>" class="name">
+          <h4><%= product.name %></h4>
+        </a>
+        <p class="short-desc text-justify"><%= product.description %></p>
+
+        <div class="single-div-container d-flex align-items-center">
+          <!-- PRICE -->
+          <% if (product.discountedPrice === product.price) { %>
+            <h3 style="font-size: 25px; margin: 0;">₹<%= product.price %>/-</h3>
+          <% } else { %>
+            <h3 style="font-size: 25px; margin: 0;">₹<%= product.discountedPrice.toFixed(0) %></h3>&nbsp;&nbsp;
+            <h5 style="color: #999; margin: 0;"><del>₹<%= product.price %></del></h5>&nbsp;&nbsp;
+            <h5 style="color: #ac4e4e; margin: 0;"><%= product.offer?.discountPercentage || 0 %>% Off</h5>
+          <% } %>&nbsp;&nbsp;&nbsp;
+
+          <!-- ADD TO CART -->
+          <a href="/user/addtocart/<%= product._id %>" class="add-to-cart btn btn-default">
+            Add to Cart
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<% }); %>
         <% } else { %>
             <div class="text-center mt-3">
                 <img src="/assets/homeimg/empty wishlist.png" alt="">
@@ -164,20 +177,9 @@ svg {
         <% } %>    
     </div>
     
-
-    
 </body>
 
-  
-
-  
-
-
-
-
-
 <script>
-    // Make a GET request to fetch the wishlist items
 fetch('/wishlist', {
   method: 'GET',
 })
@@ -207,7 +209,7 @@ fetch('/wishlist', {
                 })
                 .then(response => {
                     if (response.ok) {
-                        window.location.reload(); // You can update the UI instead if you prefer
+                        window.location.reload(); 
                     } else {
                         console.error('Failed to delete product from wishlist');
                     }
@@ -226,6 +228,3 @@ fetch('/wishlist', {
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
-
-
-

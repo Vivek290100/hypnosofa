@@ -33,20 +33,6 @@
         <video class="d-block w-100 hmvideo" controls autoplay loop muted>
           <source src="/assets/homeimg/vid-1.mp4_1712898094892 (1).mp4" type="video/mp4">
         </video>
-       
-
-<!-- <footer class="new_footer_area bg_color">
-    <div class="new_footer_top">
-    <div class="footer_bg">
-    <div class="footer_bg_one"></div>
-    <div class="footer_bg_two"></div>
-    </div>
-    </div>
-    </footer> -->
-
-
-
-
 <style>
     body {
         align-items: center;
@@ -210,8 +196,6 @@
     }
 
 </style>
-
-<!-- card -->
 <style>
 
     body {
@@ -287,54 +271,59 @@
   }
 }
     </style>
-
-
-
   <div id="productss">
   <% let count = 0; %>
   <% for (let index = 0; index < products.length; index++) { %>
-    <% if (count >= 8) { break; } %>
+    <% if (count >= 8) break; %>
     <% count++; %>
     <% const product = products[index]; %>
+
     <% if (index % 4 === 0) { %>
       <div class="row">
-        <% } %>
-        <div class="container">
-          <% if (product.images && product.images.length > 0) { %>
-            <img src="/assets/product-images/<%= product.images[0] %>" class="banner-image" id="image-zoom" alt="<%= product.name %>"
-            onclick="openModal('<%= product.images[0] %>')"><br>
-            <% } else { %>
-              <img src="/assets/default-image.jpg" class="banner-image" id="image-zoom" alt="Default Image"><br>
-              <% } %>
-              <h5 class="card-title"><%= product.name %></h5><br>
-              <!-- <h3><%= "₹" + product.price %></h3> -->
-              <div class="button-wrapper d-flex">
-            <a href="/user/mainproduct/<%= product._id %>"><button class="btn outline">VIVEW DETAILS</button></a>
-            <!-- <div class="wishlist"><i class="fa-solid fa-heart"></i></div> -->
-            <button class="wishlist btn wishlist-btn outline" data-product-id="<%= product._id %>" >
-                <i class="fa-solid fa-heart"></i>
-              </button>
-            </div>
-          </div>
-          <% if ((index + 1) % 4 === 0 || (index + 1) === products.length || count === 8) { %>
-          </div>
-          <% } %>
-          <% } %>
-        </div>
-          
-          
-          
-          
-          
-          
+    <% } %>
+
+    <div class="container">
+      <!-- CLOUDINARY IMAGE -->
+      <% if (product.images && product.images.length > 0) { %>
+        <img 
+          src="<%= product.images[0] %>" 
+          class="banner-image" 
+          id="image-zoom" 
+          alt="<%= product.name %>"
+          onclick="openModal('<%= product.images[0] %>')"
+          style="cursor: zoom-in;"
+        ><br>
+      <% } else { %>
+        <img 
+          src="/assets/default-image.jpg" 
+          class="banner-image" 
+          alt="Default Image"
+        ><br>
+      <% } %>
+
+      <h5 class="card-title"><%= product.name %></h5><br>
+
+      <div class="button-wrapper d-flex">
+        <a href="/user/mainproduct/<%= product._id %>">
+          <button class="btn outline">VIEW DETAILS</button>
+        </a>
+        <button class="wishlist btn wishlist-btn outline" data-product-id="<%= product._id %>">
+          <i class="fa-solid fa-heart"></i>
+        </button>
+      </div>
+    </div>
+
+    <% if ((index + 1) % 4 === 0 || (index + 1) === products.length || count === 8) { %>
+      </div>
+    <% } %>
+  <% } %>
+</div>
           <style>
-  /* Reset CSS */
   * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
   }
-
   .testimonial-cards {
       padding: 5rem 1rem;
       background-color: #f7f7f7;
@@ -401,9 +390,6 @@
 <body>
 
   <br><br><br><br><br><br>
-
-
-<!-- Testimonials Section -->
 <section class="testimonial-cards">
   <div class="heading">Feedback from our Clients</div>
   <div class="testimonial-cards-container">
@@ -419,7 +405,6 @@
               </div>
           </div>
       </div>
-      <!-- Testimonial Card 2 -->
       <div class="testimonial-card">
           <div class="card-body">
               <p class="testimonial-text">"Absolutely thrilled with my purchase! The sofa I ordered from this website not only looks stunning in my living room but is also incredibly comfortable. The quality is top-notch, and the delivery was prompt. Highly recommend!"</p>
@@ -431,7 +416,6 @@
               </div>
           </div>
       </div>
-      <!-- Testimonial Card 3 -->
       <div class="testimonial-card">
           <div class="card-body">
               <p class="testimonial-text">"Five stars all around! This sofa website offers an amazing variety of styles to choose from, making it easy to find the perfect fit for my home. The sofa I ordered arrived on time and was even more beautiful in person. It's clear that they take pride in their products."</p>
@@ -445,15 +429,6 @@
       </div>
   </div>
 </section>
-<!-- End of Testimonials Section -->
-
-
-
-
-
-
-
-
 <style>
 
 * {
@@ -511,9 +486,6 @@
 .back-img, .second-img, .third-img, .fourth-img {
   background-attachment: fixed;
 }
-
-/* Responsive Styles */
-
 @media only screen and (max-width: 768px) {
   #container .title h2 {
     font-size: 40px;
@@ -525,13 +497,9 @@
     font-size: 30px;
   }
 }
-
   </style>
-
   <div>
-
   <div id="aboutt">
-
     <section id="container" >
       <div class="back-img">
         
@@ -542,9 +510,6 @@
       </div>
     </section>
   </div>
-
-
-
   <script>
     $(function() {
   $('nav a').on('click', function(e) {
@@ -561,10 +526,7 @@
     }
   })
 })
-
   </script>
-
-
 <script>
     document.querySelectorAll('.wishlist-btn').forEach(button => {
         button.addEventListener('click', function(event) {
@@ -589,19 +551,7 @@
           });
         });
       });
-    
-    
     </script>
-
-
-
-
-
-
-
-
-
-
 <footer class="custom-footer">
   <div class="containerr">
       <div class="row">
@@ -647,9 +597,6 @@
       <p>&copy; 2024, Hypnosofa. All Rights Reserved.</p>
   </div>
 </footer>
-
-
-
 <style>
   .custom-footer {
   background-color: #004c3f;
@@ -660,84 +607,62 @@
   max-width: 1900px;
   margin: 0 auto;
 }
-
-
-
 .custom-col {
   padding-right: 25px;
   padding-left: 69px;
 }
-
-
-
 .custom-footer .footer-heading {
   font-size: 18px;
   margin-bottom: 15px;
   color: #ffffff;
 }
-
 .custom-footer .footer-nav {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-
 .custom-footer .footer-nav li {
   margin-bottom: 10px;
 }
-
 .custom-footer .footer-nav a {
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
 }
-
 .custom-footer .footer-nav a:hover {
   color: #999;
 }
-
 .custom-footer .social-icons {
   display: flex;
   margin: 0;
   padding: 0;
 }
-
 .custom-footer .social-icons li {
   margin-right: 10px;
   list-style-type: none;
 }
-
 .custom-footer .social-icons a {
   color: #ffffff;
   font-size: 18px;
 }
-
 .custom-footer .social-icons a:hover {
   color: #c5c5c5;
 }
-
 .custom-footer .copyright {
   text-align: center;
   padding-top: 15px;
   color: #ffffff;
 }
-
 .custom-footer .copyright p {
   margin: 0;
   font-size: medium;
   color: #9a9a9a;
 }
-
 </style>
-
-
-
     <script>
       var currentYear = new Date().getFullYear();
       document.getElementById("currentYear").innerText = currentYear;
   </script>
-
-  <!--Start of Tawk.to Script-->
   <script type="text/javascript">
       var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
       (function(){
