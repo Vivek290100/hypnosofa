@@ -1,127 +1,124 @@
-const nodemailer = require("nodemailer");
+// controller/resetpassword.js
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
+const { sendEmail } = require('../utils/email');
 
-
-//nodemailer to send otp-----------------------
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: Number(process.env.EMAIL_PORT),
-  secure: false, 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: { rejectUnauthorized: false },
-    connectionTimeout: 60000,
-    socketTimeout: 60000,
-});
-
-
-//generate otp------------
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
 }
-const otp1 = generateOTP();
-//otp for user email-------------------
-const sendOTP = async (email, otp) => {
-    const mailOptions = {
-        to: email,
-        subject: "Otp for password reset is: ",
-        html: "<h3>OTP for password reset is </h3>" + "<h1 style='font-weight:bold;'>" + otp1 + "</h1>"
-    };
-    return new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(info);
-            }
-        });
-    });
-};
-//password for forgot password--------------
+
 const forgotPassword = async (req, res) => {
     try {
-        const email = req.body.email;
-        const existingUser = await User.findOne({ email });
-        if (!existingUser) {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
             req.flash('error', 'No user found with this email');
             return res.render('./user/forgot', { error: req.flash('error') });
         }
-        req.session.user = {
-            name: req.body.name,
-            email: email,
-            password: req.body.password
+
+        const otp = generateOTP();
+        const otpExpiry = Date.now() + 2 * 60 * 1000;
+
+        req.session.resetPass = {
+            userId: user._id,
+            email: user.email,
+            otp,
+            expiry: otpExpiry
         };
-        req.session.otp = otp1
-        await sendOTP(email,otp1);
-        res.render('./user/resetpassword', { email, otp1, errorMessage1:null});
+
+        await sendEmail({
+            to: email,
+            subject: "Password Reset OTP - Hypnosofa",
+            html: `<h3>Your password reset OTP is</h3>
+                   <h1 style="color:#014122; font-weight:bold;">${otp}</h1>
+                   <p>Valid for 2 minutes only.</p>`
+        });
+
+        res.render('./user/resetpassword', {
+            email,
+            errorMessage1: null,
+            remainingTime: 120
+        });
+
     } catch (error) {
-        console.error('Error in forgotPassword:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Forgot Password Error:', error);
+        res.status(500).send('Server Error');
     }
 };
-//check the otp --------------------------
+
 const resetPassword = async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
-        const userOTP = req.body.otp;
-       console.log(userOTP);
-       console.log(otp1);
-        if (userOTP != otp1) {
-            const errorMessage1 = 'Invalid OTP Or Expired OTP. Please try again.';
-            req.flash('error', errorMessage1);
-            return res.render('./user/resetpassword', { email, otp1, errorMessage1 });
+        const sessionData = req.session.resetPass;
+
+        if (!sessionData || sessionData.email !== email) {
+            return res.render('./user/resetpassword', {
+                email, errorMessage1: "Session expired. Try again.", remainingTime: 0
+            });
         }
-        const user = await User.findOne({ email });
-        if (!user) {
-            req.flash('error', 'User not found.');
-            return res.send("invalid user");
+
+        if (Date.now() > sessionData.expiry) {
+            req.session.resetPass = null;
+            return res.render('./user/resetpassword', {
+                email, errorMessage1: "OTP expired.", remainingTime: 0
+            });
         }
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        user.password = hashedPassword;
-        user.resetPasswordOTP = null;
+
+        if (String(otp) !== String(sessionData.otp)) {
+            return res.render('./user/resetpassword', {
+                email,
+                errorMessage1: "Invalid OTP.",
+                remainingTime: Math.floor((sessionData.expiry - Date.now()) / 1000)
+            });
+        }
+
+        const user = await User.findById(sessionData.userId);
+        if (!user) return res.send("User not found");
+
+        user.password = await bcrypt.hash(newPassword, 10);
         await user.save();
-        if (req.session.logged==true) {
-            req.session.user=user
-            return res.redirect('/user/profile');
-        } else {
-            return res.redirect('/user/login');
-        }
+
+        req.session.resetPass = null;
+        req.flash('success', 'Password reset successful! Please login.');
+        res.redirect('/user/login');
+
     } catch (error) {
-        console.error('Error resetting password:', error);
-        req.flash('error', 'Internal Server Error');
-        return res.status(500).render('error', { error: req.flash('error') });
+        console.error('Reset Password Error:', error);
+        res.status(500).send('Server Error');
     }
 };
 
+const otpresend = async (req, res) => {
+    try {
+        const sessionData = req.session.resetPass;
+        if (!sessionData) return res.redirect('/forgot-password');
 
-//to get the email id of the user for resend----------------------
+        const newOTP = generateOTP();
+        sessionData.otp = newOTP;
+        sessionData.expiry = Date.now() + 2 * 60 * 1000;
+        req.session.resetPass = sessionData;
+
+        await sendEmail({
+            to: sessionData.email,
+            subject: "New Password Reset OTP",
+            html: `<h3>New OTP:</h3><h1 style="color:#014122;">${newOTP}</h1><p>Valid for 2 minutes.</p>`
+        });
+
+        res.render('./user/resetpassword', {
+            email: sessionData.email,
+            errorMessage1: "New OTP sent!",
+            remainingTime: 120
+        });
+    } catch (error) {
+        console.error("Resend OTP Error:", error);
+        res.status(500).send("Failed to resend");
+    }
+};
+
 const showForgotPasswordForm = (req, res) => {
-    console.log(req.body);
     res.render('./user/forgot', { error: req.flash('error') });
 };
-//otp resend-------------------------------------------------------
-const otpresend = function (req, res) {
-    const email = req.session.user && req.session.user.email;
-    console.log(email);
-    const storedOTP = req.session.otp;
-    const mailOptions = {
-        to: email,
-        subject: "Otp for registration is: ",
-        html: "<h3>OTP for account verification is </h3>" + "<h1 style='font-weight:bold;'>" +storedOTP + "</h1>" 
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        res.render('./user/resetpassword', { email: email, errorMessage1: "OTP has been sent" });
-    });
-};
-
 
 module.exports = {
     forgotPassword,

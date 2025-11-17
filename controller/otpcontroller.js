@@ -1,40 +1,28 @@
+// C:\Users\vivek_laxvnt1\Desktop\Tasks\Week 7-12 Project Week\hypnosofa\controller\otpcontroller.js
 const User = require("../models/userModel");
 const Wallet = require("../models/walletModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const { sendEmail } = require("../utils/email");
 
 function generateReferralCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let referralCode = '';
+    let code = '';
     for (let i = 0; i < 6; i++) {
-        referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    return referralCode;
+    return code;
 }
 
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
 }
 
-const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: Number(process.env.EMAIL_PORT),
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    tls: { rejectUnauthorized: false },
-    connectionTimeout: 60000,
-    socketTimeout: 60000,
-});
-
 const otp1 = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        if (await User.findOne({ email })) {
             req.flash("error", "User already exists");
             return res.render("./user/signup", { error: req.flash("error") });
         }
@@ -42,41 +30,29 @@ const otp1 = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const referralCode = generateReferralCode();
 
-        req.session.tempUser = {
-            name,
-            email,
-            password: hashedPassword,
-            referralCode,
-        };
+        req.session.tempUser = { name, email, password: hashedPassword, referralCode };
 
         const otp = generateOTP();
-        const otpExpiry = Date.now() + 2 * 60 * 1000; // 2 minutes
+        const otpExpiry = Date.now() + 2 * 60 * 1000;
 
-        req.session.otpData = {
-            otp,
-            expiry: otpExpiry
-        };
+        req.session.otpData = { otp, expiry: otpExpiry };
 
-        const mailOptions = {
+        await sendEmail({
             to: email,
-            subject: "Your OTP for Hypnosofa Registration",
-            html: `<h3>Your OTP for account verification is</h3>
-                   <h1 style='font-weight:bold; color:#014122;'>${otp}</h1>
-                   <p>This OTP is valid for 2 minutes.</p>`
-        };
-
-        await transporter.sendMail(mailOptions);
-        console.log("OTP Sent:", otp);
+            subject: "Your Hypnosofa OTP",
+            html: `<h3>Your OTP is</h3>
+                   <h1 style="color:#014122; font-weight:bold;">${otp}</h1>
+                   <p>Valid for 2 minutes.</p>`
+        });
 
         res.render("./user/otp", {
-            msg10: "OTP has been sent to your email!",
-            email: email,
-            remainingTime: 120 
+            msg10: "OTP sent successfully!",
+            remainingTime: 120
         });
 
     } catch (error) {
-        console.error("Error in otp1:", error);
-        res.status(500).send("Internal Server Error");
+        console.error("OTP Send Error:", error);
+        res.status(500).send("Failed to send OTP");
     }
 };
 
@@ -134,27 +110,21 @@ const verify = async (req, res) => {
 const resend = async (req, res) => {
     try {
         const tempUser = req.session.tempUser;
-        if (!tempUser) {
-            return res.redirect("/signup");
-        }
+        if (!tempUser) return res.redirect("/signup");
 
         const newOTP = generateOTP();
-        const otpExpiry = Date.now() + 2 * 60 * 1000; 
+        const otpExpiry = Date.now() + 2 * 60 * 1000;
 
-        req.session.otpData = {
-            otp: newOTP,
-            expiry: otpExpiry
-        };
+        req.session.otpData = { otp: newOTP, expiry: otpExpiry };
 
-        const mailOptions = {
+        await sendEmail({  // ← NOW USING sendEmail
             to: tempUser.email,
-            subject: "New OTP for Hypnosofa Registration",
+            subject: "New OTP - Hypnosofa",
             html: `<h3>Your new OTP is</h3>
-                   <h1 style='font-weight:bold; color:#014122;'>${newOTP}</h1>
+                   <h1 style="color:#014122; font-weight:bold;">${newOTP}</h1>
                    <p>Valid for 2 minutes only.</p>`
-        };
+        });
 
-        await transporter.sendMail(mailOptions);
         console.log("Resent OTP:", newOTP);
 
         res.render("./user/otp", {
