@@ -1,191 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OTP Verification - Sofa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>OTP Verification - Hypnosofa</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <script src="script.js" defer></script>
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
-        .body {
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+        body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* background-size: cover; */
-            background-position: center;
-            background-color: #fff;
+            /* background: linear-gradient(135deg, #014122, #8d6e63); */
         }
-
-        :where(.container, form, .input-field, header) {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-        }
-
         .container {
-            background: rgba(240, 240, 240, 0.7);
-            padding: 30px 65px;
-            border-radius: 12px;
-            row-gap: 20px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .container header {
-            height: 65px;
-            width: 65px;
-            background: #8d6e63;
-            color: #fff;
-            font-size: 2.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container h3 {
-            font-size: 1.25rem;
-            font-weight: 500;
-            color: #014122;
-        }
-
-        form .input-field {
-            display: flex;
-            column-gap: 10px;
-        }
-
-        .input-field input {
-            height: 45px;
-            width: 180px; 
-            border-radius: 6px;
-            outline: none;
-            font-size: 1.125rem;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             text-align: center;
-            border: 1px solid #ddd;
+            max-width: 400px;
+            width: 90%;
         }
-
-        .input-field input:focus {
-            box-shadow: 0 1px 0 rgba(173, 21, 21, 0.1);
+        .container h3 {
+            color: #014122;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
         }
-
-        form button {
-            margin-top: 25px;
+        .msg { color: #d32f2f; margin: 10px 0; font-weight: 500; }
+        .success { color: #00b351; }
+        input[type="text"] {
             width: 100%;
-            color: #fff;
-            font-size: 1rem;
-            border: none;
-            padding: 9px 0;
-            cursor: pointer;
-            border-radius: 6px;
+            padding: 14px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            letter-spacing: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
             background: #014122;
-            transition: all 0.2s ease;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
         }
-
-        form button.active {
-            /* background: #8d6e63; */
-            pointer-events: auto;
-        }
-
-        form button:hover {
-            background: #00b351;
-        }
-
-        .loginDiv {
-            font-size: small;
-            font-weight: 500;
-            color: #000000;
-        }
-        #timer{
-            color: #000000;
-        }
-
-        .input-field {
-            position: relative;
-        }
-
-  input[type="text"] {
-    width: 70%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adjust the values for the shadow */
-  }
-
+        button:hover { background: #00b351; }
+        .timer { color: #d32f2f; font-weight: bold; margin: 10px 0; }
+        .resend { margin-top: 15px; }
+        .resend a { color: #014122; text-decoration: none; font-weight: 500; }
+        .resend a:hover { text-decoration: underline; }
     </style>
 </head>
-
-<body class="body">
+<body>
     <div class="container">
-        <h3>Enter OTP Code</h3>
-        <form action="/verify" method="post">
-            <div class="loginDiv d-flex justify-content-center">
-                <%- msg10 -%>
-            </div>
-            <div class="input-field">
-                <input type="text" name="otp" pattern="\d{4}" required>
-            </div>
-            <input type="hidden" name="statuz" value="Active">
-            <div class="d-flex">
-                <p style="color: #000000;">Resend In: <p id="timer">0:40</p></p>
-            </div>
-            <div id="resendOtp" style="display: none;">
-                <a style="text-decoration: none; color: #000000;" href="/resend">Resend OTP</a>
-            </div>
-            <button >Verify OTP</button>
-        </form>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <h3>Verify Your Email</h3>
+        <p>Enter the 4-digit OTP sent to your email</p>
 
+        <% if (msg10) { %>
+            <div class="msg <%= msg10.includes('sent') || msg10.includes('New') ? 'success' : '' %>">
+                <%= msg10 %>
+            </div>
+        <% } %>
+
+        <form action="/verify" method="POST">
+            <input type="text" name="otp" maxlength="4" pattern="\d{4}" required placeholder="0000" />
+            <div class="timer" id="timer">Time left: 2:00</div>
+            <button type="submit" id="verifyBtn">Verify OTP</button>
+        </form>
+
+        <div class="resend" id="resendDiv" style="display: none;">
+            <a href="/resend">Resend OTP</a>
+        </div>
+    </div>
 
     <script>
-    //   let duration = 140; 
-    let duration = localStorage.getItem('remainingTime') || 140;
-      const timerDisplay = $("#timer");
-      const resendOtp = $("#resendOtp");
+        const remainingTime = parseInt("<%= remainingTime %>") || 120;
+        let timeLeft = remainingTime;
 
-      function updateTimer() {
-          const minutes = Math.floor(duration / 60);
-          let seconds = duration % 60;
-          seconds = seconds < 10 ? "0" + seconds : seconds;
+        const timerDisplay = document.getElementById("timer");
+        const resendDiv = document.getElementById("resendDiv");
+        const verifyBtn = document.getElementById("verifyBtn");
 
-          timerDisplay.text(`${minutes}:${seconds}`);
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs < 10 ? '0' + secs : secs}`;
+        }
 
-          if (duration === 0) {
-              clearInterval(countdown);
-              timerDisplay.text("00:00");
-              resendOtp.css("display", "block");
-          } else {
-              duration--;
-              localStorage.setItem('remainingTime', duration);
-          }
-      }
-      updateTimer();
-      const countdown = setInterval(updateTimer, 1000);
+        function startTimer() {
+            timerDisplay.textContent = `Time left: ${formatTime(timeLeft)}`;
 
-  function resendOTP() {
-      duration = 140; 
-      localStorage.setItem('remainingTime', duration);
-  }
+            const interval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Time left: ${formatTime(timeLeft)}`;
 
-  $("#resendOtp a").click(function(e) {
-      e.preventDefault();
-      resendOTP();
-  });
-  </script>
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    timerDisplay.textContent = "OTP Expired";
+                    verifyBtn.disabled = true;
+                    verifyBtn.style.opacity = "0.6";
+                    resendDiv.style.display = "block";
+                }
+            }, 1000);
+        }
+
+        startTimer();
+    </script>
 </body>
 </html>
-
-        
