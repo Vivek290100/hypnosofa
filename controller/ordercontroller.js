@@ -13,7 +13,8 @@ const Wallet=require('../models/walletModel')
 const WalletHistory = require('../models/walletHistoryModel')
 const Coupon = require('../models/couponModel')
 const fs = require("fs");
-const puppeteer = require("puppeteer");
+const html_to_pdf = require('html-pdf-node');
+const path = require('path');  
 const User = require("../models/userModel");
 
 
@@ -449,36 +450,55 @@ const addaddresscheckoutt = async (req, res) => {
 };
 
 
-
 const downloadinvoice = async (req, res) => {
-    try {
-        const orderId = req.query.orderId; 
-         const orderDetails = await orderModels.findById(orderId);
-        
-         if (!orderDetails) {
-             return res.status(404).json({ success: false, message: 'Order not found' });
-         }
-        const productDetails = await Product.findById(orderDetails.products[0].product);
-        const userDetails = await User.findById(orderDetails.customer);
-        const templatePath = "views/orders/invoice.ejs";
-        const templateContent = fs.readFileSync(templatePath, "utf-8");
-        const renderedHTML = ejs.render(templateContent, { 
-            orderDetails,
-            productDetails,
-            userDetails });
-        
-        const browser = await puppeteer.launch({ headless: "new" });
-        const page = await browser.newPage();
-        await page.setContent(renderedHTML);
-        const pdfBuffer = await page.pdf({ format: "Letter" });
-        await browser.close();
-        res.setHeader("Content-Type", "application/pdf");
-        res.send(pdfBuffer);
-      } catch (error) {
-        console.error('Error adding new address:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+  try {
+    const orderId = req.query.orderId;
+
+    if (!orderId) {
+      return res.status(400).send("Order ID is required");
     }
-  };
+
+    const orderDetails = await orderModels
+      .findById(orderId)
+      .populate("customer")
+      .populate("products.product");
+
+    if (!orderDetails) {
+      return res.status(404).send("Order not found");
+    }
+
+    const templatePath = path.join(__dirname, "../views/orders/invoice.ejs");
+    const templateContent = fs.readFileSync(templatePath, "utf-8");
+
+    const renderedHTML = ejs.render(templateContent, {
+      order: orderDetails,
+      orderDetails: orderDetails,
+      user: orderDetails.customer,
+      products: orderDetails.products,
+      moment,
+    });
+
+    const pdfBuffer = await html_to_pdf.generatePdf(
+      { content: renderedHTML },
+      {
+        format: "A4",
+        margin: { top: 50, bottom: 60, left: 40, right: 40 },
+        printBackground: true,
+      }
+    );
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=Invoice_${orderDetails.orderID || orderId}.pdf`
+    );
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.error("Invoice Generation Error:", error.message);
+    res.status(500).send("Failed to generate invoice");
+  }
+};
   
 
 //   const generateRazorpay = async (req,res ) =>{

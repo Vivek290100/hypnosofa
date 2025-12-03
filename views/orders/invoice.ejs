@@ -1,112 +1,134 @@
-<!-- C:\Users\vivek_laxvnt1\Desktop\Tasks\Week 7-12 Project Week\hypnosofa\views\orders\invoice.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoice</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #333;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+      color: #333;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
+
   <div class="invoice-container">
-    <div class="invoice">
-      <div class="header">
-        <!-- <h1>Invoice</h1> -->
-        <p><strong>OrderID:</strong> <%= orderDetails.orderID %></p>
+
+    <div class="header">
+      <h1>INVOICE</h1>
+      <p><strong>Order ID:</strong> <%= order.orderID %></p>
+      <p><strong>Date:</strong> <%= order.orderDate %> | <%= order.orderTime %></p>
+    </div>
+
+    <div class="info">
+      <div>
+        <h3>Billing </h3>
+        <strong><%= order.customer?.name || 'N/A' %></strong><br>
+        <!-- <%= order.address.houseName %>, <%= order.address.locality %><br> -->
+        <!-- <%= order.address.city %>, <%= order.address.district %>, <%= order.address.state %> - <%= order.address.pincode %><br> -->
+        <!-- Phone: <%= order.address.mobile %><br> -->
+        Email: <%= order.customer?.email || 'N/A' %>
       </div>
-      <div class="details">
-        <div class="customer">
-          <h2 style="text-align: center;">Billing Information</h2>
-          <p><strong>Name:</strong><%= userDetails.name %></p>
-          <p><strong>Email:</strong> <%= userDetails.email %></p>
-        </div>
-        <div class="order-details">
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% orderDetails.products.forEach(product => { %>
-              <tr>
-                <td><%= productDetails.name %></td>
-                <td><%= product.quantity %></td>
-                <td>$<%= productDetails.price %>.00</td>
-                <td>$<%= (product.quantity * productDetails.price) + 100 %>.00</td>
-                <% }); %>
-            </tbody>
-          </table>
-        </div>
-        <div class="payment">
-          <h2 style="text-align: center;">Payment Information</h2>
-          <p><strong>Total:</strong> $<%= orderDetails.totals.totalprice %>.00</p>
-          <p><strong>Payment Method:</strong> <%= orderDetails.paymentMethod %></p>
-          <p><strong>Status:</strong> <%= orderDetails.status %></p>
-        </div>
-      </div>
-      <div class="footer">
-        <p>Thank you for your purchase!</p>
+      <div>
+        <h3>Payment Info</h3>
+        <p><strong>Method:</strong> <%= order.paymentMethod %></p>
+        <p><strong>Status:</strong> <%= order.status %></p>
       </div>
     </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% order.products.forEach(item => { %>
+          <% const p = item.product; %>
+          <tr>
+            <td><%= p?.name || 'Product' %></td>
+            <td><%= item.quantity %></td>
+            <td>₹<%= p?.price || 0 %></td>
+            <td class="text-right">₹<%= (p?.price || 0) * item.quantity %></td>
+          </tr>
+        <% }); %>
+
+        <% if (order.totals.discountAmount > 0) { %>
+          <tr>
+            <td colspan="3" class="text-right"><strong>Discount (<%= order.totals.couponCode %>)</strong></td>
+            <td class="text-right">-₹<%= order.totals.discountAmount %></td>
+          </tr>
+        <% } %>
+
+        <tr class="total">
+          <td colspan="3" class="text-right"><strong>Grand Total</strong></td>
+          <td class="text-right"><strong>₹<%= order.totals.totalprice %></strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footer">
+      <p>Thank you for shopping with us!</p>
+      <p>Hypno Sofa &copy; 2025 | For support: support@hypnosofa.com</p>
+    </div>
+
   </div>
-
-
-<style>
-  body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f5f5f5;
-}
-
-.invoice-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.invoice {
-  width: 600px; 
-  height: 94vh;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd; 
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  font-size: 0.9rem; 
-}
-.header, .details, .footer {
-  padding: 10px;
-  border-bottom: 1px solid #ddd; 
-}
-.header h1 {
-  text-align: center;
-  margin: 0;
-}
-.details h2 {
-  margin-top: 15px;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-th:last-child, td:last-child {
-  text-align: right;
-}
-.payment p {
-  margin-bottom: 5px;
-}
-.footer p {
-  text-align: center;
-  margin: 10px 0;
-}
-</style>
+</body>
+</html>
