@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",
+    "@sparticuz/chromium": "^141.0.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "brevo": "^1.0.0",
@@ -25,6 +26,7 @@
     "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
     "flash": "^1.1.0",
+    "html-pdf-node": "^1.0.8",
     "js-image-zoom": "^0.7.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
@@ -34,7 +36,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^6.9.8",
     "passport": "^0.7.0",
-    "puppeteer": "^22.5.0",
+    "puppeteer": "^24.31.0",
+    "puppeteer-core": "^24.31.0",
     "razorpay": "^2.9.2",
     "resend": "^6.4.2",
     "sharp": "^0.33.2"

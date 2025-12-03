@@ -1,3 +1,4 @@
+// C:\Users\vivek_laxvnt1\Desktop\Tasks\Week 7-12 Project Week\hypnosofa\controller\admincontroller.js
 const User = require('../models/userModel');
 const ejs = require('ejs');
 const orderModels = require('../models/orderModel');
@@ -5,6 +6,8 @@ const moment = require("moment");
 const fs = require("fs");
 const puppeteer = require("puppeteer");
 const Category = require("../models/categoryModel"); 
+const path = require('path');
+const html_to_pdf = require('html-pdf-node');
 require('dotenv').config();
 
 
@@ -270,7 +273,6 @@ const updateOrderStatus = async (req, res) => {
     }
 }
 
-
 const salesReport = async (req, res) => {
   try {
     const startDate = req.query.startDate
@@ -279,52 +281,45 @@ const salesReport = async (req, res) => {
     const endDate = req.query.endDate
       ? moment(req.query.endDate).endOf("day")
       : moment().endOf("day");
-     
-      const formattedStartDate = moment(startDate).format('DD-MM-YYYY');
-      const formattedEndDate = moment(endDate).format('DD-MM-YYYY');
-    
-      const orders = await orderModels.find({
-        orderDate: {
-          $gte: formattedStartDate,
-          $lte: formattedEndDate,
-        },
-        status: "Delivered",
-      })
-      .populate({
-        path: "products.product",
-        match: { status: "Delivered" }
-      })
-      .populate("customer products.product");
-      
-    const formattedStartDate1 = startDate.format("DD-MM-YYYY ");
-    const formattedEndDate1 = endDate.format("DD-MM-YYYY ");
 
-    const templatePath = "views/admin/salesreport.ejs";
-    const templateContent = fs.readFileSync(templatePath, "utf-8");
-    const renderedHTML = ejs.render(templateContent, {
-      startDate: formattedStartDate1,
-      endDate: formattedEndDate1,
+    console.log("Searching from:", startDate.format('DD-MM-YYYY'), "to", endDate.format('DD-MM-YYYY'));
+
+    // THIS IS THE ONLY LINE THAT MATTERS NOW
+    const orders = await orderModels.find({
+      status: "Delivered",
+      $expr: {
+        $and: [
+          { $gte: [{ $dateFromString: { dateString: "$orderDate", format: "%d-%m-%Y" } }, startDate.toDate()] },
+          { $lte: [{ $dateFromString: { dateString: "$orderDate", format: "%d-%m-%Y" } }, endDate.toDate()] }
+        ]
+      }
+    })
+    .populate("customer")
+    .populate("products.product")
+    .lean();
+
+    console.log(`Found ${orders.length} delivered orders → NOW IT WILL SHOW 2`);
+
+    const displayStart = startDate.format('DD-MM-YYYY') + " ";
+    const displayEnd = endDate.format('DD-MM-YYYY') + " ";
+
+    const renderedHTML = ejs.render(fs.readFileSync(path.join(__dirname, "../views/admin/salesreport.ejs"), "utf-8"), {
+      startDate: displayStart,
+      endDate: displayEnd,
       orders,
     });
 
-    const browser = await puppeteer.launch({ headless: "new" });
-    const page = await browser.newPage();
-    await page.setContent(renderedHTML);
-    const pdfBuffer = await page.pdf({ format: "Letter" });
-    await browser.close();
+    const pdfBuffer = await html_to_pdf.generatePdf({ content: renderedHTML }, { format: "Letter", margin: 40 });
 
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=SalesReport_${formattedStartDate}_to_${formattedEndDate}.pdf`
-    );
+    res.setHeader("Content-Disposition", `attachment; filename=SalesReport_${startDate.format('DD-MM-YYYY')}_to_${endDate.format('DD-MM-YYYY')}.pdf`);
     res.setHeader("Content-Type", "application/pdf");
     res.send(pdfBuffer);
+
   } catch (error) {
-    console.error("Error generating sales report:", error.message);
-    res.status(500).send(`Internal server error: ${error.message}`);
+    console.error("Error:", error.message);
+    res.status(500).send("Error: " + error.message);
   }
 };
-
 
 
 
