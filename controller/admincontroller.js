@@ -4,7 +4,6 @@ const ejs = require('ejs');
 const orderModels = require('../models/orderModel');
 const moment = require("moment");
 const fs = require("fs");
-const puppeteer = require("puppeteer");
 const Category = require("../models/categoryModel"); 
 const path = require('path');
 const html_to_pdf = require('html-pdf-node');
