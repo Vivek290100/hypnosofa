@@ -1,6 +1,6 @@
 
 
-
+<!-- C:\Users\vivek_laxvnt1\Desktop\Tasks\Week 7-12 Project Week\hypnosofa\views\admin\orderlist.ejs -->
 <!DOCTYPE html>
 <html lang="en">
     <%- include('../adminlayout/header') -%>
@@ -18,127 +18,14 @@
     
 
 
-	<!-- SIDEBAR -->
 	<%- include('../adminlayout/slider') -%>
-	<!-- SIDEBAR -->
 
 
 
-	<!-- CONTENT -->
-        <section id="content">
-            <!-- NAVBAR -->
-            <%- include('../adminlayout/navbar') -%>
-		<!-- NAVBAR -->
-		
-		<!-- NAVBAR -->
+<section id="content">
+        <%- include('../adminlayout/navbar') -%>
 
-
-        <style>
-            /* Modal styles */
-            .modal {
-                display: none; /* Hidden by default */
-                position: fixed; /* Stay in place */
-                z-index: 1000; /* Sit on top */
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto; /* Enable scroll if needed */
-                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            }
-        
-            /* Modal content */
-            .modal-content {
-                background-color: #fefefe;
-                margin: 15% auto; /* 15% from the top and centered */
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%; /* Could be more or less, depending on screen size */
-                max-width: 500px; /* Limiting max width */
-            }
-        
-            /* Close button */
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-        
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
-            td{
-                font-size: small;
-            }
-   
-
-            td.description {
-                max-height: 100px;
-                overflow: hidden;
-                white-space: pre-line;
-            }
-            .vieworder{
-                border-radius: 4px;
-            }
-    .status-select {
-        margin-right: 10px;
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 16px;
-    }
-    .btn-success {
-        padding: 10px 20px;
-        border-radius: 5px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .btnn{
-        width: 125px;
-        height: 40px;
-        font-size: 11px;
-    }
-    #usersTable_length{
-        display: none;
-    }
-    .dataTables_length{
-        display: none;
-    }
-    .dataTables_info{
-        display: none;
-    }
-    #dataTables_previous{
-        display: none;
-    }
-    #dataTables_next{
-        display: none;
-    }
-    .pagination{
-        display:none
-    }
-    .pagination1{
-        width: 100px;
-        margin-left: 500px;
-    
-    }
-    
-</style>
-
-
-
-        
-
-
-
-		<!-- MAIN -->
-		<main>
+        <main>
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -147,51 +34,73 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>ORDER ID</th>
-                                    <th>TOTAL PRICE</th>
+                                    <th>PRODUCTS</th> <!-- Changed from NAME -->
+                                    <th>PRICE</th>
                                     <th>PAYMENT</th>
-                                    <th>NAME</th>
-                                    <th>Quantity</th>
-                                    <th>Date & Time</th>
+                                    <th>DATE & TIME</th>
                                     <th>STATUS</th>
+                                    <th>VIEW</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% if (Orders.length > 0) { %>
                                     <% Orders.forEach((order, orderIndex) => { %>
-                                        <% order.products.forEach((product, productIndex) => { %>
+                                        <% order.products.forEach((productItem, productIndex) => { %>
                                             <tr>
-                                                <% if(productIndex === 0) { %>
-                                                    <td rowspan="<%= order.products.length %>"><%- orderIndex + 1 %></td>
-                                                    <td rowspan="<%= order.products.length %>"><%= order._id %></td>
-                                                    <td rowspan="<%= order.products.length %>">Rs. <%= order.totals.totalprice %>.00</td>
-                                                <% } %>
-                                                <!-- <td>%= product.product._id %></td> -->
-                                                <td><%= order.paymentMethod %></td>
-                                                <td><%= product.product.name %></td>
-                                                <td><%= product.quantity %></td>
-                                                <td><%= order.orderDate %>, <%= order.orderTime %></td>
-                                                <td>
-                                                    <form action="/updateOrderStatus" method="POST">
-                                                        <input type="hidden" name="orderId" value="<%= order._id %>">
-                                                        <input type="hidden" name="productId" value="<%= product.product._id %>">
-                                                        <select name="newStatus" class="status-select" <%= order.status === 'Cancelled' ? 'disabled' : '' %>>
-                                                            <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
-                                                            <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
-                                                            <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
-                                                            <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
-                                                            <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option> 
+                                                <% if (productIndex === 0) { %>
+                                                    <td rowspan="<%= order.products.length %>">
+                                                        <%= (orderIndex + 1) + (currentPage - 1) * 5 %>
+                                                    </td>
 
-                                                        </select>
-                                                        <button id="update" class="btnn btn-success" type="submit">Update Status</button>
-                                                    </form>
-                                                </td>
+                                                    <!-- PRODUCTS CELL with rowspan -->
+                                                    <td rowspan="<%= order.products.length %>" class="text-left">
+                                                        <div class="product-list">
+                                                            <% order.products.forEach(p => { %>
+                                                                <div class="product-item">
+                                                                    <span class="product-name"><%= p.product.name %></span>
+                                                                    <span class="product-qty"> × <%= p.quantity %></span>
+                                                                </div>
+                                                            <% }) %>
+                                                        </div>
+                                                    </td>
+
+                                                    <td rowspan="<%= order.products.length %>">
+                                                        ₹ <%= order.totals.totalprice.toFixed(2) %>
+                                                    </td>
+                                                    <td rowspan="<%= order.products.length %>">
+                                                        <%= order.paymentMethod %>
+                                                    </td>
+                                                    <td rowspan="<%= order.products.length %>">
+                                                        <%= order.orderDate %>, <%= order.orderTime %>
+                                                    </td>
+                                                    <td rowspan="<%= order.products.length %>">
+                                                        <form action="/updateOrderStatus" method="POST">
+                                                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                                                            <select name="newStatus" class="status-select"
+                                                                    <%= ['Cancelled', 'Delivered'].includes(order.status) ? 'disabled' : '' %>>
+                                                                <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                                <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                                                <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                                                <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                                                <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                                            </select>
+                                                            <button type="submit" class="btn btn-success btn-sm mt-1"
+                                                                    <%= ['Cancelled', 'Delivered'].includes(order.status) ? 'disabled' : '' %>>
+                                                                Update
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                    <td rowspan="<%= order.products.length %>">
+                                                        <a href="/order-details/<%= order._id %>"
+                                                           class="btn btn-primary btn-sm">View Order</a>
+                                                    </td>
+                                                <% } %>
                                             </tr>
                                         <% }) %>
                                     <% }) %>
                                 <% } else { %>
                                     <tr>
-                                        <td colspan="8">No orders found.</td>
+                                        <td colspan="7" class="text-center">No orders found.</td>
                                     </tr>
                                 <% } %>
                             </tbody>
@@ -199,21 +108,17 @@
                     </div>
                 </div>
             </div>
-            
-             <!-- Pagination Controls -->
-    <ul class="pagination1 d-flex">
-        <% for (let i = 1; i <= totalPages; i++) { %>
-            <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-            </li>
-        <% } %>
-    </ul>
+
+            <!-- Pagination -->
+            <ul class="pagination1 d-flex justify-content-center mt-4">
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+            </ul>
         </main>
-		<!-- MAIN -->
-
-
-	</section>
-	<!-- CONTENT -->
+    </section>
 	
     </div>
 
@@ -226,21 +131,12 @@
 	<%- include('../adminlayout/footer') -%>
     
 
-    
-
-
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
 
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
-
-
-
-
-   
-
 
     <script>
     jQuery.noConflict();
@@ -252,48 +148,26 @@
 
 
 <script>
-$('form[action="/updateOrderStatus"]').submit(function(event) {
-    event.preventDefault(); 
-    var form = $(this);
-    var orderId = form.find('input[name="orderId"]').val();
-    var newStatus = form.find('select[name="newStatus"]').val();
-    
-    $.ajax({
-        url: form.attr('action'),
-        method: form.attr('method'),
-        data: {
-            orderId: orderId,
-            newStatus: newStatus
-        },
-        success: function(response) {
-            
-            console.log('statussuccessfully updated');      
+    $('form[action="/updateOrderStatus"]').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const orderId = form.find('input[name="orderId"]').val();
+        const newStatus = form.find('select[name="newStatus"]').val();
+
+        $.ajax({
+            url: '/updateOrderStatus',
+            method: 'POST',
+            data: { orderId, newStatus },
+            success: function(response) {
+                alert('Status updated successfully!');
+                location.reload(); 
             },
-        error: function(xhr, status, error) {
-            console.error('Error updating order status:', error);
-        }
-    });
-});
-
+            error: function(xhr) {
+                alert('Error updating status: ' + (xhr.responseText || 'Unknown error'));
+            }
+        });
+    }); 
 </script>
-
-<!-- 
-<script>
-    document.getElementById('update').addEventListener('click', function() {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Status successfully updated!",
-        showConfirmButton: false,
-        timer: 1500
-      }).then(function() {
-        location.reload();
-      });
-    });
-    </script> -->
-
-
-
 
 </body>
 </html>

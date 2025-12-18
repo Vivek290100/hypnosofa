@@ -1,238 +1,117 @@
+<!-- views/coupon/createCoupon.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href=""
-    />
-    <title>Create Coupon</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <title>Create Coupon</title>
 
-    <style>
-      body {
-        font-family: "Roboto", sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-      }
+  <style>
+    body { font-family: "Roboto", sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px; }
+    h2 { text-align: center; color: #004c3f; margin-bottom: 30px; }
+    form { max-width: 400px; margin: 0 auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    label { display: block; margin: 15px 0 5px; font-weight: 600; color: #333; }
+    input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+    button { width: 100%; background: #004c3f; color: white; padding: 14px; border: none; border-radius: 6px; font-size: 17px; cursor: pointer; margin-top: 25px; }
+    button:hover { background: #003d32; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+    .modal-content { background: white; margin: 15% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .close { float: right; font-size: 30px; cursor: pointer; }
+  </style>
+</head>
+<body>
 
-      header {
-        background-color: green;
-        color: #ffffff;
-        padding: 10px;
-        text-align: center;
-      }
+  <h2>Add New Coupon</h2>
 
-      form {
-        max-width: 400px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #ffffff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 8px;
-      }
-
-      input,
-      textarea {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
-      }
-
-      button {
-        background-color: #45a049;
-        color: #ffffff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background-color:  #388e3c;
-      }
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-
-      /* Modal Content */
-      .modal-content {
-        background-color: #41a9d5;
-        color: black;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 30%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        position: relative;
-      }
-
-      /* Close Button */
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <h2 style="text-align: center">Add Coupon</h2>
-    <div id="customModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeCustomModal()">&times;</span>
-        <p id="customModalMessage"></p>
-      </div>
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCustomModal()">×</span>
+      <p id="customModalMessage"></p>
     </div>
+  </div>
 
-    <form id="createCouponForm" action="/admin/create-coupon" method="post">
-      <label for="couponCode">Coupon Code:</label>
-      <input type="text" id="couponCode" name="couponCode" required />
-      <label for="minPurchaseAmount">Min Amount:</label>
-      <input
-        type="text"
-        id="minPurchaseAmount"
-        name="minPurchaseAmount"
-        pattern="^\d+(\.\d{1,2})?$"
-        title="Please enter a valid number"
-        required
-      />
-      <label for="discountAmount">Discount:</label>
-      <input type="text" id="discountAmount" name="discountAmount" required />
+  <form id="createCouponForm">
+    <label for="couponCode">Coupon Code</label>
+    <input type="text" id="couponCode" name="couponCode" required />
 
-      <label for="startDate">Date:</label>
-      <input type="date" id="startDate" name="startDate" required />
+    <label for="minPurchaseAmount">Minimum Purchase Amount</label>
+    <input type="number" id="minPurchaseAmount" name="minPurchaseAmount" min="1" required />
 
-      <label for="expiryDate">Expires In:</label>
-      <input type="date" id="expiryDate" name="expiryDate" required />
+    <label for="discountAmount">Discount Amount</label>
+    <input type="number" id="discountAmount" name="discountAmount" min="1" required />
 
-      <button style="background-color: #004c3f;" type="button" onclick="createCoupon()">Add Coupon</button>
-    </form>
-  </body>
-  <script>
-    function openCustomModal(message) {
-      const modal = document.getElementById("customModal");
-      const modalMessage = document.getElementById("customModalMessage");
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" name="startDate" required />
 
-      modalMessage.textContent = message;
-      modal.style.display = "block";
+    <label for="expiryDate">Expiry Date</label>
+    <input type="date" id="expiryDate" name="expiryDate" required />
+
+    <button type="button" onclick="createCoupon()">Add Coupon</button>
+  </form>
+
+<script>
+  function openCustomModal(message) {
+    document.getElementById("customModalMessage").textContent = message;
+    document.getElementById("customModal").style.display = "block";
+  }
+
+  function closeCustomModal() {
+    document.getElementById("customModal").style.display = "none";
+  }
+
+  function validateCoupon(formData) {
+    const couponCode = formData.get("couponCode")?.trim();
+    const minAmount = parseFloat(formData.get("minPurchaseAmount"));
+    const discount = parseFloat(formData.get("discountAmount"));
+    const startDateStr = formData.get("startDate");
+    const expiryDateStr = formData.get("expiryDate");
+
+    if (!couponCode) return "Coupon Code is required";
+    if (isNaN(minAmount) || minAmount <= 0) return "Minimum Amount must be greater than 0";
+    if (isNaN(discount) || discount <= 0) return "Discount Amount must be greater than 0";
+    if (discount >= minAmount) return "Discount cannot be ≥ Minimum Purchase Amount";
+
+    if (!startDateStr || !expiryDateStr) return "Both dates are required";
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const startDate = new Date(startDateStr);
+    const expiryDate = new Date(expiryDateStr);
+
+    if (startDate < today) return "Start Date cannot be before today";
+    if (expiryDate < today) return "Expiry Date cannot be before today";
+    if (expiryDate <= startDate) return "Expiry Date must be after Start Date";
+
+    return null;
+  }
+
+  function createCoupon() {
+    const form = document.getElementById("createCouponForm");
+    const formData = new FormData(form);
+
+    const error = validateCoupon(formData);
+    if (error) {
+      openCustomModal(error);
+      return;
     }
 
-    function closeCustomModal() {
-      const modal = document.getElementById("customModal");
-      modal.style.display = "none";
-    }
-    function createCoupon() {
-      const form = document.getElementById("createCouponForm");
-      const formData = new FormData(form);
+    const data = {};
+    formData.forEach((v, k) => data[k] = v.trim());
 
-      if (!validateForm(formData)) {
-        openCustomModal(
-          "Please fill in all required fields with correct values."
-        );
-        return;
-      }
-      const startDate = new Date(formData.get("startDate"));
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-
-      if (startDate < currentDate) {
-        openCustomModal("Start Date cannot be set to date before today.");
-        return;
-      }
-
-      const expiryDate = new Date(formData.get("expiryDate"));
-      expiryDate.setHours(0, 0, 0, 0);
-
-      if (expiryDate < currentDate) {
-        openCustomModal("Expiry Date cannot be set to date before today.");
-        return;
-      }
-
-      const jsonObject = {};
-      formData.forEach((value, key) => {
-        jsonObject[key] = value;
-      });
-
-      const jsonData = JSON.stringify(jsonObject);
-
-      fetch("/admin/create-coupon", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            openCustomModal("Coupon created successfully!");
-            window.location.href = "/couponlist";
-          } else {
-            openCustomModal(
-              "Failed to create coupon. Please check the form and try again."
-            );
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          openCustomModal(
-            "Please give the correct format values for the fields"
-          );
-        });
-    }
-
-    function validateForm(formData) {
-      const requiredFields = [
-        "couponCode",
-        // "description",
-        "minPurchaseAmount",
-        "discountAmount",
-        "startDate",
-        "expiryDate",
-      ];
-
-      for (const field of requiredFields) {
-        const value = formData.get(field);
-
-        if (!value) {
-          return false;
-        }
-
-        if (
-          (field === "minPurchaseAmount" || field === "discountAmount") &&
-          parseFloat(value) <= 0
-        ) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-  </script>
+    fetch("/admin/create-coupon", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(d => {
+      openCustomModal(d.success ? "Coupon created successfully!" : (d.message || "Failed"));
+      if (d.success) setTimeout(() => location.href = "/couponlist", 1500);
+    })
+    .catch(() => openCustomModal("Network error"));
+  }
+</script>
+</body>
 </html>

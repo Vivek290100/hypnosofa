@@ -320,6 +320,33 @@ const salesReport = async (req, res) => {
   }
 };
 
+const orderDetails = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+
+        const order = await orderModels.findById(orderId)
+            .populate('customer', 'name email')  // Populate customer name and email
+            .populate({
+                path: 'products.product',
+                select: 'name price image'
+            })
+            .lean();
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        res.render('./admin/orderDetails', {
+            title: 'Order Details',
+            order
+        });
+
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 
 
   module.exports = {
@@ -333,4 +360,5 @@ const salesReport = async (req, res) => {
     updateOrderStatus,
     logout,
     salesReport,
+    orderDetails,
   }

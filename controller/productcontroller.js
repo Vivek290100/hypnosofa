@@ -101,50 +101,57 @@ const updateproduct = async (req, res) => {
     const product = await Product.findById(productId);
     if (!product) return res.status(404).send('Product not found');
 
-    // ---- 5.1 Delete selected existing images (public_id from URL) ----
-    const deleteKeys = Object.keys(req.body).filter(k =>
-      k.startsWith('deleteExistingImage')
-    );
+    // ---- 1. Delete selected existing images ----
+    const deleteImages = req.body.deleteImages || [];  // This comes from hidden inputs name="deleteImages[]"
 
-    for (const key of deleteKeys) {
-      const idx = parseInt(key.replace('deleteExistingImage', ''), 10);
-      const imageUrl = product.images[idx];
-      if (imageUrl) {
-        const publicId = imageUrl.split('/').pop().split('.')[0];
-        await cloudinary.uploader.destroy(publicId);
-        product.images.splice(idx, 1);
+    for (const url of deleteImages) {
+      if (url && product.images.includes(url)) {
+        // Extract public_id from Cloudinary URL
+        // Example URL: https://res.cloudinary.com/.../v1234567890/abcd1234.jpg
+        const publicId = url.split('/').pop().split('.')[0];
+
+        await cloudinary.uploader.destroy(publicId).catch(err => {
+          console.error(`Failed to delete image ${publicId}:`, err);
+        });
+
+        // Remove from array
+        product.images = product.images.filter(img => img !== url);
       }
     }
 
-    // ---- 5.2 Upload new images (if any) ----
-    if (req.files && req.files.length) {
+    // ---- 2. Upload new images (if any) ----
+    if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map(file =>
         cloudinary.uploader.upload(file.path, {
-          public_id: `${product._id}_new_${Date.now()}_${file.originalname.split('.')[0]}`,
+          folder: 'products', // optional: organize in folder
+          public_id: `${product._id}_${Date.now()}_${Math.random().toString(36).substring(7)}`,
         })
       );
+
       const results = await Promise.all(uploadPromises);
       product.images.push(...results.map(r => r.secure_url));
 
-      // clean temp files
-      await Promise.all(req.files.map(f => fs.unlink(f.path).catch(() => {})));
+      // Clean up temp files
+      await Promise.all(
+        req.files.map(file => fs.unlink(file.path).catch(() => {}))
+      );
     }
 
-    // ---- 5.3 Update the rest of the fields ----
-    product.name = name;
-    product.description = description;
+    // ---- 3. Update other fields ----
+    product.name = name.trim();
+    product.description = description.trim();
     product.category = category;
-    product.price = price;
-    product.quantity = quantity;
+    product.price = parseFloat(price);
+    product.quantity = parseInt(quantity);
 
     await product.save();
+
     res.redirect('/product');
   } catch (err) {
     console.error('Error updating product:', err);
     res.status(500).send('Internal Server Error');
   }
-
-}
+};
 
 
 

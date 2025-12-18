@@ -76,7 +76,7 @@ body {
 	height: 56px;
 	display: flex;
 	align-items: center;
-	color: var(--blue);
+	color: var(--green);
 	position: sticky;
 	top: 0;
 	left: 0;
@@ -142,7 +142,7 @@ body {
 	overflow-x: hidden;
 }
 #sidebar .side-menu.top li.active a {
-	color: var(--blue);
+	color: var(--green);
 	text-decoration: none;
 }
 #sidebar.hide .side-menu li a {
@@ -155,7 +155,7 @@ body {
 	color: var(--red);
 }
 #sidebar .side-menu.top li a:hover {
-	color: var(--blue);
+	color: var(--green);
 }
 #sidebar .side-menu li a .bx {
 	min-width: calc(60px  - ((4px + 6px) * 2));

@@ -4,130 +4,329 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Product</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
-    h1 { color:#2c3e50; text-align:center; }
-    form { background:#fff; padding:25px; border-radius:8px; box-shadow:0 0 12px rgba(0,0,0,0.1);
-           max-width:600px; margin:auto; }
-    label { display:block; margin:12px 0 6px; font-weight:600; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; background: #156161;
+    }
+    h1 { color: #fff; margin-bottom: 20px; }
+    form {
+      background: rgba(255,255,255,.9); padding: 30px;
+      border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,.2);
+      width: 100%; max-width: 600px;
+    }
+    .field-wrapper { position: relative; margin-bottom: 20px; }
+    label { display: block; margin: 15px 0 8px; color: #333; font-weight: 600; }
     input, textarea, select {
-      width:100%; padding:10px; margin-bottom:15px;
-      border:1px solid #ddd; border-radius:5px; box-sizing:border-box;
+      width: 100%; padding: 12px; border: 1px solid #ccc;
+      border-radius: 6px; box-sizing: border-box; font-size: 16px;
     }
-    .image-grid { display:flex; flex-wrap:wrap; gap:15px; margin:15px 0; }
-    .image-item {
-      position:relative; width:80px; height:80px;
-      border:2px solid #ddd; border-radius:6px; overflow:hidden;
+    .error-text {
+      color: #c00; font-size: 14px; font-weight: bold;
+      position: absolute; top: -20px; left: 0;
+      opacity: 0; transition: opacity 0.3s;
     }
-    .image-item img { width:100%; height:100%; object-fit:cover; }
-    .delete-overlay {
-      position:absolute; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.5); color:#fff; display:flex;
-      align-items:center; justify-content:center; cursor:pointer; font-size:18px;
-      transition: background 0.2s;
-    }
-    .delete-overlay:hover { background:rgba(220, 38, 38, 0.7); }
-    .delete-overlay i { pointer-events:none; }
+    .error-text.show { opacity: 1; }
 
-    /* Visual feedback when selected */
-    .delete-overlay.selected {
-      background:rgba(220, 38, 38, 0.9) !important;
-      color:#fff;
+    /* Existing Images */
+    .image-grid {
+      display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0;
     }
-    .delete-overlay.selected i { color:#fff; }
+    .image-item {
+      position: relative; width: 100px; height: 100px;
+      border: 2px solid #ddd; border-radius: 8px; overflow: hidden;
+    }
+    .image-item img { width: 100%; height: 100%; object-fit: cover; }
+    .delete-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 20px; transition: background 0.2s;
+    }
+    .delete-overlay:hover { background: rgba(220, 38, 38, 0.7); }
+    .delete-overlay.selected { background: rgba(220, 38, 38, 0.9) !important; }
+
+    /* New Images */
+    .selected-images-container {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px;
+    }
+    .selected-image {
+      position: relative; width: 100px; height: 100px;
+      object-fit: cover; border-radius: 8px; border: 2px solid #ddd;
+      cursor: pointer;
+    }
+    .cancel-icon {
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(255,255,255,.9); color: #c00;
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-weight: bold; font-size: 14px;
+    }
+    .cancel-icon:hover { background: #c00; color: #fff; }
 
     button {
-      background:#27ae60; color:#fff; padding:12px; border:none; border-radius:5px;
-      cursor:pointer; font-size:16px; width:100%; margin-top:10px;
+      background: #014122; color: #fff; padding: 14px;
+      border: none; border-radius: 6px; cursor: pointer;
+      font-size: 17px; width: 100%; margin-top: 10px;
     }
-    button:hover { background:#219150; }
-    a { display:block; text-align:center; margin-top:15px; color:#27ae60; text-decoration:none; }
+    button:hover { background: #428f66; }
+    .back-link { display: block; text-align: center; margin-top: 15px; color: #fff; text-decoration: none; }
+
+    /* Crop Modal */
+    #imageCropModal {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,.85);
+      z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+    }
+    .modal-content {
+      background: #fff; padding: 25px; border-radius: 12px;
+      width: 90%; max-width: 600px; max-height: 90vh;
+      display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .close-modal { align-self: flex-end; font-size: 32px; cursor: pointer; color: #999; margin-bottom: 10px; }
+    .close-modal:hover { color: #c00; }
+    #cropperImage { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+    #cropButton { margin-top: auto; background: #014122; width: 100%; }
   </style>
 </head>
 <body>
 
 <h1>Edit Product</h1>
 
-<form id="editForm" action="/product/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data">
-  <label>Product Name:</label>
-  <input type="text" name="name" value="<%= product.name %>" required>
-
-  <label>Description:</label>
-  <textarea name="description" required><%= product.description %></textarea>
-
-  <label>Price:</label>
-  <input type="number" name="price" value="<%= product.price %>" required min="0">
-
-  <label>Quantity:</label>
-  <input type="number" name="quantity" value="<%= product.quantity || 0 %>" required min="0">
-
-  <!-- Existing Images -->
-  <label>Current Images (click trash to delete):</label>
-  <div class="image-grid">
-    <% product.images.forEach((url, i) => { %>
-      <div class="image-item">
-        <img src="<%= url %>" alt="Product image">
-        <div class="delete-overlay" data-index="<%= i %>" data-url="<%= url %>">
-          <i class="fas fa-trash"></i>
-        </div>
-      </div>
-    <% }) %>
+<form id="editProductForm" action="/product/updateproduct/<%= product._id %>" method="post" enctype="multipart/form-data" novalidate>
+  <div class="field-wrapper">
+    <span class="error-text" id="nameError"></span>
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" name="name" value="<%= product.name %>" required>
   </div>
 
-  <!-- Hidden inputs will be added here dynamically -->
-  <div id="deleteInputs"></div>
+  <div class="field-wrapper">
+    <span class="error-text" id="descError"></span>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="4" required><%= product.description %></textarea>
+  </div>
+
+  <div class="field-wrapper">
+    <span class="error-text" id="priceError"></span>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" value="<%= product.price %>" min="0" step="0.01" required>
+  </div>
+
+  <div class="field-wrapper">
+    <span class="error-text" id="qtyError"></span>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" value="<%= product.quantity || 0 %>" min="0" required>
+  </div>
+
+  <!-- Existing Images -->
+  <div class="field-wrapper">
+    <label>Current Images (click trash to delete):</label>
+    <div class="image-grid">
+      <% product.images.forEach((url) => { %>
+        <div class="image-item">
+          <img src="<%= url %>" alt="Product image">
+          <div class="delete-overlay" data-url="<%= url %>">
+            <i class="fas fa-trash"></i>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <div id="deleteInputs"></div>
+  </div>
 
   <!-- New Images -->
-  <label>Add New Images:</label>
-  <input type="file" name="image" multiple accept="image/*">
+  <div class="field-wrapper">
+    <label>Add New Images:</label>
+    <input type="file" id="newImage" name="image" accept="image/*" multiple onchange="displayNewImages(this)">
+    <div class="selected-images-container" id="newImagesContainer"></div>
+  </div>
 
-  <label>Category:</label>
-  <select name="category" required>
-    <% categories.forEach(cat => { %>
-      <option value="<%= cat._id %>" <%= product.category && product.category._id.equals(cat._id) ? 'selected' : '' %>>
-        <%= cat.name %>
-      </option>
-    <% }) %>
-  </select>
+  <!-- Category -->
+  <div class="field-wrapper">
+    <span class="error-text" id="categoryError"></span>
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat._id %>" <%= product.category && product.category.toString() === cat._id.toString() ? 'selected' : '' %>>
+          <%= cat.name %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
 
   <button type="submit">Update Product</button>
 </form>
 
-<a href="/product">Back to Products</a>
+<a href="/product" class="back-link">← Back to Products</a>
 
+<!-- Crop Modal -->
+<div id="imageCropModal">
+  <div class="modal-content">
+    <span class="close-modal">×</span>
+    <h3>Crop New Image</h3>
+    <div style="max-height: 60vh; overflow-y: auto; text-align: center;">
+      <img id="cropperImage" src="" alt="Crop">
+    </div>
+    <button id="cropButton">Crop & Use</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const overlays = document.querySelectorAll('.delete-overlay');
-    const deleteInputsContainer = document.getElementById('deleteInputs');
+  /* ---------- Delete Existing Images - FULLY FIXED ---------- */
+  const deleteInputsContainer = document.getElementById('deleteInputs');
 
-    overlays.forEach(overlay => {
-      overlay.addEventListener('click', function () {
-        const index = this.dataset.index;
-        const url = this.dataset.url;
+  document.querySelectorAll('.delete-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function() {
+      this.classList.toggle('selected');
 
-        // Toggle selected state
-        this.classList.toggle('selected');
+      const url = this.dataset.url;
 
-        // Find or create hidden input
-        let input = document.querySelector(`input[name="deleteExistingImage${index}"]`);
-        if (this.classList.contains('selected')) {
-          if (!input) {
-            input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = `deleteExistingImage${index}`;
-            input.value = url;
-            deleteInputsContainer.appendChild(input);
-          }
-        } else {
-          if (input) {
-            input.remove();
-          }
+      // Find if this URL is already marked for deletion
+      let input = Array.from(deleteInputsContainer.children)
+        .find(el => el.value === url);
+
+      if (this.classList.contains('selected')) {
+        // Mark for deletion
+        if (!input) {
+          input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'deleteImages[]';  // ← This is the key!
+          input.value = url;
+          deleteInputsContainer.appendChild(input);
         }
-      });
+      } else {
+        // Unmark
+        if (input) input.remove();
+      }
     });
   });
-</script>
 
+  /* ---------- Validation & Crop (unchanged from previous working version) ---------- */
+  function showError(id, message) {
+    const el = document.getElementById(id);
+    el.textContent = message;
+    el.classList.add('show');
+    setTimeout(() => {
+      el.classList.remove('show');
+      setTimeout(() => el.textContent = '', 300);
+    }, 2000);
+  }
+
+  document.getElementById('editProductForm').onsubmit = function(e) {
+    e.preventDefault();
+
+    document.querySelectorAll('.error-text').forEach(el => {
+      el.classList.remove('show');
+      el.textContent = '';
+    });
+
+    const name = document.getElementById('name').value.trim();
+    const desc = document.getElementById('description').value.trim();
+    const price = parseFloat(document.getElementById('price').value);
+    const qty = parseInt(document.getElementById('quantity').value);
+    const category = document.getElementById('category').value;
+
+    let hasError = false;
+
+    if (!name) { showError('nameError', 'Product name is required'); hasError = true; }
+    if (!desc) { showError('descError', 'Description is required'); hasError = true; }
+    if (isNaN(price) || price < 0) { showError('priceError', 'Valid price required'); hasError = true; }
+    if (isNaN(qty) || qty < 0) { showError('qtyError', 'Valid quantity required'); hasError = true; }
+    if (!category) { showError('categoryError', 'Please select a category'); hasError = true; }
+
+    if (!hasError) this.submit();
+  };
+
+  /* ---------- New Images + Crop (same as add product) ---------- */
+  let cropper = null;
+  let currentNewImageIndex = null;
+
+  function displayNewImages(input) {
+    const container = document.getElementById('newImagesContainer');
+    container.innerHTML = '';
+
+    for (let i = 0; i < input.files.length; i++) {
+      const file = input.files[i];
+      const url = URL.createObjectURL(file);
+
+      const wrapper = document.createElement('div');
+      wrapper.style.position = 'relative';
+
+      const img = document.createElement('img');
+      img.src = url;
+      img.className = 'selected-image';
+      img.dataset.index = i;
+      img.onclick = () => openCropModal(url, i);
+
+      const cancel = document.createElement('div');
+      cancel.className = 'cancel-icon';
+      cancel.innerHTML = '×';
+      cancel.onclick = (e) => {
+        e.stopPropagation();
+        const dt = new DataTransfer();
+        for (let j = 0; j < input.files.length; j++) {
+          if (j !== i) dt.items.add(input.files[j]);
+        }
+        input.files = dt.files;
+        displayNewImages(input);
+      };
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(cancel);
+      container.appendChild(wrapper);
+    }
+  }
+
+  function openCropModal(src, idx) {
+    currentNewImageIndex = idx;
+    document.getElementById('cropperImage').src = src;
+    document.getElementById('imageCropModal').style.display = 'flex';
+
+    if (cropper) cropper.destroy();
+    cropper = new Cropper(document.getElementById('cropperImage'), {
+      aspectRatio: 1,
+      viewMode: 1,
+      dragMode: 'move',
+      autoCropArea: 0.85,
+      restore: false,
+      guides: true,
+      center: true,
+      highlight: false,
+      cropBoxMovable: true,
+      cropBoxResizable: true
+    });
+  }
+
+  document.querySelector('.close-modal').onclick = () => {
+    document.getElementById('imageCropModal').style.display = 'none';
+    if (cropper) cropper.destroy();
+  };
+
+  document.getElementById('cropButton').onclick = () => {
+    if (!cropper) return;
+
+    const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 });
+    canvas.toBlob(blob => {
+      const croppedFile = new File([blob], `cropped_${Date.now()}.jpg`, { type: 'image/jpeg' });
+
+      const dt = new DataTransfer();
+      const input = document.getElementById('newImage');
+      for (let i = 0; i < input.files.length; i++) {
+        i === currentNewImageIndex ? dt.items.add(croppedFile) : dt.items.add(input.files[i]);
+      }
+      input.files = dt.files;
+      displayNewImages(input);
+
+      document.getElementById('imageCropModal').style.display = 'none';
+      cropper.destroy();
+    }, 'image/jpeg', 0.95);
+  };
+</script>
 </body>
 </html>
