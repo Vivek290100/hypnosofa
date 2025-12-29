@@ -378,6 +378,90 @@
     
 
     <script>
+$(document).ready(function() {
+
+    // Global function to refresh total
+    function refreshCartTotal() {
+        $.ajax({
+            url: '/cart/total',           // ← we'll create this endpoint
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    $('#total-price').text('₹ ' + parseFloat(response.total).toFixed(2));
+                }
+            }
+        });
+    }
+
+    // Increase quantity
+    $('.increase').on('click', function() {
+        const $row = $(this).closest('.main');
+        const $input = $row.find('.quantity-input');
+        const productId = $row.data('product-id');
+        let qty = parseInt($input.val());
+
+        const maxStock = parseInt($row.find('.dbquantity').text()) || 999;
+
+        if (qty >= 10 || qty >= maxStock) {
+            $('#global-alert').fadeIn().delay(3000).fadeOut();
+            return;
+        }
+
+        qty++;
+        $input.val(qty);
+        updateItemQuantity(productId, qty);
+    });
+
+    // Decrease quantity
+    $('.decrease').on('click', function() {
+        const $row = $(this).closest('.main');
+        const $input = $row.find('.quantity-input');
+        const productId = $row.data('product-id');
+        let qty = parseInt($input.val());
+
+        if (qty <= 1) return;
+
+        qty--;
+        $input.val(qty);
+        updateItemQuantity(productId, qty);
+    });
+
+    // Main update function
+    function updateItemQuantity(productId, quantity) {
+        $.ajax({
+            url: `/updateQuantity/${productId}`,
+            type: 'PUT',
+            data: { quantity },
+            success: function(response) {
+                if (response.success) {
+                    // Update only this item's price display (optional)
+                    const itemTotal = parseFloat(response.itemSubtotal || 0);
+                    $(`#update-price-${productId}`).html(
+                        '₹ ' + itemTotal.toFixed(2) +
+                        (response.discountPercentage ? ` (${response.discountPercentage}% off)` : '')
+                    );
+
+                    // Always refresh whole cart total
+                    refreshCartTotal();
+                } else {
+                    alert(response.message || "Couldn't update quantity");
+                    // rollback UI if needed
+                }
+            },
+            error: function() {
+                alert("Error communicating with server");
+            }
+        });
+    }
+
+    // Initial load + periodic refresh (every 30s is enough)
+    refreshCartTotal();
+    setInterval(refreshCartTotal, 30000);
+});
+</script>
+
+
+    <!-- <script>
         $('.increase').click(function() {
         const row = $(this).closest('.main');
         const productId = row.attr('data-product-id'); 
@@ -433,7 +517,7 @@
                 }
             });
         }
-    </script>
+    </script> -->
     
 
    

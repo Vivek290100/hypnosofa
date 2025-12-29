@@ -86,62 +86,84 @@ const removeFromCart = async (req, res) => {
 };
 
 
-
 const updateQuantity = async (req, res) => {
-  try {
-    const productId = req.params.productId;
-    const quantity = req.body.quantity;
+    try {
+        const userId = req.session.user._id;
+        const productId = req.params.productId;
+        const newQuantity = parseInt(req.body.quantity);
 
-    if (quantity==10) {
-      console.log('limit reached',);
-    }
-
-    const cart = await cartModels.findOne({ 'products.productId': productId });
-    if (!cart) {
-      return res.status(404).json({ success: false, message: 'Cart item not found.' });
-    }
-    const productIds = cart.products.map(item => item.productId._id);
-    const productOffers = await ProductOffer.find({ product: { $in: productIds } });
-
-    let updatePrice = 0;
-    for (const product of cart.products) {
-      if (product.productId.toString() === productId) {
-        const originalQuantity = product.quantity;
-
-        
-        if (quantity > 0 && quantity<=10) {
-          product.quantity = quantity;
-          const productDetails = await Product.findById(product.productId);
-          if (productDetails) {
-            let discountedPrice = productDetails.price;
-            const activeOffer = productOffers.find(offer => offer.product.toString() === product.productId.toString());
-            if (activeOffer && isActiveOffer(activeOffer)) {
-              const discountPercentage = activeOffer.discountPercentage;
-              const discountAmount = (productDetails.price * discountPercentage) / 100;
-              discountedPrice = productDetails.price - discountAmount;
-            }
-            updatePrice += discountedPrice * product.quantity;
-            const quantityDifference = quantity - originalQuantity;
-            await Product.findByIdAndUpdate(product.productId, { $inc: { quantity: -quantityDifference } });
-          }
-          product.updateprice = updatePrice;
+        if (isNaN(newQuantity) || newQuantity < 1) {
+            return res.status(400).json({ success: false, message: 'Invalid quantity' });
         }
-      }
-    }
-            const product = await Product.findOne({ _id: productId });
-            const dbquantity = product.quantity
 
-    let subtotal = 0;
-    cart.products.forEach(item => {
-      subtotal += item.updateprice || (item.productId.price * item.quantity);
-    });
-    cart.totals.subtotal = subtotal;
-    await cart.save();
-    res.json({ success: true, message: 'Quantity updated successfully.', updatePrice: updatePrice });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error.' });
-  }
+        const cart = await cartModels.findOne({ userId });
+        if (!cart) {
+            return res.status(404).json({ success: false, message: 'Cart not found' });
+        }
+
+        const itemIndex = cart.products.findIndex(
+            item => item.productId.toString() === productId
+        );
+
+        if (itemIndex === -1) {
+            return res.status(404).json({ success: false, message: 'Product not in cart' });
+        }
+
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        if (newQuantity > product.quantity) {
+            return res.status(400).json({
+                success: false,
+                message: 'Not enough stock available',
+                available: product.quantity || 0
+            });
+        }
+
+        const oldQuantity = cart.products[itemIndex].quantity;
+        cart.products[itemIndex].quantity = newQuantity;
+
+        let newSubtotal = 0;
+        let thisItemSubtotal = 0;
+
+        for (const item of cart.products) {
+            const prod = await Product.findById(item.productId);
+            if (!prod) continue;
+
+            let effectivePrice = prod.price;
+
+            const offer = await ProductOffer.findOne({ product: item.productId });
+            if (offer && isActiveOffer(offer)) {
+                const discount = (prod.price * offer.discountPercentage) / 100;
+                effectivePrice -= discount;
+            }
+
+            const itemTotal = effectivePrice * item.quantity;
+            newSubtotal += itemTotal;
+
+            if (item.productId.toString() === productId) {
+                thisItemSubtotal = itemTotal;
+            }
+        }
+
+        if (!cart.totals) cart.totals = {};
+        cart.totals.subtotal = newSubtotal;
+        await cart.save();
+
+        res.json({
+            success: true,
+            newQuantity,
+            itemSubtotal: thisItemSubtotal.toFixed(2),
+            cartSubtotal: newSubtotal.toFixed(2),
+            message: 'Quantity updated successfully'
+        });
+
+    } catch (error) {
+        console.error('Error in updateQuantity:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
 };
 
 
