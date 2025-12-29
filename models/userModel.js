@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
-// const Address = require('../models/addressModel');
 
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,

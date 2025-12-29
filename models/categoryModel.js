@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//catagory schema
 const catagorySchema = new Schema({
   name: {
     type: String,

@@ -1,7 +1,6 @@
 const Category = require('../models/categoryModel');
 
 
-//categorylist in admin side
 const categoryList = async (req, res) => {
    try{
         let query = {};

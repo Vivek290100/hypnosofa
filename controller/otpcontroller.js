@@ -1,4 +1,3 @@
-// C:\Users\vivek_laxvnt1\Desktop\Tasks\Week 7-12 Project Week\hypnosofa\controller\otpcontroller.js
 const User = require("../models/userModel");
 const Wallet = require("../models/walletModel");
 const bcrypt = require("bcrypt");

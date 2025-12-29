@@ -19,7 +19,6 @@ const productList = async (req, res) => {
 };
 
 
-//add product with categories that stored in database------
 const addform = function(req, res) {
     Category.find({}).exec()
         .then(categories => {
@@ -32,26 +31,22 @@ const addform = function(req, res) {
 };
 
 
-//add product in admin side----------------------------------
 const addproduct = async (req, res) => {
   try {
     const { name, description, category, price, quantity } = req.body;
 
-    // 1. Save the product **without** images first
     const newProduct = new Product({
       name,
       description,
-      images: [],                 // will be filled later
+      images: [],
       category,
       price,
       quantity,
     });
     await newProduct.save();
 
-    // 2. Upload each file to Cloudinary & push secure_url
     if (req.files && req.files.length) {
       const uploadPromises = req.files.map(file => {
-        // file.path is the temporary path created by multer-storage-cloudinary
         return cloudinary.uploader.upload(file.path, {
           public_id: `${newProduct._id}_${Date.now()}_${file.originalname.split('.')[0]}`,
         });
@@ -62,8 +57,6 @@ const addproduct = async (req, res) => {
       console.log("newProduct",newProduct);
       
 
-      // clean up temp files (multer-storage-cloudinary already deletes them,
-      // but we keep the safety net)
       await Promise.all(req.files.map(f => fs.unlink(f.path).catch(() => {})));
     }
 
@@ -76,7 +69,6 @@ const addproduct = async (req, res) => {
 };
 
 
-//Edit product-----------------------
 const editform = function(req, res) {
     const productId = req.params.id;
     Promise.all([
@@ -92,7 +84,6 @@ const editform = function(req, res) {
     });
 };
 
-//Update product--------------------------------
 const updateproduct = async (req, res) => {
   const productId = req.params.id;
   const { name, description, category, price, quantity } = req.body;
@@ -101,29 +92,24 @@ const updateproduct = async (req, res) => {
     const product = await Product.findById(productId);
     if (!product) return res.status(404).send('Product not found');
 
-    // ---- 1. Delete selected existing images ----
-    const deleteImages = req.body.deleteImages || [];  // This comes from hidden inputs name="deleteImages[]"
+    const deleteImages = req.body.deleteImages || [];
 
     for (const url of deleteImages) {
       if (url && product.images.includes(url)) {
-        // Extract public_id from Cloudinary URL
-        // Example URL: https://res.cloudinary.com/.../v1234567890/abcd1234.jpg
         const publicId = url.split('/').pop().split('.')[0];
 
         await cloudinary.uploader.destroy(publicId).catch(err => {
           console.error(`Failed to delete image ${publicId}:`, err);
         });
 
-        // Remove from array
         product.images = product.images.filter(img => img !== url);
       }
     }
 
-    // ---- 2. Upload new images (if any) ----
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map(file =>
         cloudinary.uploader.upload(file.path, {
-          folder: 'products', // optional: organize in folder
+          folder: 'products',
           public_id: `${product._id}_${Date.now()}_${Math.random().toString(36).substring(7)}`,
         })
       );
@@ -131,13 +117,11 @@ const updateproduct = async (req, res) => {
       const results = await Promise.all(uploadPromises);
       product.images.push(...results.map(r => r.secure_url));
 
-      // Clean up temp files
       await Promise.all(
         req.files.map(file => fs.unlink(file.path).catch(() => {}))
       );
     }
 
-    // ---- 3. Update other fields ----
     product.name = name.trim();
     product.description = description.trim();
     product.category = category;
@@ -156,21 +140,17 @@ const updateproduct = async (req, res) => {
 
 
 
-// DELETE PRODUCT - FIXED
 const deleteproduct = async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
 
-    // MARK AS DELETED IMMEDIATELY
     product.isDeleted = true;
     await product.save();
 
-    // RESPOND FAST
     res.json({ success: true, message: 'Product deleted' });
 
-    // DELETE IMAGES IN BACKGROUND (non-blocking)
     product.images.forEach(url => {
       const publicId = url.split('/').pop().split('.')[0];
       cloudinary.uploader.destroy(publicId).catch(err => {

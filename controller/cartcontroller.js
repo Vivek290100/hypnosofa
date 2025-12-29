@@ -4,7 +4,6 @@ const Product = require('../models/productModel');
 const ProductOffer = require("../models/productOfferModel");
 
 
-//addToCart function
 const addToCart = async (req, res) => {
   try {
     const userId = req.session.user._id;
